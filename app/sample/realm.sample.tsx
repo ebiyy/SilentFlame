@@ -2,7 +2,7 @@
 ***REMOVED***
 import Realm from 'realm';
 
-const App = () => {
+const SampleRealm = () => {
   const [realm, setRealm] = useState<Realm>();
 
 ***REMOVED***
@@ -10,6 +10,8 @@ const App = () => {
       schema: [{name: 'Dog', properties: {name: 'string'***REMOVED******REMOVED***],
     ***REMOVED***).then((realm2: Realm) => {
       realm2.write(() => {
+        let allDogs = realm2.objects('Dog');
+        realm2.delete(allDogs); // すべてのBookオブジェクトを削除します
         realm2.create('Dog', {name: 'Rex'***REMOVED***
       ***REMOVED***
       setRealm(realm2);
@@ -30,6 +32,8 @@ const App = () => {
     ? 'Number of dogs in this Realm: ' + realm.objects('Dog').length
     : 'Loading...';
 
+  console.log(realm?.path);
+
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -41,4 +45,4 @@ const App = () => {
 ***REMOVED***
 ***REMOVED***
 
-export default App;
+export default SampleRealm;
