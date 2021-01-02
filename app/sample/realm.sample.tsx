@@ -10,8 +10,8 @@ const SampleRealm = () => {
       schema: [{name: 'Dog', properties: {name: 'string'***REMOVED******REMOVED***],
     ***REMOVED***).then((realm2: Realm) => {
       realm2.write(() => {
-        let allDogs = realm2.objects('Dog');
-        realm2.delete(allDogs); // すべてのBookオブジェクトを削除します
+        // let allDogs = realm2.objects('Dog');
+        // realm2.delete(allDogs); // すべてのBookオブジェクトを削除します
         realm2.create('Dog', {name: 'Rex'***REMOVED***
       ***REMOVED***
       setRealm(realm2);

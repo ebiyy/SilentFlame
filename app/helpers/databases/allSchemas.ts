@@ -1,19 +1,110 @@
 import Realm from 'realm';
-export const DATA_SCHEMA = 'DataList';
+export const SUPPLEMENT_SCHEMA = 'SupplementList';
 export const USER_SCHEMA = 'UserData';
+export const NUTRIENT_SCHEMA = 'NutrientList';
+export const WATER_SCHEMA = 'WaterList';
 
-export const DataSchema = {
-  name: DATA_SCHEMA,
+const UnitSign = {
+  Quantity: 'count',
+  Currency: '円',
+  Weight: ['mcg', 'mg', 'g'],
+***REMOVED***
+
+interface WeightUnit {
+  value: number;
+  sign: typeof UnitSign.Weight[number];
+***REMOVED***
+
+interface QuantityUnit {
+  value: number;
+  sign: typeof UnitSign.Quantity;
+***REMOVED***
+
+interface CurrencyUnit {
+  value: number;
+  sign: typeof UnitSign.Currency;
+***REMOVED***
+
+interface Supplement {
+  id: string;
+  supplementName: string;
+  customName?: string;
+  brandName: string;
+  nutrientId: string[];
+  category: string;
+  subCategory: string;
+  price: CurrencyUnit;
+  content: QuantityUnit;
+  serving: QuantityUnit;
+  productCode: string;
+  UPCCode: string;
+  imageUrl: string;
+  createdAt: Date;
+  updatedAt: Date;
+***REMOVED***
+
+export const SupplementSchema = {
+  name: SUPPLEMENT_SCHEMA,
   primaryKey: 'id',
   properties: {
     id: 'string',
-    genre: 'string',
-    word: {type: 'string', indexed: true***REMOVED***,
-    detail: 'string',
-    title: 'string',
-    author: 'string',
-    memo: 'string',
-    isLike: 'bool',
+    supplementName: 'string',
+    brandName: 'string',
+    nutrientId: {type: 'string?[]'***REMOVED***,
+    category: 'string',
+    sub_category: 'string',
+    price: 'string',
+    content: 'string',
+    serving: 'string',
+    productCode: 'string',
+    UPCCode: 'string',
+    imageUrl: 'string',
+    createdAt: 'date',
+    updatedAt: 'date',
+***REMOVED***
+***REMOVED***
+
+interface Nutrient {
+  id: string;
+  name: string;
+  perUnit: QuantityUnit;
+  amountPerServing: WeightUnit;
+  perDailyValue: number;
+  createdAt: Date;
+  updatedAt: Date;
+***REMOVED***
+
+export const NutrientSchema = {
+  name: NUTRIENT_SCHEMA,
+  primaryKey: 'id',
+  properties: {
+    id: 'string',
+    name: 'string',
+    perUnit: 'string',
+    amountPerServing: 'string',
+    perDailyValue: 'int',
+    createdAt: 'data',
+    updatedAt: 'data',
+***REMOVED***
+***REMOVED***
+
+export const WaterSchema = {
+  name: WATER_SCHEMA,
+  primaryKey: 'id',
+  properties: {
+    id: 'string',
+    waterName: 'string',
+    brandName: 'string',
+    nutrientId: {type: 'string?[]'***REMOVED***,
+    classification: 'string',
+    price: 'string',
+    content: 'string',
+    waterSamplingArea: 'string',
+    productCode: 'string',
+    barCode: 'string',
+    imageUrl: 'string',
+    createdAt: 'date',
+    updatedAt: 'date',
 ***REMOVED***
 ***REMOVED***
 
@@ -26,81 +117,68 @@ export const UserSchema = {
 ***REMOVED***
 ***REMOVED***
 
-// DataListスキーマにインサート
-export const insertNewDataList = (newDataList) =>
-  new Promise((resolve, reject) => {
-    Realm.open(databaseOptions)
-      .then((realm) => {
-        realm.write(() => {
-          realm.create(DATA_SCHEMA, newDataList);
-          resolve(newDataList);
-        ***REMOVED***
-      ***REMOVED***)
-      .catch((error) => reject(error));
-  ***REMOVED***
-Realm.open(databaseOptions).then((realm: Realm) => {
-  realm.write(() => {
-    realm.create(DATA_SCHEMA, newDataList);
-  ***REMOVED***
-  // setRealm(realmState);
+const createRealm = (
+  realm: Realm,
+  schemaName: string,
+  insertObj: any,
+  modified: boolean,
+) => {
+  modified
+    ? realm.create(schemaName, insertObj, Realm.UpdateMode.Modified)
+    : realm.create(schemaName, insertObj);
 ***REMOVED***
 
-// DataListスキーマにアップデート
-export const updateDataList = (dataList) =>
-  new Promise((resolve, reject) => {
-    Realm.open(databaseOptions)
-      .then((realm) => {
-        realm.write(() => {
-          let updatingDataList = realm.objectForPrimaryKey(
-            DATA_SCHEMA,
-            dataList.id,
-        ***REMOVED***
-          updatingDataList.name = dataList.name;
-          resolve();
-        ***REMOVED***
-      ***REMOVED***)
-      .catch((error) => reject(error));
-  ***REMOVED***
+// スキーマにインサート
+const writeRealm = (
+  schema: any,
+  schemaName: string,
+  insertObj: any,
+  modified = false,
+) => {
+  Realm.open({
+    schema: [schema],
+  ***REMOVED***)
+    .then((realm: Realm) => {
+      realm.write(() => {
+        createRealm(realm, schemaName, insertObj, modified);
+      ***REMOVED***
+      realm.close();
+    ***REMOVED***)
+    .catch((error) => {
+      console.log(error);
+    ***REMOVED***
+***REMOVED***
 
 // DataListスキーマにデリート
-export const deleteDataList = (dataListId) =>
-  new Promise((resolve, reject) => {
-    Realm.open(databaseOptions)
-      .then((realm) => {
-        realm.write(() => {
-          let deletingDataList = realm.objectForPrimaryKey(
-            DATA_SCHEMA,
-            dataListId,
-        ***REMOVED***
-          realm.delete(deletingDataList);
-          resolve();
-        ***REMOVED***
-      ***REMOVED***)
-      .catch((error) => reject(error));
-  ***REMOVED***
+const deleteSchema = (schema: any, schemaName: string, schemaId: any) => {
+  Realm.open({
+    schema: [schema],
+  ***REMOVED***)
+    .then((realm: Realm) => {
+      realm.write(() => {
+        let deletingDataList = realm.objectForPrimaryKey(schemaName, schemaId);
+        realm.delete(deletingDataList);
+      ***REMOVED***
+      realm.close();
+    ***REMOVED***)
+    .catch((error) => {
+      console.log(error);
+    ***REMOVED***
+***REMOVED***
 
 // DataListスキーマを全デリート
-export const deleteAllDataList = () =>
-  new Promise((resolve, reject) => {
-    Realm.open(databaseOptions)
-      .then((realm) => {
-        realm.write(() => {
-          let allTodoLists = realm.objects(DATA_SCHEMA);
-          realm.delete(allTodoLists);
-          resolve();
-        ***REMOVED***
-      ***REMOVED***)
-      .catch((error) => reject(error));
-  ***REMOVED***
-
-// DataListスキーマからセレクト
-export const queryAllDataList = () =>
-  new Promise((resolve, reject) => {
-    Realm.open(databaseOptions)
-      .then((realm) => {
-        let allTodoLists = realm.objects(DATA_SCHEMA);
-        resolve(allTodoLists);
-      ***REMOVED***)
-      .catch((error) => reject(error));
-  ***REMOVED***
-export default new Realm(databaseOptions);
+const allDeleteSchema = (schema: any, schemaName: string) => {
+  Realm.open({
+    schema: [schema],
+  ***REMOVED***)
+    .then((realm: Realm) => {
+      realm.write(() => {
+        let allTodoLists = realm.objects(schemaName);
+        realm.delete(allTodoLists);
+      ***REMOVED***
+      realm.close();
+    ***REMOVED***)
+    .catch((error) => {
+      console.log(error);
+    ***REMOVED***
+***REMOVED***

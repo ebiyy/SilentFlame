@@ -6,7 +6,7 @@
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-  search_expression: 'Walnuts roasted',
+***REMOVED***
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
@@ -53,9 +53,9 @@
 ***REMOVED***
 ***REMOVED***
 ***REMOVED***
-          ? data.foods.food.map((obj: ItemDescription) => (
+***REMOVED***
           ***REMOVED***
-                <Text>{obj.food_name***REMOVED***</Text>
+                <Text key={index***REMOVED***>{obj.food_name***REMOVED***</Text>
 ***REMOVED***
 ***REMOVED***
           : null***REMOVED***

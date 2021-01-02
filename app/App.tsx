@@ -1,15 +1,6 @@
 import React from 'react';
-import SampleFatsecret from './sample/fatsecret.sample';
+import NavigationScreen from './navigation';
 
-import SampleRealm from './sample/realm.sample';
-
-const App = () => {
-***REMOVED***
-***REMOVED***
-      <SampleRealm />
-      <SampleFatsecret />
-***REMOVED***
-***REMOVED***
-***REMOVED***
+const App = () => <NavigationScreen />;
 
 export default App;
