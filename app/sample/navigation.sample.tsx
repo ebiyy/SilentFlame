@@ -1,29 +1,29 @@
 import 'react-native-gesture-handler';
 import React from 'react';
-import {View, Text***REMOVED*** from 'react-native';
-import {NavigationContainer***REMOVED*** from '@react-navigation/native';
-import {createStackNavigator***REMOVED*** from '@react-navigation/stack';
+import {View, Text} from 'react-native';
+import {NavigationContainer} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
 import SampleRealm from './realm.sample';
-import {MyTabs***REMOVED*** from '../components/tab-bar';
+import {MyTabs} from '../components/tab-bar';
 
 function HomeScreen() {
-***REMOVED***
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'***REMOVED******REMOVED***>
+  return (
+    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
       <Text>Home Screen</Text>
     </View>
-***REMOVED***
-***REMOVED***
+  );
+}
 
 const Stack = createStackNavigator();
 
 const NavigationSample = () => {
-***REMOVED***
+  return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Home" component={HomeScreen***REMOVED*** />
+        <Stack.Screen name="Home" component={HomeScreen} />
       </Stack.Navigator>
     </NavigationContainer>
-***REMOVED***
-***REMOVED***
+  );
+};
 
 export default NavigationSample;

@@ -1,11 +1,11 @@
 import React from 'react';
-import {Text, View, TextInput, Button, Alert, StyleSheet***REMOVED*** from 'react-native';
-import {useForm, Controller***REMOVED*** from 'react-hook-form';
+import {Text, View, TextInput, Button, Alert, StyleSheet} from 'react-native';
+import {useForm, Controller} from 'react-hook-form';
 
 const styles = StyleSheet.create({
   header: {
     marginTop: 100,
-***REMOVED***
+  },
   input: {
     height: 60,
     flexDirection: 'row',
@@ -16,48 +16,48 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     margin: 30,
     padding: 10,
-***REMOVED***
-***REMOVED***
+  },
+});
 
 const SupplementForm = () => {
-  const {control, handleSubmit, errors***REMOVED*** = useForm();
+  const {control, handleSubmit, errors} = useForm();
   const onSubmit = (data) => console.log(data);
 
-***REMOVED***
-    <View style={styles.header***REMOVED***>
+  return (
+    <View style={styles.header}>
       <Controller
-        control={control***REMOVED***
-        render={({onChange, onBlur, value***REMOVED***) => (
+        control={control}
+        render={({onChange, onBlur, value}) => (
           <TextInput
-            style={styles.input***REMOVED***
-            onBlur={onBlur***REMOVED***
-            onChangeText={(value) => onChange(value)***REMOVED***
-            value={value***REMOVED***
+            style={styles.input}
+            onBlur={onBlur}
+            onChangeText={(value) => onChange(value)}
+            value={value}
           />
-        )***REMOVED***
+        )}
         name="firstName"
-        rules={{required: true***REMOVED******REMOVED***
+        rules={{required: true}}
         defaultValue=""
       />
-      {errors.firstName && <Text>This is required.</Text>***REMOVED***
+      {errors.firstName && <Text>This is required.</Text>}
 
       <Controller
-        control={control***REMOVED***
-        render={({onChange, onBlur, value***REMOVED***) => (
+        control={control}
+        render={({onChange, onBlur, value}) => (
           <TextInput
-            style={styles.input***REMOVED***
-            onBlur={onBlur***REMOVED***
-            onChangeText={(value) => onChange(value)***REMOVED***
-            value={value***REMOVED***
+            style={styles.input}
+            onBlur={onBlur}
+            onChangeText={(value) => onChange(value)}
+            value={value}
           />
-        )***REMOVED***
+        )}
         name="lastName"
         defaultValue=""
       />
 
-      <Button title="Submit" onPress={handleSubmit(onSubmit)***REMOVED*** />
+      <Button title="Submit" onPress={handleSubmit(onSubmit)} />
     </View>
-***REMOVED***
-***REMOVED***
+  );
+};
 
 export default SupplementForm;

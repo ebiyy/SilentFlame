@@ -1,10 +1,10 @@
 // カメラロールにアクセスできる。
 // 全ての画像を取得など、画像を選択できないため削除ようかも
 
-import CameraRoll, {PhotoIdentifier***REMOVED*** from '@react-native-community/cameraroll';
-import React, {useState***REMOVED*** from 'react';
-import {ScrollView***REMOVED*** from 'react-native';
-import {View, Button, Image***REMOVED*** from 'react-native';
+import CameraRoll, {PhotoIdentifier} from '@react-native-community/cameraroll';
+import React, {useState} from 'react';
+import {ScrollView} from 'react-native';
+import {View, Button, Image} from 'react-native';
 
 const SampleCameraRoll = () => {
   const [photos, setPhotos] = useState<PhotoIdentifier[]>();
@@ -13,38 +13,38 @@ const SampleCameraRoll = () => {
     CameraRoll.getPhotos({
       first: 1,
       assetType: 'Photos',
-    ***REMOVED***)
+    })
       .then((r) => {
         setPhotos(r.edges);
-      ***REMOVED***)
+      })
       .catch((err) => {
         //Error Loading Images
-      ***REMOVED***
-  ***REMOVED***
+      });
+  };
 
-***REMOVED***
-***REMOVED***
+  return (
+    <>
       <View>
-        <Button title="Load Images" onPress={handleButtonPress***REMOVED*** />
+        <Button title="Load Images" onPress={handleButtonPress} />
         <ScrollView>
           {photos
             ? photos.map((p, i) => {
-              ***REMOVED***
+                return (
                   <Image
-                    key={i***REMOVED***
+                    key={i}
                     style={{
                       width: 300,
                       height: 100,
-                    ***REMOVED******REMOVED***
-                    source={{uri: p.node.image.uri***REMOVED******REMOVED***
+                    }}
+                    source={{uri: p.node.image.uri}}
                   />
-              ***REMOVED***
-              ***REMOVED***)
-            : null***REMOVED***
+                );
+              })
+            : null}
         </ScrollView>
       </View>
-***REMOVED***
-***REMOVED***
-***REMOVED***
+    </>
+  );
+};
 
 export default SampleCameraRoll;

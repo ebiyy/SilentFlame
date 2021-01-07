@@ -1,6 +1,6 @@
 import React from 'react'; // need
-import {StyleSheet***REMOVED*** from 'react-native';
+import {StyleSheet} from 'react-native';
 
 export const ComStyles = StyleSheet.create({
-  centeringContainer: {flex: 1, alignItems: 'center', justifyContent: 'center'***REMOVED***,
-***REMOVED***
+  centeringContainer: {flex: 1, alignItems: 'center', justifyContent: 'center'},
+});

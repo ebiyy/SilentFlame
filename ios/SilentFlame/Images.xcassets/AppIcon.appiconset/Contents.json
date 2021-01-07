@@ -4,50 +4,50 @@
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "20x20"
-  ***REMOVED***
+    },
     {
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "20x20"
-  ***REMOVED***
+    },
     {
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "29x29"
-  ***REMOVED***
+    },
     {
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "29x29"
-  ***REMOVED***
+    },
     {
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "40x40"
-  ***REMOVED***
+    },
     {
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "40x40"
-  ***REMOVED***
+    },
     {
       "idiom" : "iphone",
       "scale" : "2x",
       "size" : "60x60"
-  ***REMOVED***
+    },
     {
       "idiom" : "iphone",
       "scale" : "3x",
       "size" : "60x60"
-  ***REMOVED***
+    },
     {
       "idiom" : "ios-marketing",
       "scale" : "1x",
       "size" : "1024x1024"
-    ***REMOVED***
+    }
   ],
   "info" : {
     "author" : "xcode",
     "version" : 1
-  ***REMOVED***
-***REMOVED***
+  }
+}

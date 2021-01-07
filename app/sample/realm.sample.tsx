@@ -1,32 +1,32 @@
-***REMOVED***
-***REMOVED***
+import React, {useEffect, useState} from 'react';
+import {SafeAreaView, Text} from 'react-native';
 import Realm from 'realm';
 
 const SampleRealm = () => {
   const [realm, setRealm] = useState<Realm>();
 
-***REMOVED***
+  useEffect(() => {
     Realm.open({
-      schema: [{name: 'Dog', properties: {name: 'string'***REMOVED******REMOVED***],
-    ***REMOVED***).then((realm2: Realm) => {
+      schema: [{name: 'Dog', properties: {name: 'string'}}],
+    }).then((realm2: Realm) => {
       realm2.write(() => {
         // let allDogs = realm2.objects('Dog');
         // realm2.delete(allDogs); // すべてのBookオブジェクトを削除します
-        realm2.create('Dog', {name: 'Rex'***REMOVED***
-      ***REMOVED***
+        realm2.create('Dog', {name: 'Rex'});
+      });
       setRealm(realm2);
-    ***REMOVED***
+    });
 
     // 【終了処理】処理が終了したらデータベースを閉じる
     const cleanup = () => {
       if (realm !== undefined && !realm.isClosed) {
         realm.close();
-      ***REMOVED***
-    ***REMOVED***
+      }
+    };
 
     // return する関数が終了処理(componentWillUnmountに相当)
     return cleanup;
-***REMOVED*** []);
+  }, []);
 
   const info = realm
     ? 'Number of dogs in this Realm: ' + realm.objects('Dog').length
@@ -34,15 +34,15 @@ const SampleRealm = () => {
 
   console.log(realm?.path);
 
-***REMOVED***
-***REMOVED***
-***REMOVED***
-        <Text>{info***REMOVED***</Text>
-***REMOVED***
-        <Text>{realm?.path***REMOVED***</Text>
-***REMOVED***
-***REMOVED***
-***REMOVED***
-***REMOVED***
+  return (
+    <>
+      <SafeAreaView>
+        <Text>{info}</Text>
+        <Text>---</Text>
+        <Text>{realm?.path}</Text>
+      </SafeAreaView>
+    </>
+  );
+};
 
 export default SampleRealm;

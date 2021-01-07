@@ -17,14 +17,14 @@
 {
   if (test(view)) {
     return YES;
-  ***REMOVED***
+  }
   for (UIView *subview in [view subviews]) {
     if ([self findSubviewInView:subview matching:test]) {
       return YES;
-    ***REMOVED***
-  ***REMOVED***
+    }
+  }
   return NO;
-***REMOVED***
+}
 
 - (void)testRendersWelcomeScreen
 {
@@ -37,8 +37,8 @@
   RCTSetLogFunction(^(RCTLogLevel level, RCTLogSource source, NSString *fileName, NSNumber *lineNumber, NSString *message) {
     if (level >= RCTLogLevelError) {
       redboxError = message;
-    ***REMOVED***
-  ***REMOVED***
+    }
+  });
 #endif
 
   while ([date timeIntervalSinceNow] > 0 && !foundElement && !redboxError) {
@@ -48,10 +48,10 @@
     foundElement = [self findSubviewInView:vc.view matching:^BOOL(UIView *view) {
       if ([view.accessibilityLabel isEqualToString:TEXT_TO_LOOK_FOR]) {
         return YES;
-      ***REMOVED***
+      }
       return NO;
-    ***REMOVED***];
-  ***REMOVED***
+    }];
+  }
 
 #ifdef DEBUG
   RCTSetLogFunction(RCTDefaultLogFunction);
@@ -59,7 +59,7 @@
 
   XCTAssertNil(redboxError, @"RedBox error: %@", redboxError);
   XCTAssertTrue(foundElement, @"Couldn't find element with text '%@' in %d seconds", TEXT_TO_LOOK_FOR, TIMEOUT_SECONDS);
-***REMOVED***
+}
 
 
 @end

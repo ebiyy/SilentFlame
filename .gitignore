@@ -59,7 +59,6 @@ buck-out/
 /ios/Pods/
 
 # fatsecret
-./fatsecret-get.js
-./fatsecret-oath.jsgit
-
-
+fatsecret-get.js
+fatsecret-oath.js
+fatsecret.sample.tsx

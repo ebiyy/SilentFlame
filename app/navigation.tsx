@@ -1,12 +1,12 @@
 import React from 'react';
 
-import {createBottomTabNavigator***REMOVED*** from '@react-navigation/bottom-tabs';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {
   NavigationContainer,
   Route,
   getFocusedRouteNameFromRoute,
-***REMOVED*** from '@react-navigation/native';
-import {createStackNavigator***REMOVED*** from '@react-navigation/stack';
+} from '@react-navigation/native';
+import {createStackNavigator} from '@react-navigation/stack';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome5Icons from 'react-native-vector-icons/FontAwesome5';
 import SampleFatsecret from './sample/fatsecret.sample';
@@ -33,20 +33,20 @@ const getHeaderTitle = (route: Route<string, object | undefined>) => {
       return 'Water';
     case 'SupplementForm':
       return '新しいサプリを登録';
-  ***REMOVED***
-***REMOVED***
+  }
+};
 
 const IconTypes = {
   MCi: 'MaterialCommunityIcons',
   Fa5i: 'FontAwesome5Icons',
-***REMOVED***
+};
 
 const materiaComIcon = (name: string, color: string, size: number) => (
-  <MaterialCommunityIcons name={name***REMOVED*** color={color***REMOVED*** size={size***REMOVED*** />
+  <MaterialCommunityIcons name={name} color={color} size={size} />
 );
 
 const fontAwesome5Icon = (name: string, color: string, size: number) => (
-  <FontAwesome5Icons name={name***REMOVED*** color={color***REMOVED*** size={size***REMOVED*** />
+  <FontAwesome5Icons name={name} color={color} size={size} />
 );
 
 const generateIcon = (
@@ -57,9 +57,9 @@ const generateIcon = (
       return materiaComIcon;
     case IconTypes.Fa5i:
       return fontAwesome5Icon;
-  ***REMOVED***
+  }
   return materiaComIcon;
-***REMOVED***
+};
 
 const TabScreen = (
   name: string,
@@ -68,56 +68,56 @@ const TabScreen = (
   iconName: string,
 ) => (
   <Tab.Screen
-    name={name***REMOVED***
-    component={component***REMOVED***
+    name={name}
+    component={component}
     options={{
       tabBarLabel: name,
-      tabBarIcon: ({color, size***REMOVED***) =>
+      tabBarIcon: ({color, size}) =>
         generateIcon(iconTypes)(iconName, color, size),
-    ***REMOVED******REMOVED***
+    }}
   />
 );
 
 const Tab = createBottomTabNavigator();
 
 const MyTabs = () => {
-***REMOVED***
+  return (
     <Tab.Navigator
       initialRouteName="Home"
       tabBarOptions={{
         activeTintColor: '#e91e63',
-      ***REMOVED******REMOVED***>
-      {TabScreen('Home', SampleImagePicker, IconTypes.MCi, 'home')***REMOVED***
-      {TabScreen('Suppl.', SupplementScreen, IconTypes.Fa5i, 'tablets')***REMOVED***
+      }}>
+      {TabScreen('Home', SampleImagePicker, IconTypes.MCi, 'home')}
+      {TabScreen('Suppl.', SupplementScreen, IconTypes.Fa5i, 'tablets')}
       {TabScreen(
         'Meals',
         SampleFatsecret,
         IconTypes.MCi,
         'silverware-fork-knife',
-      )***REMOVED***
-      {TabScreen('Water', SampleRealm, IconTypes.MCi, 'cup-water')***REMOVED***
+      )}
+      {TabScreen('Water', SampleRealm, IconTypes.MCi, 'cup-water')}
     </Tab.Navigator>
-***REMOVED***
-***REMOVED***
+  );
+};
 
 const Stack = createStackNavigator();
 
 const NavigationScreen = () => {
-***REMOVED***
+  return (
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
           name="Home"
-          component={MyTabs***REMOVED***
-          options={({route***REMOVED***) => ({
+          component={MyTabs}
+          options={({route}) => ({
             headerTitle: getHeaderTitle(route),
-          ***REMOVED***)***REMOVED***
+          })}
         />
-        <Stack.Screen name="Settings" component={SampleRealm***REMOVED*** />
-        <Stack.Screen name="SupplementForm" component={SupplementForm***REMOVED*** />
+        <Stack.Screen name="Settings" component={SampleRealm} />
+        <Stack.Screen name="SupplementForm" component={SupplementForm} />
       </Stack.Navigator>
     </NavigationContainer>
-***REMOVED***
-***REMOVED***
+  );
+};
 
 export default NavigationScreen;

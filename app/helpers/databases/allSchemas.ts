@@ -8,22 +8,22 @@ const UnitSign = {
   Quantity: 'count',
   Currency: '円',
   Weight: ['mcg', 'mg', 'g'],
-***REMOVED***
+};
 
 interface WeightUnit {
   value: number;
   sign: typeof UnitSign.Weight[number];
-***REMOVED***
+}
 
 interface QuantityUnit {
   value: number;
   sign: typeof UnitSign.Quantity;
-***REMOVED***
+}
 
 interface CurrencyUnit {
   value: number;
   sign: typeof UnitSign.Currency;
-***REMOVED***
+}
 
 interface Supplement {
   id: string;
@@ -41,7 +41,7 @@ interface Supplement {
   imageUrl: string;
   createdAt: Date;
   updatedAt: Date;
-***REMOVED***
+}
 
 export const SupplementSchema = {
   name: SUPPLEMENT_SCHEMA,
@@ -50,7 +50,7 @@ export const SupplementSchema = {
     id: 'string',
     supplementName: 'string',
     brandName: 'string',
-    nutrientId: {type: 'string?[]'***REMOVED***,
+    nutrientId: {type: 'string?[]'},
     category: 'string',
     sub_category: 'string',
     price: 'string',
@@ -61,8 +61,8 @@ export const SupplementSchema = {
     imageUrl: 'string',
     createdAt: 'date',
     updatedAt: 'date',
-***REMOVED***
-***REMOVED***
+  },
+};
 
 interface Nutrient {
   id: string;
@@ -72,7 +72,7 @@ interface Nutrient {
   perDailyValue: number;
   createdAt: Date;
   updatedAt: Date;
-***REMOVED***
+}
 
 export const NutrientSchema = {
   name: NUTRIENT_SCHEMA,
@@ -85,8 +85,8 @@ export const NutrientSchema = {
     perDailyValue: 'int',
     createdAt: 'data',
     updatedAt: 'data',
-***REMOVED***
-***REMOVED***
+  },
+};
 
 export const WaterSchema = {
   name: WATER_SCHEMA,
@@ -95,7 +95,7 @@ export const WaterSchema = {
     id: 'string',
     waterName: 'string',
     brandName: 'string',
-    nutrientId: {type: 'string?[]'***REMOVED***,
+    nutrientId: {type: 'string?[]'},
     classification: 'string',
     price: 'string',
     content: 'string',
@@ -105,8 +105,8 @@ export const WaterSchema = {
     imageUrl: 'string',
     createdAt: 'date',
     updatedAt: 'date',
-***REMOVED***
-***REMOVED***
+  },
+};
 
 export const UserSchema = {
   name: USER_SCHEMA,
@@ -114,8 +114,8 @@ export const UserSchema = {
   properties: {
     id: 'string',
     name: 'string',
-***REMOVED***
-***REMOVED***
+  },
+};
 
 const createRealm = (
   realm: Realm,
@@ -126,7 +126,7 @@ const createRealm = (
   modified
     ? realm.create(schemaName, insertObj, Realm.UpdateMode.Modified)
     : realm.create(schemaName, insertObj);
-***REMOVED***
+};
 
 // スキーマにインサート
 const writeRealm = (
@@ -137,48 +137,48 @@ const writeRealm = (
 ) => {
   Realm.open({
     schema: [schema],
-  ***REMOVED***)
+  })
     .then((realm: Realm) => {
       realm.write(() => {
         createRealm(realm, schemaName, insertObj, modified);
-      ***REMOVED***
+      });
       realm.close();
-    ***REMOVED***)
+    })
     .catch((error) => {
       console.log(error);
-    ***REMOVED***
-***REMOVED***
+    });
+};
 
 // DataListスキーマにデリート
 const deleteSchema = (schema: any, schemaName: string, schemaId: any) => {
   Realm.open({
     schema: [schema],
-  ***REMOVED***)
+  })
     .then((realm: Realm) => {
       realm.write(() => {
         let deletingDataList = realm.objectForPrimaryKey(schemaName, schemaId);
         realm.delete(deletingDataList);
-      ***REMOVED***
+      });
       realm.close();
-    ***REMOVED***)
+    })
     .catch((error) => {
       console.log(error);
-    ***REMOVED***
-***REMOVED***
+    });
+};
 
 // DataListスキーマを全デリート
 const allDeleteSchema = (schema: any, schemaName: string) => {
   Realm.open({
     schema: [schema],
-  ***REMOVED***)
+  })
     .then((realm: Realm) => {
       realm.write(() => {
         let allTodoLists = realm.objects(schemaName);
         realm.delete(allTodoLists);
-      ***REMOVED***
+      });
       realm.close();
-    ***REMOVED***)
+    })
     .catch((error) => {
       console.log(error);
-    ***REMOVED***
-***REMOVED***
+    });
+};
