@@ -2,7 +2,7 @@ import {useNavigation***REMOVED*** from '@react-navigation/native';
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity, View***REMOVED*** from 'react-native';
 import CountSupplement from '../../components/count-supplement';
-import {GlobalStyles***REMOVED*** from '../../global-style';
+import {ComStyles***REMOVED*** from '../../global-style';
 
 const MOCK = [
   {supplementName: 'Mega D-3 & MK-7'***REMOVED***,
@@ -19,10 +19,9 @@ const SupplementScreen = () => {
   const navigation = useNavigation();
 ***REMOVED***
     <View style={Styles.screenContainer***REMOVED***>
-      <View
-        style={[GlobalStyles.centeringContainer, Styles.addButtonContainer]***REMOVED***>
+      <View style={[ComStyles.centeringContainer, Styles.addButtonContainer]***REMOVED***>
         <TouchableOpacity
-          style={[Styles.addButton, GlobalStyles.centeringContainer]***REMOVED***
+          style={[Styles.addButton, ComStyles.centeringContainer]***REMOVED***
           onPress={() => navigation.navigate('SupplementForm')***REMOVED***>
           <Text style={Styles.addButtonText***REMOVED***>サプリを登録する</Text>
         </TouchableOpacity>

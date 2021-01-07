@@ -13,6 +13,8 @@ import SampleFatsecret from './sample/fatsecret.sample';
 import SampleRealm from './sample/realm.sample';
 import SupplementScreen from './screen/supplement/supplement-screen';
 import SupplementForm from './screen/supplement/supplement-form';
+import SampleCameraRoll from './sample/camera-roll.sample';
+import SampleImagePicker from './sample/image-picker.sample';
 
 const getHeaderTitle = (route: Route<string, object | undefined>) => {
   // If the focused route is not found, we need to assume it's the initial screen
@@ -85,9 +87,14 @@ const MyTabs = () => {
       tabBarOptions={{
         activeTintColor: '#e91e63',
       ***REMOVED******REMOVED***>
-      {TabScreen('Home', SampleRealm, IconTypes.MCi, 'home')***REMOVED***
+      {TabScreen('Home', SampleImagePicker, IconTypes.MCi, 'home')***REMOVED***
       {TabScreen('Suppl.', SupplementScreen, IconTypes.Fa5i, 'tablets')***REMOVED***
-      {TabScreen('Meals', SampleRealm, IconTypes.MCi, 'silverware-fork-knife')***REMOVED***
+      {TabScreen(
+        'Meals',
+        SampleFatsecret,
+        IconTypes.MCi,
+        'silverware-fork-knife',
+      )***REMOVED***
       {TabScreen('Water', SampleRealm, IconTypes.MCi, 'cup-water')***REMOVED***
     </Tab.Navigator>
 ***REMOVED***
@@ -107,6 +114,7 @@ const NavigationScreen = () => {
           ***REMOVED***)***REMOVED***
         />
         <Stack.Screen name="Settings" component={SampleRealm***REMOVED*** />
+        <Stack.Screen name="SupplementForm" component={SupplementForm***REMOVED*** />
       </Stack.Navigator>
     </NavigationContainer>
 ***REMOVED***

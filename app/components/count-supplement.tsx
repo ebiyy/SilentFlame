@@ -1,7 +1,7 @@
 import React, {useState***REMOVED*** from 'react';
 import {Alert, Text, View, StyleSheet, TouchableOpacity***REMOVED*** from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import {GlobalStyles***REMOVED*** from '../global-style';
+import {ComStyles***REMOVED*** from '../global-style';
 
 type Props = {
   supplementName: string;
@@ -14,12 +14,12 @@ const CountSupplement = (props: Props) => {
     <View style={Styles.countSupplContainer***REMOVED***>
       <View style={[Styles.supplNameContainer]***REMOVED***>
         <TouchableOpacity
-          style={GlobalStyles.centeringContainer***REMOVED***
+          style={ComStyles.centeringContainer***REMOVED***
           onPress={() => Alert.alert('Simple Button pressed')***REMOVED***>
           <Text>{props.supplementName***REMOVED***</Text>
         </TouchableOpacity>
       </View>
-      <View style={[GlobalStyles.centeringContainer, Styles.counterContainer]***REMOVED***>
+      <View style={[ComStyles.centeringContainer, Styles.counterContainer]***REMOVED***>
         {switchIcon ? (
           <TouchableOpacity
             onPress={() => setCount(count - 1 >= 0 ? count - 1 : 0)***REMOVED***>
@@ -31,8 +31,7 @@ const CountSupplement = (props: Props) => {
           </TouchableOpacity>
         )***REMOVED***
       </View>
-      <View
-        style={[GlobalStyles.centeringContainer, Styles.countValueContainer]***REMOVED***>
+      <View style={[ComStyles.centeringContainer, Styles.countValueContainer]***REMOVED***>
         <TouchableOpacity onPress={() => setSwitchIcon(!switchIcon)***REMOVED***>
           <Text style={Styles.countValueText***REMOVED***>{count***REMOVED***</Text>
         </TouchableOpacity>
