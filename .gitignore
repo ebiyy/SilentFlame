@@ -62,3 +62,4 @@ buck-out/
 fatsecret-get.js
 fatsecret-oath.js
 fatsecret.sample.tsx
+credencial.ts

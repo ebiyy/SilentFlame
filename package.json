@@ -8,11 +8,14 @@
     "all": "react-native run-ios && react-native run-android",
     "start": "react-native start",
     "test": "jest",
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "clean-pod": "rm -rf ios/Pods && npx pod-install && yarn start -- --reset-cache",
+    "pod-restart": "cd ios && pod repo remove master && pod setup && pod install"
   },
   "dependencies": {
     "@react-native-community/cameraroll": "^4.0.1",
     "@react-native-community/masked-view": "^0.1.10",
+    "@react-native-picker/picker": "^1.9.10",
     "@react-navigation/bottom-tabs": "^5.11.2",
     "@react-navigation/native": "^5.8.10",
     "@react-navigation/stack": "^5.12.8",

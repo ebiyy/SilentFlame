@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Text, View, TextInput, Button, Alert, StyleSheet} from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
 
@@ -19,9 +19,15 @@ const styles = StyleSheet.create({
   },
 });
 
-const SupplementForm = () => {
+const SupplementForm = ({navigation, route}) => {
   const {control, handleSubmit, errors} = useForm();
   const onSubmit = (data) => console.log(data);
+
+  useEffect(() => {
+    navigation.setOptions({
+      title: 'サプリを登録',
+    });
+  }, []);
 
   return (
     <View style={styles.header}>

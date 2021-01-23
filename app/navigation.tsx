@@ -15,6 +15,8 @@ import SupplementScreen from './screen/supplement/supplement-screen';
 import SupplementForm from './screen/supplement/supplement-form';
 import SampleCameraRoll from './sample/camera-roll.sample';
 import SampleImagePicker from './sample/image-picker.sample';
+import NutrientForm from './screen/supplement/nutrient-from';
+import NutrientFormController from './screen/supplement/nutrient-from-controller';
 
 const getHeaderTitle = (route: Route<string, object | undefined>) => {
   // If the focused route is not found, we need to assume it's the initial screen
@@ -115,6 +117,10 @@ const NavigationScreen = () => {
         />
         <Stack.Screen name="Settings" component={SampleRealm} />
         <Stack.Screen name="SupplementForm" component={SupplementForm} />
+        <Stack.Screen
+          name="NutrientFormController"
+          component={NutrientFormController}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

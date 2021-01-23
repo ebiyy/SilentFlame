@@ -1,3 +1,4 @@
+import {useNavigation} from '@react-navigation/native';
 import React, {useState} from 'react';
 import {Alert, Text, View, StyleSheet, TouchableOpacity} from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
@@ -10,12 +11,18 @@ type Props = {
 const CountSupplement = (props: Props) => {
   const [count, setCount] = useState(0);
   const [switchIcon, setSwitchIcon] = useState(false);
+  const navigation = useNavigation();
   return (
     <View style={Styles.countSupplContainer}>
       <View style={[Styles.supplNameContainer]}>
         <TouchableOpacity
           style={ComStyles.centeringContainer}
-          onPress={() => Alert.alert('Simple Button pressed')}>
+          onPress={() =>
+            navigation.navigate('NutrientFormController', {
+              mySppliId: 1,
+              isEditable: false,
+            })
+          }>
           <Text>{props.supplementName}</Text>
         </TouchableOpacity>
       </View>

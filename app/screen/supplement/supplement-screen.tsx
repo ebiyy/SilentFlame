@@ -26,8 +26,8 @@ const SupplementScreen = () => {
           <Text style={Styles.addButtonText}>サプリを登録する</Text>
         </TouchableOpacity>
       </View>
-      {MOCK.map((obj) => (
-        <CountSupplement supplementName={obj.supplementName} />
+      {MOCK.map((obj, index) => (
+        <CountSupplement key={index} supplementName={obj.supplementName} />
       ))}
     </View>
   );
