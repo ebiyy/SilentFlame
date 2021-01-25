@@ -104,21 +104,21 @@ const MOCK: MySuppli[] = [
   },
 ];
 
+export const BLANK_NUTRIENT: Nutrient = {
+  nutrientName: '',
+  amountPerServing: {
+    value: 0,
+    unit: UnitOfWeight.mcg,
+  },
+  perDailyValue: 0,
+};
+
 const isNutrientArr = (mySppliId: number): Nutrient[] => {
   const check = MOCK.filter((obj) => obj.mySppliId === mySppliId);
   if (check.length > 0) {
     return check[0].nutrient;
   } else {
-    return [
-      {
-        nutrientName: '',
-        amountPerServing: {
-          value: 0,
-          unit: UnitOfWeight.mcg,
-        },
-        perDailyValue: 0,
-      },
-    ];
+    return [BLANK_NUTRIENT];
   }
 };
 
@@ -143,7 +143,6 @@ const NutrientFormController = ({navigation, route}) => {
               color="#FFFFFF"
               title={isEditableState ? '編集終了' : '編集'}
               onPress={() => {
-                // isEditableState && handleSubmit(onSubmit);
                 setIsEditableState(!isEditableState);
               }}
             />
@@ -166,17 +165,7 @@ const NutrientFormController = ({navigation, route}) => {
               title="栄養素を追加"
               // onPress={handleSubmit(onSubmit)}
               onPress={() =>
-                setNutrientArr((preState) => [
-                  ...preState,
-                  {
-                    nutrientName: '',
-                    amountPerServing: {
-                      value: 0,
-                      unit: UnitOfWeight.mcg,
-                    },
-                    perDailyValue: 0,
-                  },
-                ])
+                setNutrientArr((preState) => [...preState, BLANK_NUTRIENT])
               }
             />
           </View>
