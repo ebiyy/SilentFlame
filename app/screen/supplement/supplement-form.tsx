@@ -7,27 +7,38 @@ import {
   Alert,
   StyleSheet,
   Image,
+  KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback,
+  Keyboard,
+  StatusBar,
 } from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {UnitOfWeight} from './nutrient-from-controller';
 import {Picker} from '@react-native-picker/picker';
+import {ScrollView} from 'react-native-gesture-handler';
+import {useHeaderHeight} from '@react-navigation/stack';
+import PickerController from '../../components/picker-controller';
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   header: {
-    marginTop: 50,
+    marginTop: 20,
     marginHorizontal: 30,
+    flex: 1,
+    justifyContent: 'space-around',
   },
   input: {
-    height: 60,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    height: 50,
     borderColor: 'gray',
     borderWidth: 2,
     borderRadius: 10,
-    marginBottom: 15,
+    marginVertical: 5,
     padding: 10,
+    zIndex: 999,
   },
   imageContainer: {
     backgroundColor: '#d1d1d1',
@@ -39,17 +50,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
   },
   pickerView: {
-    width: '50%',
-    marginTop: -80,
+    width: '33%',
+    // marginTop: -72,
     padding: 0,
     maxHeight: 60,
+    zIndex: 0,
   },
   button: {
     backgroundColor: 'purple',
     marginHorizontal: 40,
     padding: 15,
     borderRadius: 10,
-    marginTop: 15,
+    marginTop: 40,
   },
 });
 
@@ -64,177 +76,173 @@ const SupplementForm = ({navigation, route}) => {
   }, []);
 
   return (
-    <View style={styles.header}>
-      <Controller
-        control={control}
-        render={({onChange, onBlur, value}) => (
-          <TextInput
-            style={styles.input}
-            onBlur={onBlur}
-            onChangeText={(value) => onChange(value)}
-            value={value}
-            placeholder="サプリ名"
-          />
-        )}
-        name="supplementName"
-        rules={{required: true}}
-        defaultValue=""
-      />
-      {errors.supplementName && <Text>This is required.</Text>}
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      keyboardVerticalOffset={useHeaderHeight()}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <ScrollView>
+          <View style={styles.header}>
+            <Controller
+              control={control}
+              render={({onChange, onBlur, value}) => (
+                <TextInput
+                  style={styles.input}
+                  onBlur={onBlur}
+                  onChangeText={(value) => onChange(value)}
+                  value={value}
+                  placeholder="サプリ名"
+                  placeholderTextColor="lightgray"
+                />
+              )}
+              name="supplementName"
+              rules={{required: true}}
+              defaultValue=""
+            />
+            {errors.supplementName && <Text>This is required.</Text>}
 
-      <View style={styles.imageContainer}>
-        <Icon name="image" size={100} color="#000" solid={true} />
-      </View>
+            <View style={styles.imageContainer}>
+              <Icon name="image" size={100} color="#000" solid={true} />
+            </View>
 
-      <View style={styles.splitForm}>
-        <View style={{width: '50%'}}>
-          <Controller
-            control={control}
-            render={({onChange, onBlur, value}) => (
-              <TextInput
-                style={styles.input}
-                onBlur={onBlur}
-                onChangeText={(value) => onChange(value)}
-                value={value}
-                placeholder="カテゴリー"
+            <View style={styles.splitForm}>
+              <View style={{width: '50%'}}>
+                <Controller
+                  control={control}
+                  render={({onChange, onBlur, value}) => (
+                    <TextInput
+                      style={styles.input}
+                      onBlur={onBlur}
+                      onChangeText={(value) => onChange(value)}
+                      value={value}
+                      placeholder="カテゴリー"
+                      placeholderTextColor="lightgray"
+                    />
+                  )}
+                  name="category"
+                  rules={{required: true}}
+                  defaultValue=""
+                />
+                {errors.category && <Text>入力してください</Text>}
+              </View>
+              <View style={{width: '50%'}}>
+                <Controller
+                  control={control}
+                  render={({onChange, onBlur, value}) => (
+                    <TextInput
+                      style={styles.input}
+                      onBlur={onBlur}
+                      onChangeText={(value) => onChange(value)}
+                      value={value}
+                      placeholder="子カテゴリー"
+                      placeholderTextColor="lightgray"
+                    />
+                  )}
+                  name="clindCategory"
+                  rules={{required: true}}
+                  defaultValue=""
+                />
+                {errors.clindCategory && <Text>入力してください</Text>}
+              </View>
+            </View>
+
+            <View style={styles.splitForm}>
+              <View style={{width: '66%'}}>
+                <Controller
+                  control={control}
+                  render={({onChange, onBlur, value}) => (
+                    <TextInput
+                      style={styles.input}
+                      onBlur={onBlur}
+                      onChangeText={(value) => onChange(value)}
+                      value={value}
+                      placeholder="金額"
+                      placeholderTextColor="lightgray"
+                    />
+                  )}
+                  name="priceValue"
+                  rules={{required: true}}
+                  defaultValue=""
+                />
+                {errors.priceValue && <Text>入力してください</Text>}
+              </View>
+              <View style={styles.pickerView}>
+                <PickerController
+                  control={control}
+                  controlName="priceUnit"
+                  items={['¥', '$']}
+                  defaultValue={['¥', '$'][0]}
+                  errors={errors}
+                  marginTop={-78}
+                />
+              </View>
+            </View>
+
+            <View style={{...styles.splitForm, zIndex: 99, marginTop: 30}}>
+              <View style={{width: '66%'}}>
+                <Controller
+                  control={control}
+                  render={({onChange, onBlur, value}) => (
+                    <TextInput
+                      style={styles.input}
+                      onBlur={onBlur}
+                      onChangeText={(value) => onChange(value)}
+                      value={value}
+                      placeholder="内容量"
+                      placeholderTextColor="lightgray"
+                    />
+                  )}
+                  name="contentSizeValue"
+                  rules={{required: true}}
+                  defaultValue=""
+                />
+                {errors.contentSizeValue && <Text>入力してください</Text>}
+              </View>
+              <View style={styles.pickerView}>
+                <PickerController
+                  control={control}
+                  controlName="contentSizeUnit"
+                  items={['個', ...Object.values(UnitOfWeight)]}
+                  defaultValue={['個', ...Object.values(UnitOfWeight)][0]}
+                  errors={errors}
+                  marginTop={-20}
+                />
+              </View>
+            </View>
+
+            <View style={styles.splitForm}>
+              <View style={{width: '66%'}}>
+                <Controller
+                  control={control}
+                  render={({onChange, onBlur, value}) => (
+                    <TextInput
+                      style={styles.input}
+                      onBlur={onBlur}
+                      onChangeText={(value) => onChange(value)}
+                      value={value}
+                      placeholder="1日分の値"
+                      placeholderTextColor="lightgray"
+                    />
+                  )}
+                  name="servingSize"
+                  rules={{required: true}}
+                  defaultValue=""
+                />
+                {errors.servingSize && <Text>入力してください</Text>}
+              </View>
+            </View>
+
+            <View style={styles.button}>
+              <Button
+                color="#FFFFFF"
+                title="続けて栄養素も登録"
+                onPress={handleSubmit(onSubmit)}
               />
-            )}
-            name="category"
-            rules={{required: true}}
-            defaultValue=""
-          />
-          {errors.category && <Text>入力してください</Text>}
-        </View>
-        <View style={{width: '50%'}}>
-          <Controller
-            control={control}
-            render={({onChange, onBlur, value}) => (
-              <TextInput
-                style={styles.input}
-                onBlur={onBlur}
-                onChangeText={(value) => onChange(value)}
-                value={value}
-                placeholder="子カテゴリー"
-              />
-            )}
-            name="clindCategory"
-            rules={{required: true}}
-            defaultValue=""
-          />
-          {errors.clindCategory && <Text>入力してください</Text>}
-        </View>
-      </View>
-
-      <View style={styles.splitForm}>
-        <View style={{width: '50%'}}>
-          <Controller
-            control={control}
-            render={({onChange, onBlur, value}) => (
-              <TextInput
-                style={styles.input}
-                onBlur={onBlur}
-                onChangeText={(value) => onChange(value)}
-                value={value}
-                placeholder="金額"
-              />
-            )}
-            name="priceValue"
-            rules={{required: true}}
-            defaultValue=""
-          />
-          {errors.priceValue && <Text>入力してください</Text>}
-        </View>
-        <View style={styles.pickerView}>
-          <Controller
-            control={control}
-            render={({onChange, onBlur, value}) => (
-              <Picker
-                selectedValue={value || UnitOfWeight.mcg}
-                onValueChange={(value) => onChange(value)}>
-                {/* {Object.values(UnitOfWeight).map((v, index) => (
-                  <Picker.Item key={index} label={v} value={v} />
-                ))} */}
-                <Picker.Item label="¥" value="¥" />
-                <Picker.Item label="$" value="$" />
-              </Picker>
-            )}
-            name="priceUnit"
-            rules={{required: true}}
-            defaultValue=""
-          />
-          {errors.priceUnit && <Text>選択してください</Text>}
-        </View>
-      </View>
-
-      <View style={{...styles.splitForm, marginTop: 20}}>
-        <View style={{width: '50%'}}>
-          <Controller
-            control={control}
-            render={({onChange, onBlur, value}) => (
-              <TextInput
-                style={styles.input}
-                onBlur={onBlur}
-                onChangeText={(value) => onChange(value)}
-                value={value}
-                placeholder="内容量"
-              />
-            )}
-            name="contentSizeValue"
-            rules={{required: true}}
-            defaultValue=""
-          />
-          {errors.contentSizeValue && <Text>入力してください</Text>}
-        </View>
-        <View style={{...styles.pickerView, paddingTop: 10}}>
-          <Controller
-            control={control}
-            render={({onChange, onBlur, value}) => (
-              <Picker
-                selectedValue={value || 'コ'}
-                onValueChange={(value) => onChange(value)}>
-                <Picker.Item label="コ" value="コ" />
-                {Object.values(UnitOfWeight).map((v, index) => (
-                  <Picker.Item key={index} label={v} value={v} />
-                ))}
-              </Picker>
-            )}
-            name="contentSizeUnit"
-            rules={{required: true}}
-            defaultValue=""
-          />
-          {errors.contentSizeUnit && <Text>選択してください</Text>}
-        </View>
-      </View>
-
-      <View style={styles.splitForm}>
-        <View style={{width: '50%'}}>
-          <Controller
-            control={control}
-            render={({onChange, onBlur, value}) => (
-              <TextInput
-                style={styles.input}
-                onBlur={onBlur}
-                onChangeText={(value) => onChange(value)}
-                value={value}
-                placeholder="1日分の値"
-              />
-            )}
-            name="servingSize"
-            rules={{required: true}}
-            defaultValue=""
-          />
-          {errors.servingSize && <Text>入力してください</Text>}
-        </View>
-      </View>
-
-      <View style={styles.button}>
-        <Button
-          color="#FFFFFF"
-          title="続けて栄養素も登録"
-          onPress={handleSubmit(onSubmit)}
-        />
-      </View>
-    </View>
+            </View>
+          </View>
+        </ScrollView>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
 

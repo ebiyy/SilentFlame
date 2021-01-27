@@ -17,6 +17,7 @@ import SampleCameraRoll from './sample/camera-roll.sample';
 import SampleImagePicker from './sample/image-picker.sample';
 import NutrientForm from './screen/supplement/nutrient-from';
 import NutrientFormController from './screen/supplement/nutrient-from-controller';
+import KeyboardAvoidingComponent from './sample/keyboard-avoiding';
 
 const getHeaderTitle = (route: Route<string, object | undefined>) => {
   // If the focused route is not found, we need to assume it's the initial screen
@@ -97,7 +98,12 @@ const MyTabs = () => {
         IconTypes.MCi,
         'silverware-fork-knife',
       )}
-      {TabScreen('Water', SampleRealm, IconTypes.MCi, 'cup-water')}
+      {TabScreen(
+        'Water',
+        KeyboardAvoidingComponent,
+        IconTypes.MCi,
+        'cup-water',
+      )}
     </Tab.Navigator>
   );
 };
