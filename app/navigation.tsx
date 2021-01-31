@@ -18,6 +18,7 @@ import SampleImagePicker from './sample/image-picker.sample';
 import NutrientForm from './screen/supplement/nutrient-from';
 import NutrientFormController from './screen/supplement/nutrient-from-controller';
 import KeyboardAvoidingComponent from './sample/keyboard-avoiding';
+import HomeScreen from './screen/home/home';
 
 const getHeaderTitle = (route: Route<string, object | undefined>) => {
   // If the focused route is not found, we need to assume it's the initial screen
@@ -27,7 +28,7 @@ const getHeaderTitle = (route: Route<string, object | undefined>) => {
 
   switch (routeName) {
     case 'Home':
-      return 'Home';
+      return '今日';
     case 'Suppl.':
       return '今日のサプリ';
     case 'Meals':
@@ -90,7 +91,7 @@ const MyTabs = () => {
       tabBarOptions={{
         activeTintColor: '#e91e63',
       }}>
-      {TabScreen('Home', SampleImagePicker, IconTypes.MCi, 'home')}
+      {TabScreen('Home', HomeScreen, IconTypes.MCi, 'home')}
       {TabScreen('Suppl.', SupplementScreen, IconTypes.Fa5i, 'tablets')}
       {TabScreen(
         'Meals',

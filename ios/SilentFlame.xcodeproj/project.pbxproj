@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		00DFE2FC25C539B1001DD666 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00DFE2FB25C539B1001DD666 /* HealthKit.framework */; };
 		00E356F31AD99517003FC87E /* SilentFlameTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* SilentFlameTests.m */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
@@ -41,6 +42,8 @@
 /* Begin PBXFileReference section */
 		00373B0367576A2C2E4C5CF3 /* Pods-SilentFlame-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SilentFlame-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-SilentFlame-tvOS/Pods-SilentFlame-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
+		00DFE2FA25C539B1001DD666 /* SilentFlame.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = SilentFlame.entitlements; path = SilentFlame/SilentFlame.entitlements; sourceTree = "<group>"; };
+		00DFE2FB25C539B1001DD666 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		00E356EE1AD99517003FC87E /* SilentFlameTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SilentFlameTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* SilentFlameTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SilentFlameTests.m; sourceTree = "<group>"; };
@@ -98,6 +101,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				97D482B4A509B006A130F6AD /* libPods-SilentFlame.a in Frameworks */,
+				00DFE2FC25C539B1001DD666 /* HealthKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -140,6 +144,7 @@
 		13B07FAE1A68108700A75B9A /* SilentFlame */ = {
 			isa = PBXGroup;
 			children = (
+				00DFE2FA25C539B1001DD666 /* SilentFlame.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
@@ -177,6 +182,7 @@
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				00DFE2FB25C539B1001DD666 /* HealthKit.framework */,
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
 				ED2971642150620600B7C4FE /* JavaScriptCore.framework */,
 				EEE2CDEF487A0E4792445BE9 /* libPods-SilentFlame.a */,
@@ -757,6 +763,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = SilentFlame/SilentFlame.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5V6DUAYUG3;
 				ENABLE_BITCODE = NO;
@@ -782,6 +789,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_ENTITLEMENTS = SilentFlame/SilentFlame.entitlements;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 5V6DUAYUG3;
 				INFOPLIST_FILE = SilentFlame/Info.plist;
