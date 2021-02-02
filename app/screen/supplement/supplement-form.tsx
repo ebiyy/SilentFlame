@@ -20,6 +20,7 @@ import {Picker} from '@react-native-picker/picker';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useHeaderHeight} from '@react-navigation/stack';
 import PickerController from '../../components/picker-controller';
+import TextInputController from '../../components/text-input-controller';
 
 const styles = StyleSheet.create({
   container: {
@@ -83,88 +84,47 @@ const SupplementForm = ({navigation, route}) => {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <ScrollView>
           <View style={styles.header}>
-            <Controller
+            <TextInputController
               control={control}
-              render={({onChange, onBlur, value}) => (
-                <TextInput
-                  style={styles.input}
-                  onBlur={onBlur}
-                  onChangeText={(value) => onChange(value)}
-                  value={value}
-                  placeholder="サプリ名"
-                  placeholderTextColor="lightgray"
-                />
-              )}
-              name="supplementName"
-              rules={{required: true}}
+              controlName="supplementName"
+              placeholder="サプリ名"
               defaultValue=""
+              errors={errors}
             />
-            {errors.supplementName && <Text>This is required.</Text>}
-
             <View style={styles.imageContainer}>
               <Icon name="image" size={100} color="#000" solid={true} />
             </View>
 
             <View style={styles.splitForm}>
               <View style={{width: '50%'}}>
-                <Controller
+                <TextInputController
                   control={control}
-                  render={({onChange, onBlur, value}) => (
-                    <TextInput
-                      style={styles.input}
-                      onBlur={onBlur}
-                      onChangeText={(value) => onChange(value)}
-                      value={value}
-                      placeholder="カテゴリー"
-                      placeholderTextColor="lightgray"
-                    />
-                  )}
-                  name="category"
-                  rules={{required: true}}
+                  controlName="category"
+                  placeholder="カテゴリー"
                   defaultValue=""
+                  errors={errors}
                 />
-                {errors.category && <Text>入力してください</Text>}
               </View>
               <View style={{width: '50%'}}>
-                <Controller
+                <TextInputController
                   control={control}
-                  render={({onChange, onBlur, value}) => (
-                    <TextInput
-                      style={styles.input}
-                      onBlur={onBlur}
-                      onChangeText={(value) => onChange(value)}
-                      value={value}
-                      placeholder="子カテゴリー"
-                      placeholderTextColor="lightgray"
-                    />
-                  )}
-                  name="clindCategory"
-                  rules={{required: true}}
+                  controlName="clindCategory"
+                  placeholder="子カテゴリー"
                   defaultValue=""
+                  errors={errors}
                 />
-                {errors.clindCategory && <Text>入力してください</Text>}
               </View>
             </View>
 
             <View style={styles.splitForm}>
               <View style={{width: '66%'}}>
-                <Controller
+                <TextInputController
                   control={control}
-                  render={({onChange, onBlur, value}) => (
-                    <TextInput
-                      style={styles.input}
-                      onBlur={onBlur}
-                      onChangeText={(value) => onChange(value)}
-                      value={value}
-                      placeholder="金額"
-                      placeholderTextColor="lightgray"
-                    />
-                  )}
-                  name="priceValue"
-                  rules={{required: true}}
+                  controlName="priceValue"
+                  placeholder="金額"
                   defaultValue=""
+                  errors={errors}
                 />
-                {errors.priceValue && <Text>入力してください</Text>}
               </View>
               <View style={styles.pickerView}>
                 <PickerController
@@ -180,23 +140,13 @@ const SupplementForm = ({navigation, route}) => {
 
             <View style={{...styles.splitForm, zIndex: 99, marginTop: 30}}>
               <View style={{width: '66%'}}>
-                <Controller
+                <TextInputController
                   control={control}
-                  render={({onChange, onBlur, value}) => (
-                    <TextInput
-                      style={styles.input}
-                      onBlur={onBlur}
-                      onChangeText={(value) => onChange(value)}
-                      value={value}
-                      placeholder="内容量"
-                      placeholderTextColor="lightgray"
-                    />
-                  )}
-                  name="contentSizeValue"
-                  rules={{required: true}}
+                  controlName="contentSizeValue"
+                  placeholder="内容量"
                   defaultValue=""
+                  errors={errors}
                 />
-                {errors.contentSizeValue && <Text>入力してください</Text>}
               </View>
               <View style={styles.pickerView}>
                 <PickerController
@@ -212,23 +162,13 @@ const SupplementForm = ({navigation, route}) => {
 
             <View style={styles.splitForm}>
               <View style={{width: '66%'}}>
-                <Controller
+                <TextInputController
                   control={control}
-                  render={({onChange, onBlur, value}) => (
-                    <TextInput
-                      style={styles.input}
-                      onBlur={onBlur}
-                      onChangeText={(value) => onChange(value)}
-                      value={value}
-                      placeholder="1日分の値"
-                      placeholderTextColor="lightgray"
-                    />
-                  )}
-                  name="servingSize"
-                  rules={{required: true}}
+                  controlName="servingSize"
+                  placeholder="1日分の値"
                   defaultValue=""
+                  errors={errors}
                 />
-                {errors.servingSize && <Text>入力してください</Text>}
               </View>
             </View>
 

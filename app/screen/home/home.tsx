@@ -60,7 +60,7 @@ const HomeScreen = ({navigation, route}) => {
 
   return (
     <ScrollView>
-      <View style={{marginTop: Dimensions.get('window').height * 0.05}}>
+      <View style={{marginTop: Dimensions.get('window').height * 0.035}}>
         <View>
           <View style={{flexDirection: 'row'}}>
             {generateBtn(switchView, setSwitchView, ViewType.weight)}
@@ -76,12 +76,12 @@ const HomeScreen = ({navigation, route}) => {
           }
         />
       </View>
-      <View style={{marginTop: 30}}>
+      <View style={{marginTop: Dimensions.get('window').height * 0.01}}>
         <View>
           <View style={{flexDirection: 'row'}}>
-            <View style={styles.btnContainer}>
+            <View style={styles.activeBtn}>
               <Button
-                color="#fff"
+                color="black"
                 title="簡易"
                 onPress={() => console.log('簡易')}
               />
@@ -97,10 +97,28 @@ const HomeScreen = ({navigation, route}) => {
         </View>
         <SampleChartBar />
       </View>
-      <View style={{margin: 30, alignSelf: 'center'}}>
-        <Text style={{margin: 10, fontSize: 18}}>水分</Text>
+      <View
+        style={{
+          marginHorizontal: 30,
+          marginTop: Dimensions.get('window').height * 0.015,
+          alignSelf: 'center',
+        }}>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <Text style={{margin: 10, fontSize: 18}}>カロリー</Text>
+          <Text style={{margin: 10, fontSize: 18}}>1500Cal</Text>
+        </View>
         <Progress.Bar
-          // style={{}}
+          progress={0.3}
+          color="red"
+          width={Dimensions.get('window').width * 0.8}
+        />
+      </View>
+      <View style={{marginHorizontal: 30, marginTop: 10, alignSelf: 'center'}}>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <Text style={{margin: 10, fontSize: 18}}>水分</Text>
+          <Text style={{margin: 10, fontSize: 18}}>2L</Text>
+        </View>
+        <Progress.Bar
           progress={0.3}
           width={Dimensions.get('window').width * 0.8}
         />

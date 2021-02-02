@@ -12,6 +12,9 @@ type Props = {
 };
 
 const PickerController = (props: Props) => {
+  console.log(props.errors, 'PickerController');
+  console.log(props.errors[props.controlName], 'PickerController');
+  console.log(props.errors.priceValue, 'PickerController');
   return (
     <Controller
       control={props.control}
@@ -19,7 +22,9 @@ const PickerController = (props: Props) => {
         <Picker
           selectedValue={value}
           onValueChange={(v) => onChange(v)}
-          style={{marginTop: props.marginTop}}>
+          style={{
+            marginTop: props.marginTop,
+          }}>
           {props.items.map((str, i) => (
             <Picker.Item key={i} label={str} value={str} />
           ))}
