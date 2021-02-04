@@ -63,3 +63,9 @@ fatsecret-get.js
 fatsecret-oath.js
 fatsecret.sample.tsx
 credencial.ts
+
+# csvtojson
+*/csvtojson/*
+app/helpers/csvtojson/index.js
+app/helpers/csvtojson/nutrients.csv
+app/helpers/csvtojson/nutrients.ts

@@ -1,12 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {
-  View,
-  StyleSheet,
-  Text,
-  Button,
-  useWindowDimensions,
-  Dimensions,
-} from 'react-native';
+import {View, StyleSheet, Text, Button, Dimensions} from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
 import {
   getBodyFatPercentage,
@@ -44,6 +37,9 @@ const generateBtn = (
   );
 };
 
+const windowHeight = Dimensions.get('window').height;
+const windowWidth = Dimensions.get('window').width;
+
 const HomeScreen = ({navigation, route}) => {
   const [weightArr, setWeightArr] = useState<HealthArr[]>();
   const [fatPercentageArr, setFatPercentageArr] = useState<HealthArr[]>();
@@ -60,7 +56,7 @@ const HomeScreen = ({navigation, route}) => {
 
   return (
     <ScrollView>
-      <View style={{marginTop: Dimensions.get('window').height * 0.035}}>
+      <View style={{marginTop: windowHeight * 0.035}}>
         <View>
           <View style={{flexDirection: 'row'}}>
             {generateBtn(switchView, setSwitchView, ViewType.weight)}
@@ -76,7 +72,7 @@ const HomeScreen = ({navigation, route}) => {
           }
         />
       </View>
-      <View style={{marginTop: Dimensions.get('window').height * 0.01}}>
+      <View style={{marginTop: windowHeight * 0.01}}>
         <View>
           <View style={{flexDirection: 'row'}}>
             <View style={styles.activeBtn}>
@@ -100,28 +96,21 @@ const HomeScreen = ({navigation, route}) => {
       <View
         style={{
           marginHorizontal: 30,
-          marginTop: Dimensions.get('window').height * 0.015,
+          marginTop: windowHeight * 0.015,
           alignSelf: 'center',
         }}>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <Text style={{margin: 10, fontSize: 18}}>カロリー</Text>
-          <Text style={{margin: 10, fontSize: 18}}>1500Cal</Text>
+        <View style={styles.barTextViwer}>
+          <Text style={styles.barText}>カロリー</Text>
+          <Text style={styles.barText}>600/1500 kcal</Text>
         </View>
-        <Progress.Bar
-          progress={0.3}
-          color="red"
-          width={Dimensions.get('window').width * 0.8}
-        />
+        <Progress.Bar progress={0.3} color="red" width={windowWidth * 0.8} />
       </View>
       <View style={{marginHorizontal: 30, marginTop: 10, alignSelf: 'center'}}>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <Text style={{margin: 10, fontSize: 18}}>水分</Text>
-          <Text style={{margin: 10, fontSize: 18}}>2L</Text>
+        <View style={styles.barTextViwer}>
+          <Text style={styles.barText}>水分</Text>
+          <Text style={styles.barText}>1.5/2 L</Text>
         </View>
-        <Progress.Bar
-          progress={0.3}
-          width={Dimensions.get('window').width * 0.8}
-        />
+        <Progress.Bar progress={0.3} width={windowWidth * 0.8} />
       </View>
     </ScrollView>
   );
@@ -141,6 +130,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: 'gray',
     borderRadius: 5,
+  },
+  barTextViwer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  barText: {
+    margin: 10,
+    fontSize: 18,
   },
 });
 

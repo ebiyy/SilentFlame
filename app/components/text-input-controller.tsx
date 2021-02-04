@@ -22,11 +22,7 @@ const TextInputController = (props: Props) => {
       control={props.control}
       render={({onChange, onBlur, value}) => (
         <TextInput
-          style={Object.assign(
-            {},
-            styles.input,
-            isError ? styles.invalid : styles.valid,
-          )}
+          style={[styles.input, isError ? styles.invalid : styles.valid]}
           onBlur={onBlur}
           onChangeText={(value) => onChange(value)}
           value={value}

@@ -1,3 +1,4 @@
+import {useNavigation} from '@react-navigation/native';
 import React, {useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {
@@ -11,26 +12,54 @@ import {
   Button,
   Keyboard,
 } from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
+import {
+  ScrollView,
+  TouchableHighlight,
+  TouchableOpacity,
+} from 'react-native-gesture-handler';
 import {NUTRIENTS} from '../../helpers/csvtojson/nutrients';
+import CollapsibleSample from '../../sample/collapsible';
 
-const generateHitObj = (inputText: string) => {
-  const hitArr = NUTRIENTS.filter((obj) => obj.foodName.includes(inputText));
-  return (
-    hitArr.length > 0 &&
-    hitArr.map((obj, i) => <Text key={i}>{obj.foodName}</Text>)
-  );
-};
-
-const KeyboardAvoidingComponent = () => {
+const MealsScreen = () => {
+  const navigation = useNavigation();
   const {control, handleSubmit, errors} = useForm();
   const [inputText, setInputText] = useState('');
+
+  const generateHitObj = (inputText: string) => {
+    const hitArr = [].concat(
+      NUTRIENTS.filter((obj) => obj.foodName.includes(inputText)),
+      NUTRIENTS.filter((obj) => obj.remarks.includes(inputText)),
+    );
+    return (
+      hitArr.length > 0 &&
+      hitArr.map((obj, i) => (
+        <TouchableHighlight
+          key={i}
+          underlayColor="lightblue"
+          onPress={() =>
+            navigation.navigate('NutrientsList', {selectNutrient: obj})
+          }>
+          <View
+            style={{
+              padding: 10,
+              paddingVertical: 20,
+              borderWidth: 1,
+              borderRadius: 3,
+              borderBottomWidth: i === hitArr.length - 1 ? 1 : 0,
+            }}>
+            <Text>{obj.foodName}</Text>
+          </View>
+        </TouchableHighlight>
+      ))
+    );
+  };
+
   return (
-    <ScrollView>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        style={styles.container}>
-        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      style={styles.container}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <ScrollView>
           <View style={styles.inner}>
             <Controller
               control={control}
@@ -43,7 +72,7 @@ const KeyboardAvoidingComponent = () => {
                     setInputText(value);
                   }}
                   value={value}
-                  placeholder="サプリ名"
+                  placeholder="食品名"
                 />
               )}
               name="supplementName"
@@ -51,15 +80,14 @@ const KeyboardAvoidingComponent = () => {
               defaultValue=""
             />
             {errors.supplementName && <Text>This is required.</Text>}
-
             <View>
               <Text style={{marginBottom: 10}}>「{inputText}」で検索</Text>
               {inputText.length > 1 && generateHitObj(inputText)}
             </View>
           </View>
-        </TouchableWithoutFeedback>
-      </KeyboardAvoidingView>
-    </ScrollView>
+        </ScrollView>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
 
@@ -88,4 +116,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default KeyboardAvoidingComponent;
+export default MealsScreen;

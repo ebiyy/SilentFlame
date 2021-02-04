@@ -17,8 +17,9 @@ import SampleCameraRoll from './sample/camera-roll.sample';
 import SampleImagePicker from './sample/image-picker.sample';
 import NutrientForm from './screen/supplement/nutrient-from';
 import NutrientFormController from './screen/supplement/nutrient-from-controller';
-import KeyboardAvoidingComponent from './sample/keyboard-avoiding';
+import MealsScreen from './screen/meals/meals-screen';
 import HomeScreen from './screen/home/home';
+import NutrientsList from './screen/meals/nutrients-list';
 
 const getHeaderTitle = (route: Route<string, object | undefined>) => {
   // If the focused route is not found, we need to assume it's the initial screen
@@ -32,7 +33,7 @@ const getHeaderTitle = (route: Route<string, object | undefined>) => {
     case 'Suppl.':
       return '今日のサプリ';
     case 'Meals':
-      return 'Meals';
+      return '食事登録';
     case 'Water':
       return 'Water';
     case 'SupplementForm':
@@ -93,18 +94,8 @@ const MyTabs = () => {
       }}>
       {TabScreen('Home', HomeScreen, IconTypes.MCi, 'home')}
       {TabScreen('Suppl.', SupplementScreen, IconTypes.Fa5i, 'tablets')}
-      {TabScreen(
-        'Meals',
-        SampleFatsecret,
-        IconTypes.MCi,
-        'silverware-fork-knife',
-      )}
-      {TabScreen(
-        'Water',
-        KeyboardAvoidingComponent,
-        IconTypes.MCi,
-        'cup-water',
-      )}
+      {TabScreen('Meals', MealsScreen, IconTypes.MCi, 'silverware-fork-knife')}
+      {TabScreen('Water', MealsScreen, IconTypes.MCi, 'cup-water')}
     </Tab.Navigator>
   );
 };
@@ -128,6 +119,7 @@ const NavigationScreen = () => {
           name="NutrientFormController"
           component={NutrientFormController}
         />
+        <Stack.Screen name="NutrientsList" component={NutrientsList} />
       </Stack.Navigator>
     </NavigationContainer>
   );
