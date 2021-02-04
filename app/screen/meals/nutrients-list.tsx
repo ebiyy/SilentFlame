@@ -1,6 +1,7 @@
-import React, {useEffect} from 'react';
+import React, {Fragment, useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import {ScrollView} from 'react-native-gesture-handler';
+import Collapsible from 'react-native-collapsible';
+import {ScrollView, TouchableHighlight} from 'react-native-gesture-handler';
 
 const nutrients = {
   foodName: {
@@ -22,63 +23,58 @@ const nutrients = {
     label: '水分',
     unit: 'g',
   },
-  PROTCAA: {
-    label: 'アミノ酸組成によるたんぱく質',
-    unit: 'g',
-    nutrientCategory: 'たんぱく質',
-  },
   PROT: {
     label: 'たんぱく質',
     unit: 'g',
-    nutrientCategory: 'たんぱく質',
-  },
-  FATNLEA: {
-    label: '脂肪酸のトリアシルグリセロール当量',
-    unit: 'g',
-    nutrientCategory: '脂質',
-  },
-  CHOLE: {
-    label: 'コレステロール',
-    unit: 'mg',
-    nutrientCategory: '脂質',
+    detail: {
+      PROTCAA: {
+        label: 'アミノ酸組成によるたんぱく質',
+        unit: 'g',
+      },
+    },
   },
   FAT: {
     label: '脂質',
     unit: 'g',
-    nutrientCategory: '脂質',
-  },
-  CHOAVLM: {
-    label: '利用可能炭水化物（単糖当量）',
-    unit: 'g',
-    nutrientCategory: '炭水化物',
-    nutrientSubCategory: '利用可能炭水化物',
-  },
-  CHOAVL: {
-    label: '利用可能炭水化物（質量計）',
-    unit: 'g',
-    nutrientCategory: '炭水化物',
-    nutrientSubCategory: '利用可能炭水化物',
-  },
-  CHOAVLDF: {
-    label: '差引き法による利用可能炭水化物',
-    unit: 'g',
-    nutrientCategory: '炭水化物',
-    nutrientSubCategory: '利用可能炭水化物',
-  },
-  FIB: {
-    label: '食物繊維総量',
-    unit: 'g',
-    nutrientCategory: '炭水化物',
-  },
-  POLYL: {
-    label: '糖アルコール',
-    unit: 'g',
-    nutrientCategory: '炭水化物',
+    detail: {
+      FATNLEA: {
+        label: '脂肪酸のトリアシルグリセロール当量',
+        unit: 'g',
+      },
+      CHOLE: {
+        label: 'コレステロール',
+        unit: 'mg',
+      },
+    },
   },
   CHOCDF: {
     label: '炭水化物',
     unit: 'g',
-    nutrientCategory: '炭水化物',
+    detail: {
+      CHOAVLM: {
+        label: '利用可能炭水化物（単糖当量）',
+        unit: 'g',
+        nutrientSubCategory: '利用可能炭水化物',
+      },
+      CHOAVL: {
+        label: '利用可能炭水化物（質量計）',
+        unit: 'g',
+        nutrientSubCategory: '利用可能炭水化物',
+      },
+      CHOAVLDF: {
+        label: '差引き法による利用可能炭水化物',
+        unit: 'g',
+        nutrientSubCategory: '利用可能炭水化物',
+      },
+      FIB: {
+        label: '食物繊維総量',
+        unit: 'g',
+      },
+      POLYL: {
+        label: '糖アルコール',
+        unit: 'g',
+      },
+    },
   },
   OA: {
     label: '有機酸',
@@ -88,199 +84,174 @@ const nutrients = {
     label: '灰分',
     unit: 'g',
   },
-  NA: {
-    label: 'ナトリウム',
-    unit: 'mg',
-    nutrientCategory: 'ミネラル',
+  mineral: {
+    label: 'ミネラル',
+    detail: {
+      NA: {
+        label: 'ナトリウム',
+        unit: 'mg',
+      },
+      K: {
+        label: 'カリウム',
+        unit: 'mg',
+      },
+      CA: {
+        label: 'カルシウム',
+        unit: 'mg',
+      },
+      MG: {
+        label: 'マグネシウム',
+        unit: 'mg',
+      },
+      P: {
+        label: 'リン',
+        unit: 'mg',
+      },
+      FE: {
+        label: '鉄分',
+        unit: 'mg',
+      },
+      ZN: {
+        label: '亜鉛',
+        unit: 'mg',
+      },
+      CU: {
+        label: '銅',
+        unit: 'mg',
+      },
+      MN: {
+        label: 'マンガン',
+        unit: 'mg',
+      },
+      ID: {
+        label: 'ヨウ素',
+        unit: 'μg',
+      },
+      SE: {
+        label: 'セレン',
+        unit: 'μg',
+      },
+      CR: {
+        label: 'クロム',
+        unit: 'μg',
+      },
+      MO: {
+        label: 'モリブデン',
+        unit: 'μg',
+      },
+    },
   },
-  K: {
-    label: 'カリウム',
-    unit: 'mg',
-    nutrientCategory: 'ミネラル',
-  },
-  CA: {
-    label: 'カルシウム',
-    unit: 'mg',
-    nutrientCategory: 'ミネラル',
-  },
-  MG: {
-    label: 'マグネシウム',
-    unit: 'mg',
-    nutrientCategory: 'ミネラル',
-  },
-  P: {
-    label: 'リン',
-    unit: 'mg',
-    nutrientCategory: 'ミネラル',
-  },
-  FE: {
-    label: '鉄分',
-    unit: 'mg',
-    nutrientCategory: 'ミネラル',
-  },
-  ZN: {
-    label: '亜鉛',
-    unit: 'mg',
-    nutrientCategory: 'ミネラル',
-  },
-  CU: {
-    label: '銅',
-    unit: 'mg',
-    nutrientCategory: 'ミネラル',
-  },
-  MN: {
-    label: 'マンガン',
-    unit: 'mg',
-    nutrientCategory: 'ミネラル',
-  },
-  ID: {
-    label: 'ヨウ素',
-    unit: 'μg',
-    nutrientCategory: 'ミネラル',
-  },
-  SE: {
-    label: 'セレン',
-    unit: 'μg',
-    nutrientCategory: 'ミネラル',
-  },
-  CR: {
-    label: 'クロム',
-    unit: 'μg',
-    nutrientCategory: 'ミネラル',
-  },
-  MO: {
-    label: 'モリブデン',
-    unit: 'μg',
-    nutrientCategory: 'ミネラル',
-  },
-  RETOL: {
-    label: 'レチノール',
-    unit: 'μg',
-    nutrientCategory: 'ミネラル',
-    nutrientSubCategory: 'ビタミンA',
-  },
-  CARTA: {
-    label: 'αカロテン',
-    unit: 'μg',
-    nutrientCategory: 'ミネラル',
-    nutrientSubCategory: 'ビタミンA',
-  },
-  CARTB: {
-    label: 'βカロテン',
-    unit: 'μg',
-    nutrientCategory: 'ミネラル',
-    nutrientSubCategory: 'ビタミンA',
-  },
-  CRYPXB: {
-    label: 'βクリプトキサンチン',
-    unit: 'μg',
-    nutrientCategory: 'ミネラル',
-    nutrientSubCategory: 'ビタミンA',
-  },
-  CARTBEQ: {
-    label: 'βカロテン当量',
-    unit: 'μg',
-    nutrientCategory: 'ミネラル',
-    nutrientSubCategory: 'ビタミンA',
-  },
-  VITA_RAE: {
-    label: 'レチノール活性当量',
-    unit: 'μg',
-    nutrientCategory: 'ミネラル',
-    nutrientSubCategory: 'ビタミンA',
-  },
-  VITD: {
-    label: 'ビタミンD',
-    unit: 'μg',
-    nutrientCategory: 'ミネラル',
-  },
-  TOCPHA: {
-    label: 'αトコフェロール',
-    unit: 'mg',
-    nutrientCategory: 'ミネラル',
-    nutrientSubCategory: 'ビタミンE',
-  },
-  TOCPHB: {
-    label: 'βトコフェロール',
-    unit: 'mg',
-    nutrientCategory: 'ミネラル',
-    nutrientSubCategory: 'ビタミンE',
-  },
-  TOCPHG: {
-    label: 'γトコフェロール',
-    unit: 'mg',
-    nutrientCategory: 'ミネラル',
-    nutrientSubCategory: 'ビタミンE',
-  },
-  TOCPHD: {
-    label: 'δトコフェロール',
-    unit: 'mg',
-    nutrientCategory: 'ミネラル',
-    nutrientSubCategory: 'ビタミンE',
-  },
-  VITK: {
-    label: 'ビタミンK',
-    unit: 'μg',
-    nutrientCategory: 'ミネラル',
-  },
-  THIA: {
-    label: 'ビタミンB1',
-    unit: 'mg',
-    nutrientCategory: 'ミネラル',
-    nutrientSubCategory: 'ビタミンB群',
-  },
-  RIBF: {
-    label: 'ビタミンB2',
-    unit: 'mg',
-    nutrientCategory: 'ミネラル',
-    nutrientSubCategory: 'ビタミンB群',
-  },
-  NIA: {
-    label: 'ナイアシン',
-    unit: 'mg',
-    nutrientCategory: 'ミネラル',
-    nutrientSubCategory: 'ビタミンB群',
-  },
-  NE: {
-    label: 'ナイアシン当量',
-    unit: 'mg',
-    nutrientCategory: 'ミネラル',
-    nutrientSubCategory: 'ビタミンB群',
-  },
-  VITB6A: {
-    label: 'ビタミンB6',
-    unit: 'mg',
-    nutrientCategory: 'ミネラル',
-    nutrientSubCategory: 'ビタミンB群',
-  },
-  VITB12: {
-    label: 'ビタミンB12',
-    unit: 'μg',
-    nutrientCategory: 'ミネラル',
-    nutrientSubCategory: 'ビタミンB群',
-  },
-  FOL: {
-    label: '葉酸',
-    unit: 'μg',
-    nutrientCategory: 'ミネラル',
-    nutrientSubCategory: 'ビタミンB群',
-  },
-  PANTAC: {
-    label: 'パントテン酸',
-    unit: 'mg',
-    nutrientCategory: 'ミネラル',
-    nutrientSubCategory: 'ビタミンB群',
-  },
-  BIOT: {
-    label: 'ビオチン',
-    unit: 'μg',
-    nutrientCategory: 'ミネラル',
-    nutrientSubCategory: 'ビタミンB群',
-  },
-  VITC: {
-    label: 'ビタミンC',
-    unit: 'mg',
-    nutrientCategory: 'ミネラル',
+  vitamin: {
+    label: 'ビタミン',
+    detail: {
+      RETOL: {
+        label: 'レチノール',
+        unit: 'μg',
+        nutrientSubCategory: 'ビタミンA',
+      },
+      CARTA: {
+        label: 'αカロテン',
+        unit: 'μg',
+        nutrientSubCategory: 'ビタミンA',
+      },
+      CARTB: {
+        label: 'βカロテン',
+        unit: 'μg',
+        nutrientSubCategory: 'ビタミンA',
+      },
+      CRYPXB: {
+        label: 'βクリプトキサンチン',
+        unit: 'μg',
+        nutrientSubCategory: 'ビタミンA',
+      },
+      CARTBEQ: {
+        label: 'βカロテン当量',
+        unit: 'μg',
+        nutrientSubCategory: 'ビタミンA',
+      },
+      VITA_RAE: {
+        label: 'レチノール活性当量',
+        unit: 'μg',
+        nutrientSubCategory: 'ビタミンA',
+      },
+      VITD: {
+        label: 'ビタミンD',
+        unit: 'μg',
+      },
+      TOCPHA: {
+        label: 'αトコフェロール',
+        unit: 'mg',
+        nutrientSubCategory: 'ビタミンE',
+      },
+      TOCPHB: {
+        label: 'βトコフェロール',
+        unit: 'mg',
+        nutrientSubCategory: 'ビタミンE',
+      },
+      TOCPHG: {
+        label: 'γトコフェロール',
+        unit: 'mg',
+        nutrientSubCategory: 'ビタミンE',
+      },
+      TOCPHD: {
+        label: 'δトコフェロール',
+        unit: 'mg',
+        nutrientSubCategory: 'ビタミンE',
+      },
+      VITK: {
+        label: 'ビタミンK',
+        unit: 'μg',
+      },
+      THIA: {
+        label: 'ビタミンB1',
+        unit: 'mg',
+        nutrientSubCategory: 'ビタミンB群',
+      },
+      RIBF: {
+        label: 'ビタミンB2',
+        unit: 'mg',
+        nutrientSubCategory: 'ビタミンB群',
+      },
+      NIA: {
+        label: 'ナイアシン',
+        unit: 'mg',
+        nutrientSubCategory: 'ビタミンB群',
+      },
+      NE: {
+        label: 'ナイアシン当量',
+        unit: 'mg',
+        nutrientSubCategory: 'ビタミンB群',
+      },
+      VITB6A: {
+        label: 'ビタミンB6',
+        unit: 'mg',
+        nutrientSubCategory: 'ビタミンB群',
+      },
+      VITB12: {
+        label: 'ビタミンB12',
+        unit: 'μg',
+        nutrientSubCategory: 'ビタミンB群',
+      },
+      FOL: {
+        label: '葉酸',
+        unit: 'μg',
+        nutrientSubCategory: 'ビタミンB群',
+      },
+      PANTAC: {
+        label: 'パントテン酸',
+        unit: 'mg',
+        nutrientSubCategory: 'ビタミンB群',
+      },
+      BIOT: {
+        label: 'ビオチン',
+        unit: 'μg',
+        nutrientSubCategory: 'ビタミンB群',
+      },
+      VITC: {
+        label: 'ビタミンC',
+        unit: 'mg',
+      },
+    },
   },
   ALC: {
     label: 'アルコール',
@@ -306,31 +277,81 @@ const setNutrientValue = (value: string, unit: string) => {
   }
 };
 
+const generateItemList = (
+  i: number,
+  label: string,
+  value: string,
+  unit: string,
+) => (
+  <View key={i} style={styles.itemView}>
+    <View style={styles.labelItemView}>
+      <Text>{label}</Text>
+    </View>
+    <View>
+      <Text>{setNutrientValue(value, unit)}</Text>
+    </View>
+  </View>
+);
+
 const NutrientsList = ({navigation, route}) => {
   const {selectNutrient} = route.params;
+  const [isCollapsed, setIsCollapsed] = useState({});
   useEffect(() => {
     navigation.setOptions({
       title: '栄養素',
     });
   }, []);
+  useEffect(() => {
+    console.log(isCollapsed);
+  }, [isCollapsed]);
+
+  const generateCategory = (nutrientObj: object, objKey: string) => (
+    <TouchableHighlight
+      underlayColor="lightblue"
+      onPress={() =>
+        setIsCollapsed({
+          ...isCollapsed,
+          [objKey]: !isCollapsed[objKey],
+        })
+      }>
+      {generateItemList(
+        1,
+        nutrientObj.label,
+        selectNutrient[objKey],
+        nutrientObj.unit,
+      )}
+    </TouchableHighlight>
+  );
+
+  const generateItems = (key: string, i: number, mapObj: {}) => {
+    if (mapObj[key].detail) {
+      return (
+        <Fragment key={i}>
+          {generateCategory(mapObj[key], key)}
+          <Collapsible collapsed={!!isCollapsed[key]}>
+            <View style={styles.categoryList}>
+              {Object.keys(mapObj[key].detail).map((detailKey: string, ii) =>
+                generateItems(detailKey, ii, mapObj[key].detail),
+              )}
+            </View>
+          </Collapsible>
+        </Fragment>
+      );
+    }
+    return generateItemList(
+      i,
+      mapObj[key].label,
+      selectNutrient[key],
+      mapObj[key].unit,
+    );
+  };
+
   return (
     <ScrollView>
       <View style={{margin: 10}}>
-        {Object.keys(nutrients).map((objKey: string, i) => (
-          <View key={i} style={styles.itemView}>
-            <View style={styles.labelItemView}>
-              <Text>{nutrients[objKey].label}</Text>
-            </View>
-            <View>
-              <Text>
-                {setNutrientValue(
-                  selectNutrient[objKey],
-                  nutrients[objKey].unit,
-                )}
-              </Text>
-            </View>
-          </View>
-        ))}
+        {Object.keys(nutrients).map((key: string, i) =>
+          generateItems(key, i, nutrients),
+        )}
       </View>
     </ScrollView>
   );
@@ -345,38 +366,9 @@ const styles = StyleSheet.create({
   labelItemView: {
     // paddingLeft: 20,
   },
-  modalView: {
-    margin: 20,
-    backgroundColor: 'white',
-    borderRadius: 20,
-    paddingVertical: 35,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 3.84,
-    elevation: 5,
-    maxWidth: '100%',
-  },
-  openButton: {
-    backgroundColor: '#F194FF',
-    borderRadius: 20,
-    padding: 10,
-    margin: 5,
-    elevation: 2,
-    height: 40,
-  },
-  textStyle: {
-    color: 'white',
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  modalText: {
-    marginBottom: 15,
-    textAlign: 'center',
+  categoryList: {
+    marginLeft: 10,
+    marginBottom: 10,
   },
 });
 
