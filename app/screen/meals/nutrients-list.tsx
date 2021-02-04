@@ -2,6 +2,7 @@ import React, {Fragment, useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import Collapsible from 'react-native-collapsible';
 import {ScrollView, TouchableHighlight} from 'react-native-gesture-handler';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 const nutrients = {
   foodName: {
@@ -51,20 +52,22 @@ const nutrients = {
     label: '炭水化物',
     unit: 'g',
     detail: {
-      CHOAVLM: {
-        label: '利用可能炭水化物（単糖当量）',
-        unit: 'g',
-        nutrientSubCategory: '利用可能炭水化物',
-      },
-      CHOAVL: {
-        label: '利用可能炭水化物（質量計）',
-        unit: 'g',
-        nutrientSubCategory: '利用可能炭水化物',
-      },
-      CHOAVLDF: {
-        label: '差引き法による利用可能炭水化物',
-        unit: 'g',
-        nutrientSubCategory: '利用可能炭水化物',
+      CHOAV: {
+        label: '利用可能炭水化物（糖質）',
+        detail: {
+          CHOAVLM: {
+            label: '利用可能炭水化物（単糖当量）',
+            unit: 'g',
+          },
+          CHOAVL: {
+            label: '利用可能炭水化物（質量計）',
+            unit: 'g',
+          },
+          CHOAVLDF: {
+            label: '差引き法による利用可能炭水化物',
+            unit: 'g',
+          },
+        },
       },
       FIB: {
         label: '食物繊維総量',
@@ -144,108 +147,104 @@ const nutrients = {
   vitamin: {
     label: 'ビタミン',
     detail: {
-      RETOL: {
-        label: 'レチノール',
-        unit: 'μg',
-        nutrientSubCategory: 'ビタミンA',
-      },
-      CARTA: {
-        label: 'αカロテン',
-        unit: 'μg',
-        nutrientSubCategory: 'ビタミンA',
-      },
-      CARTB: {
-        label: 'βカロテン',
-        unit: 'μg',
-        nutrientSubCategory: 'ビタミンA',
-      },
-      CRYPXB: {
-        label: 'βクリプトキサンチン',
-        unit: 'μg',
-        nutrientSubCategory: 'ビタミンA',
-      },
-      CARTBEQ: {
-        label: 'βカロテン当量',
-        unit: 'μg',
-        nutrientSubCategory: 'ビタミンA',
-      },
-      VITA_RAE: {
-        label: 'レチノール活性当量',
-        unit: 'μg',
-        nutrientSubCategory: 'ビタミンA',
+      VITA: {
+        label: 'ビタミンA',
+        detail: {
+          RETOL: {
+            label: 'レチノール',
+            unit: 'μg',
+          },
+          CARTA: {
+            label: 'αカロテン',
+            unit: 'μg',
+          },
+          CARTB: {
+            label: 'βカロテン',
+            unit: 'μg',
+          },
+          CRYPXB: {
+            label: 'βクリプトキサンチン',
+            unit: 'μg',
+          },
+          CARTBEQ: {
+            label: 'βカロテン当量',
+            unit: 'μg',
+          },
+          VITA_RAE: {
+            label: 'レチノール活性当量',
+            unit: 'μg',
+          },
+        },
       },
       VITD: {
         label: 'ビタミンD',
         unit: 'μg',
       },
-      TOCPHA: {
-        label: 'αトコフェロール',
-        unit: 'mg',
-        nutrientSubCategory: 'ビタミンE',
-      },
-      TOCPHB: {
-        label: 'βトコフェロール',
-        unit: 'mg',
-        nutrientSubCategory: 'ビタミンE',
-      },
-      TOCPHG: {
-        label: 'γトコフェロール',
-        unit: 'mg',
-        nutrientSubCategory: 'ビタミンE',
-      },
-      TOCPHD: {
-        label: 'δトコフェロール',
-        unit: 'mg',
-        nutrientSubCategory: 'ビタミンE',
+      VITE: {
+        label: 'ビタミンE',
+        detail: {
+          TOCPHA: {
+            label: 'αトコフェロール',
+            unit: 'mg',
+          },
+          TOCPHB: {
+            label: 'βトコフェロール',
+            unit: 'mg',
+          },
+          TOCPHG: {
+            label: 'γトコフェロール',
+            unit: 'mg',
+          },
+          TOCPHD: {
+            label: 'δトコフェロール',
+            unit: 'mg',
+          },
+        },
       },
       VITK: {
         label: 'ビタミンK',
         unit: 'μg',
       },
-      THIA: {
-        label: 'ビタミンB1',
-        unit: 'mg',
-        nutrientSubCategory: 'ビタミンB群',
-      },
-      RIBF: {
-        label: 'ビタミンB2',
-        unit: 'mg',
-        nutrientSubCategory: 'ビタミンB群',
-      },
-      NIA: {
-        label: 'ナイアシン',
-        unit: 'mg',
-        nutrientSubCategory: 'ビタミンB群',
-      },
-      NE: {
-        label: 'ナイアシン当量',
-        unit: 'mg',
-        nutrientSubCategory: 'ビタミンB群',
-      },
-      VITB6A: {
-        label: 'ビタミンB6',
-        unit: 'mg',
-        nutrientSubCategory: 'ビタミンB群',
-      },
-      VITB12: {
-        label: 'ビタミンB12',
-        unit: 'μg',
-        nutrientSubCategory: 'ビタミンB群',
-      },
-      FOL: {
-        label: '葉酸',
-        unit: 'μg',
-        nutrientSubCategory: 'ビタミンB群',
-      },
-      PANTAC: {
-        label: 'パントテン酸',
-        unit: 'mg',
-        nutrientSubCategory: 'ビタミンB群',
-      },
-      BIOT: {
-        label: 'ビオチン',
-        unit: 'μg',
-        nutrientSubCategory: 'ビタミンB群',
+      VITB: {
+        label: 'ビタミンB群',
+        detail: {
+          THIA: {
+            label: 'ビタミンB1',
+            unit: 'mg',
+          },
+          RIBF: {
+            label: 'ビタミンB2',
+            unit: 'mg',
+          },
+          NIA: {
+            label: 'ナイアシン',
+            unit: 'mg',
+          },
+          NE: {
+            label: 'ナイアシン当量',
+            unit: 'mg',
+          },
+          VITB6A: {
+            label: 'ビタミンB6',
+            unit: 'mg',
+          },
+          VITB12: {
+            label: 'ビタミンB12',
+            unit: 'μg',
+          },
+          FOL: {
+            label: '葉酸',
+            unit: 'μg',
+          },
+          PANTAC: {
+            label: 'パントテン酸',
+            unit: 'mg',
+          },
+          BIOT: {
+            label: 'ビオチン',
+            unit: 'μg',
+          },
+        },
       },
       VITC: {
         label: 'ビタミンC',
@@ -270,11 +269,7 @@ const setNutrientValue = (value: string, unit: string) => {
   if (value === '-' || value === 'Tr') {
     return value;
   }
-  if (unit) {
-    return `${value} ${unit}`;
-  } else {
-    return value;
-  }
+  return unit ? `${value} ${unit}` : value;
 };
 
 const generateItemList = (
@@ -282,16 +277,26 @@ const generateItemList = (
   label: string,
   value: string,
   unit: string,
-) => (
-  <View key={i} style={styles.itemView}>
-    <View style={styles.labelItemView}>
-      <Text>{label}</Text>
+) => {
+  if (label === nutrients.remarks.label) {
+    return (
+      <View key={i} style={{margin: 10}}>
+        <Text style={{marginBottom: 10}}>{label}</Text>
+        <Text>{setNutrientValue(value, unit)}</Text>
+      </View>
+    );
+  }
+  return (
+    <View key={i} style={styles.itemView}>
+      <View style={styles.labelItemView}>
+        <Text>{label}</Text>
+      </View>
+      <View>
+        <Text>{setNutrientValue(value, unit)}</Text>
+      </View>
     </View>
-    <View>
-      <Text>{setNutrientValue(value, unit)}</Text>
-    </View>
-  </View>
-);
+  );
+};
 
 const NutrientsList = ({navigation, route}) => {
   const {selectNutrient} = route.params;
@@ -314,12 +319,31 @@ const NutrientsList = ({navigation, route}) => {
           [objKey]: !isCollapsed[objKey],
         })
       }>
-      {generateItemList(
+      <View key={1} style={styles.categoryItemView}>
+        <View style={styles.labelItemView}>
+          <Text>
+            <View style={{maxHeight: 18, height: 18}}>
+              {isCollapsed[objKey] ? (
+                <Icon name="arrow-right" size={25} />
+              ) : (
+                <Icon name="arrow-drop-down" size={25} />
+              )}
+            </View>
+            <Text>{nutrientObj.label}</Text>
+          </Text>
+        </View>
+        <View>
+          <Text>
+            {setNutrientValue(selectNutrient[objKey], nutrientObj.unit)}
+          </Text>
+        </View>
+      </View>
+      {/* {generateItemList(
         1,
         nutrientObj.label,
         selectNutrient[objKey],
         nutrientObj.unit,
-      )}
+      )} */}
     </TouchableHighlight>
   );
 
@@ -362,6 +386,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     margin: 10,
+  },
+  categoryItemView: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginVertical: 10,
+    marginRight: 10,
   },
   labelItemView: {
     // paddingLeft: 20,
