@@ -9,9 +9,6 @@ const chartConfig = {
   decimalPlaces: 2, // optional, defaults to 2dp
   color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
   labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-  style: {
-    borderRadius: 16,
-  },
   propsForDots: {
     r: '6',
     strokeWidth: '2',
@@ -95,7 +92,7 @@ const SampleChart = (props: Props) => {
 const styles = StyleSheet.create({
   chart: {
     marginVertical: 8,
-    borderRadius: 16,
+    // borderRadius: 16,
   },
 });
 

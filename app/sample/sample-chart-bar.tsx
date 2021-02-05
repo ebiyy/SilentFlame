@@ -48,7 +48,7 @@ const SampleChartBar = () => {
 const styles = StyleSheet.create({
   chart: {
     marginVertical: 8,
-    borderRadius: 16,
+    // borderRadius: 16,
   },
 });
 

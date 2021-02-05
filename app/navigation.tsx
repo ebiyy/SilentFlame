@@ -20,6 +20,7 @@ import NutrientFormController from './screen/supplement/nutrient-from-controller
 import MealsScreen from './screen/meals/meals-screen';
 import HomeScreen from './screen/home/home';
 import NutrientsList from './screen/meals/nutrients-list';
+import SearchMeals from './screen/meals/search-meals';
 
 const getHeaderTitle = (route: Route<string, object | undefined>) => {
   // If the focused route is not found, we need to assume it's the initial screen
@@ -33,7 +34,7 @@ const getHeaderTitle = (route: Route<string, object | undefined>) => {
     case 'Suppl.':
       return '今日のサプリ';
     case 'Meals':
-      return '食事登録';
+      return '今日の食事';
     case 'Water':
       return 'Water';
     case 'SupplementForm':
@@ -120,6 +121,7 @@ const NavigationScreen = () => {
           component={NutrientFormController}
         />
         <Stack.Screen name="NutrientsList" component={NutrientsList} />
+        <Stack.Screen name="SearchMeals" component={SearchMeals} />
       </Stack.Navigator>
     </NavigationContainer>
   );

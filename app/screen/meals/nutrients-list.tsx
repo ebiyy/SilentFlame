@@ -4,7 +4,7 @@ import Collapsible from 'react-native-collapsible';
 import {ScrollView, TouchableHighlight} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
-const nutrients = {
+export const NUTRIENTS_LABEL = {
   foodName: {
     label: '食品名',
   },
@@ -278,7 +278,7 @@ const generateItemList = (
   value: string,
   unit: string,
 ) => {
-  if (label === nutrients.remarks.label) {
+  if (label === NUTRIENTS_LABEL.remarks.label) {
     return (
       <View key={i} style={{margin: 10}}>
         <Text style={{marginBottom: 10}}>{label}</Text>
@@ -373,8 +373,8 @@ const NutrientsList = ({navigation, route}) => {
   return (
     <ScrollView>
       <View style={{margin: 10}}>
-        {Object.keys(nutrients).map((key: string, i) =>
-          generateItems(key, i, nutrients),
+        {Object.keys(NUTRIENTS_LABEL).map((key: string, i) =>
+          generateItems(key, i, NUTRIENTS_LABEL),
         )}
       </View>
     </ScrollView>
