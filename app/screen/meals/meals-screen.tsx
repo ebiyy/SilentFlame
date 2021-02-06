@@ -51,8 +51,8 @@ const MealsScreen = () => {
   const [meals, setMeals] = useState([]);
 
   useEffect(() => {
-    console.log(meals);
-    console.log(meals.map((v) => v.foodName));
+    // console.log(meals);
+    // console.log(meals.map((v) => v.foodName));
   }, [meals]);
 
   return (
@@ -68,7 +68,12 @@ const MealsScreen = () => {
           <View
             key={i}
             onTouchStart={() =>
-              navigation.navigate('NutrientsList', {selectNutrient: meal})
+              navigation.navigate('NutrientsList', {
+                selectNutrient: meal,
+                setMeals: setMeals,
+                index: i,
+                parentScreen: 'MealsScreen',
+              })
             }
             style={{
               flex: 7,
@@ -82,13 +87,20 @@ const MealsScreen = () => {
               marginTop: 10,
             }}>
             <View style={{flex: 1, ...Styles.itemCenter}}>
-              <Text style={Styles.textColor}>12:00</Text>
+              <Text style={Styles.textColor}>
+                {new Intl.DateTimeFormat('ja-JP', {
+                  hour: 'numeric',
+                  minute: 'numeric',
+                }).format(new Date(meal.date))}
+              </Text>
             </View>
             <View style={{flex: 3, ...Styles.itemCenter}}>
               <Text style={{...Styles.textColor, fontSize: 17}}>
                 {meal.foodName}
               </Text>
-              <Text style={{marginTop: 20, ...Styles.textColor}}>100g</Text>
+              <Text style={{marginTop: 20, ...Styles.textColor}}>
+                {meal.intake}g
+              </Text>
             </View>
             <View
               style={{flex: 2, maxWidth: 75, marginLeft: 15, paddingTop: 5}}>

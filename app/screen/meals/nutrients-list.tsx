@@ -1,8 +1,14 @@
+import {CommonActions} from '@react-navigation/native';
 import React, {Fragment, useEffect, useState} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {Button, StyleSheet, Text, View} from 'react-native';
 import Collapsible from 'react-native-collapsible';
-import {ScrollView, TouchableHighlight} from 'react-native-gesture-handler';
+import {
+  ScrollView,
+  TextInput,
+  TouchableHighlight,
+} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import Divider from '../../components/divider';
 
 export const NUTRIENTS_LABEL = {
   foodName: {
@@ -265,42 +271,10 @@ export const NUTRIENTS_LABEL = {
   },
 };
 
-const setNutrientValue = (value: string, unit: string) => {
-  if (value === '-' || value === 'Tr') {
-    return value;
-  }
-  return unit ? `${value} ${unit}` : value;
-};
-
-const generateItemList = (
-  i: number,
-  label: string,
-  value: string,
-  unit: string,
-) => {
-  if (label === NUTRIENTS_LABEL.remarks.label) {
-    return (
-      <View key={i} style={{margin: 10}}>
-        <Text style={{marginBottom: 10}}>{label}</Text>
-        <Text>{setNutrientValue(value, unit)}</Text>
-      </View>
-    );
-  }
-  return (
-    <View key={i} style={styles.itemView}>
-      <View style={styles.labelItemView}>
-        <Text>{label}</Text>
-      </View>
-      <View>
-        <Text>{setNutrientValue(value, unit)}</Text>
-      </View>
-    </View>
-  );
-};
-
 const NutrientsList = ({navigation, route}) => {
-  const {selectNutrient} = route.params;
+  const {selectNutrient, setMeals, index, parentScreen} = route.params;
   const [isCollapsed, setIsCollapsed] = useState({});
+  const [intake, setIntake] = useState(selectNutrient.intake || 100);
   useEffect(() => {
     navigation.setOptions({
       title: '栄養素',
@@ -309,6 +283,89 @@ const NutrientsList = ({navigation, route}) => {
   useEffect(() => {
     console.log(isCollapsed);
   }, [isCollapsed]);
+
+  console.log('NutrientsList', selectNutrient, setMeals, index);
+
+  const reCal = (v: string) => {
+    if (v === undefined) return;
+    const cal = (num: number) => {
+      const numIntake = Number(intake);
+      if (numIntake > 0) {
+        const result = (num / selectNutrient.intake) * numIntake;
+        if (result === 0) {
+          return result;
+        } else {
+          const integerPart = Math.floor(result);
+          // ex. 100
+          if (String(integerPart).length > 1) {
+            return result.toFixed(0);
+            // ex. 0.1, 0.1000000001
+          } else {
+            const smallNumberPart = String(result).split('.')[1];
+            if (smallNumberPart === undefined) return result;
+            // ex. 0.1000000001
+            if (smallNumberPart.length > 5) {
+              return result.toFixed(2);
+            }
+            // ex. 0.1
+            return result;
+          }
+        }
+      } else {
+        return num;
+      }
+    };
+    const numV = Number(v);
+
+    // ex. foodName, (0.1)
+    if (!numV) {
+      // ex.
+      const toNum = Number(v.replace('(', '').replace(')', ''));
+      const isParenthesesNum = typeof toNum === 'number' && !isNaN(toNum);
+      if (!isParenthesesNum) {
+        // ex. foodName, not Number
+        return v;
+      } else {
+        // ex. (0.1)
+        return `(${String(cal(toNum))})`;
+      }
+    }
+    // ex. 100
+    return cal(numV);
+  };
+
+  const setNutrientValue = (value: string, unit: string) => {
+    if (value === '-' || value === 'Tr') {
+      return value;
+    }
+    return unit ? `${reCal(value)} ${unit}` : reCal(value);
+  };
+
+  const generateItemList = (
+    i: number,
+    label: string,
+    value: string,
+    unit: string,
+  ) => {
+    if (label === NUTRIENTS_LABEL.remarks.label) {
+      return (
+        <View key={i} style={{margin: 10}}>
+          <Text style={{marginBottom: 10}}>{label}</Text>
+          <Text>{setNutrientValue(value, unit)}</Text>
+        </View>
+      );
+    }
+    return (
+      <View key={i} style={styles.itemView}>
+        <View style={styles.labelItemView}>
+          <Text>{label}</Text>
+        </View>
+        <View>
+          <Text>{setNutrientValue(value, unit)}</Text>
+        </View>
+      </View>
+    );
+  };
 
   const generateCategory = (nutrientObj: object, objKey: string) => (
     <TouchableHighlight
@@ -371,13 +428,86 @@ const NutrientsList = ({navigation, route}) => {
   };
 
   return (
-    <ScrollView>
-      <View style={{margin: 10}}>
-        {Object.keys(NUTRIENTS_LABEL).map((key: string, i) =>
-          generateItems(key, i, NUTRIENTS_LABEL),
-        )}
+    <>
+      <View
+        style={{
+          flexDirection: 'row',
+          justifyContent: 'space-around',
+          margin: 20,
+        }}>
+        <View style={{flexDirection: 'row'}}>
+          <TextInput
+            keyboardType="numeric"
+            style={{
+              borderWidth: 1,
+              borderColor: 'black',
+              borderRadius: 10,
+              padding: 10,
+              minWidth: 130,
+            }}
+            onChangeText={(v) => {
+              setIntake(v.replace(/[^0-9]/g, ''));
+            }}
+            maxLength={10}
+            value={intake}
+            placeholder="摂取量(g)"
+            clearButtonMode="always"
+            defaultValue={intake.toString()}
+          />
+          <Text style={{marginVertical: 8, marginHorizontal: 5, fontSize: 18}}>
+            g
+          </Text>
+        </View>
+        <View style={{paddingTop: 4}}>
+          <Button
+            title="この量で登録"
+            onPress={() => {
+              const calNutrient = {};
+              Object.keys(selectNutrient).forEach((key) => {
+                calNutrient[key] = reCal(selectNutrient[key]);
+              });
+              if (index !== undefined) {
+                console.log('index', calNutrient);
+                setMeals((preState) =>
+                  preState.map((obj, i) =>
+                    i === index
+                      ? {...calNutrient, intake: intake, date: Date()}
+                      : obj,
+                  ),
+                );
+              } else {
+                setMeals((preState) =>
+                  preState.concat([
+                    {...calNutrient, intake: intake, date: Date()},
+                  ]),
+                );
+              }
+              console.log(navigation, route);
+              if (parentScreen === 'SearchMeals') {
+                navigation.goBack();
+                navigation.goBack();
+              }
+              if (parentScreen === 'MealsScreen') {
+                navigation.goBack();
+              }
+            }}
+          />
+        </View>
       </View>
-    </ScrollView>
+
+      <View style={{alignItems: 'flex-end', marginTop: 10, marginRight: 20}}>
+        {/* <Text style={{fontSize: 11.5, color: 'gray'}}>※100gあたりの栄養素</Text> */}
+      </View>
+      <Divider>{`${Number(intake)}g あたりの栄養素`}</Divider>
+
+      <ScrollView>
+        <View style={{margin: 10}}>
+          {Object.keys(NUTRIENTS_LABEL).map((key: string, i) =>
+            generateItems(key, i, NUTRIENTS_LABEL),
+          )}
+        </View>
+      </ScrollView>
+    </>
   );
 };
 

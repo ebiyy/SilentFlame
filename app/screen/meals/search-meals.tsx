@@ -60,7 +60,11 @@ const SearchMeals = ({route}) => {
             underlayColor="while"
             activeOpacity={0.6}
             onPress={() =>
-              navigation.navigate('NutrientsList', {selectNutrient: obj})
+              navigation.navigate('NutrientsList', {
+                selectNutrient: {...obj, intake: 100},
+                setMeals: route.params.setMeals,
+                parentScreen: 'SearchMeals',
+              })
             }>
             <View
               style={{flexDirection: 'row', justifyContent: 'space-between'}}>
@@ -77,7 +81,9 @@ const SearchMeals = ({route}) => {
               onPress={() => {
                 console.log('route.params', route.params);
                 console.log('route.params.setMeals', route.params.setMeals);
-                route.params.setMeals((preState) => preState.concat([obj]));
+                route.params.setMeals((preState) =>
+                  preState.concat([{...obj, intake: 100, date: Date()}]),
+                );
                 navigation.goBack();
               }}>
               <FontAwesome5 name="plus-circle" size={20} />
