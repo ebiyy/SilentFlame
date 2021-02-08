@@ -9,6 +9,7 @@ import {
 } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import Divider from '../../components/divider';
+import {nutrientRecalculation} from './function';
 
 export const NUTRIENTS_LABEL = {
   foodName: {
@@ -286,59 +287,13 @@ const NutrientsList = ({navigation, route}) => {
 
   console.log('NutrientsList', selectNutrient, setMeals, index);
 
-  const reCal = (v: string) => {
-    if (v === undefined) return;
-    const cal = (num: number) => {
-      const numIntake = Number(intake);
-      if (numIntake > 0) {
-        const result = (num / selectNutrient.intake) * numIntake;
-        if (result === 0) {
-          return result;
-        } else {
-          const integerPart = Math.floor(result);
-          // ex. 100
-          if (String(integerPart).length > 1) {
-            return result.toFixed(0);
-            // ex. 0.1, 0.1000000001
-          } else {
-            const smallNumberPart = String(result).split('.')[1];
-            if (smallNumberPart === undefined) return result;
-            // ex. 0.1000000001
-            if (smallNumberPart.length > 5) {
-              return result.toFixed(2);
-            }
-            // ex. 0.1
-            return result;
-          }
-        }
-      } else {
-        return num;
-      }
-    };
-    const numV = Number(v);
-
-    // ex. foodName, (0.1)
-    if (!numV) {
-      // ex.
-      const toNum = Number(v.replace('(', '').replace(')', ''));
-      const isParenthesesNum = typeof toNum === 'number' && !isNaN(toNum);
-      if (!isParenthesesNum) {
-        // ex. foodName, not Number
-        return v;
-      } else {
-        // ex. (0.1)
-        return `(${String(cal(toNum))})`;
-      }
-    }
-    // ex. 100
-    return cal(numV);
-  };
-
   const setNutrientValue = (value: string, unit: string) => {
     if (value === '-' || value === 'Tr') {
       return value;
     }
-    return unit ? `${reCal(value)} ${unit}` : reCal(value);
+    return unit
+      ? `${nutrientRecalculation(value, intake, selectNutrient.intake)} ${unit}`
+      : nutrientRecalculation(value, intake, selectNutrient.intake);
   };
 
   const generateItemList = (
@@ -369,7 +324,7 @@ const NutrientsList = ({navigation, route}) => {
 
   const generateCategory = (nutrientObj: object, objKey: string) => (
     <TouchableHighlight
-      underlayColor="lightblue"
+      underlayColor="#CBEDCB"
       onPress={() =>
         setIsCollapsed({
           ...isCollapsed,
@@ -464,21 +419,43 @@ const NutrientsList = ({navigation, route}) => {
             onPress={() => {
               const calNutrient = {};
               Object.keys(selectNutrient).forEach((key) => {
-                calNutrient[key] = reCal(selectNutrient[key]);
+                if (
+                  [
+                    'foodGroup',
+                    'foodNumber',
+                    'indexNumber',
+                    'foodName',
+                    'remarks',
+                  ].includes(key)
+                ) {
+                  calNutrient[key] = selectNutrient[key];
+                } else {
+                  calNutrient[key] = nutrientRecalculation(
+                    selectNutrient[key],
+                    intake,
+                    selectNutrient.intake,
+                  );
+                }
               });
+              console.log(calNutrient, intake, index);
               if (index !== undefined) {
-                console.log('index', calNutrient);
                 setMeals((preState) =>
                   preState.map((obj, i) =>
                     i === index
-                      ? {...calNutrient, intake: intake, date: Date()}
+                      ? {
+                          ...calNutrient,
+                          intake: Number(intake),
+                        }
                       : obj,
                   ),
                 );
               } else {
                 setMeals((preState) =>
                   preState.concat([
-                    {...calNutrient, intake: intake, date: Date()},
+                    {
+                      ...calNutrient,
+                      intake: Number(intake),
+                    },
                   ]),
                 );
               }

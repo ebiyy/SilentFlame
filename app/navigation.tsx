@@ -5,6 +5,7 @@ import {
   NavigationContainer,
   Route,
   getFocusedRouteNameFromRoute,
+  DefaultTheme,
 } from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -34,7 +35,7 @@ const getHeaderTitle = (route: Route<string, object | undefined>) => {
     case 'Suppl.':
       return '今日のサプリ';
     case 'Meals':
-      return '今日の食事';
+      return '';
     case 'Water':
       return 'Water';
     case 'SupplementForm':
@@ -102,16 +103,29 @@ const MyTabs = () => {
 };
 
 const Stack = createStackNavigator();
+const MyTheme = {
+  ...DefaultTheme,
+  colors: {
+    ...DefaultTheme.colors,
+    background: 'white',
+    border: 'white',
+  },
+};
 
 const NavigationScreen = () => {
   return (
-    <NavigationContainer>
+    <NavigationContainer theme={MyTheme}>
       <Stack.Navigator>
         <Stack.Screen
           name="Home"
           component={MyTabs}
           options={({route}) => ({
-            headerTitle: getHeaderTitle(route),
+            // headerTitle: getHeaderTitle(route),
+            headerTitle: '',
+            headerStyle: {
+              backgroundColor: 'white',
+              borderWidth: 0,
+            },
           })}
         />
         <Stack.Screen name="Settings" component={SampleRealm} />

@@ -3,16 +3,16 @@ import {View, StyleSheet, Dimensions} from 'react-native';
 import {LineChart} from 'react-native-chart-kit';
 
 const chartConfig = {
-  backgroundColor: '#e26a00',
-  backgroundGradientFrom: '#fb8c00',
-  backgroundGradientTo: '#ffa726',
+  backgroundGradientFrom: 'white',
+  backgroundGradientTo: 'white',
+
   decimalPlaces: 2, // optional, defaults to 2dp
-  color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-  labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+  color: (opacity = 1) => `rgba(144, 238, 144, ${opacity})`,
+  labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
   propsForDots: {
     r: '6',
     strokeWidth: '2',
-    stroke: '#ffa726',
+    stroke: '#90EE90',
   },
 };
 
@@ -43,7 +43,7 @@ const SampleChart = (props: Props) => {
         // ex. 60000.0000
         if (String(num).split('.')[0].length > 4) {
           console.log(num, 'k');
-          setUnitSig('k');
+          setUnitSig('kg');
           setFormatNum(0.001);
           return;
         }
@@ -76,7 +76,7 @@ const SampleChart = (props: Props) => {
               },
             ],
           }}
-          width={Dimensions.get('window').width} // from react-native
+          width={Dimensions.get('window').width * 0.9} // from react-native
           height={Dimensions.get('window').height * 0.225}
           yAxisSuffix={unitSig}
           yAxisInterval={1} // optional, defaults to 1

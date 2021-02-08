@@ -42,6 +42,25 @@ export const mockWeight = [
   {startDate: '2021-01-22T05:17:30.000+0900', value: 55900.0015258789},
 ];
 
+export const getPermissions = () => {
+  const options = {
+    permissions: {
+      read: [
+        AppleHealthKit.Constants.Permissions.Weight,
+        AppleHealthKit.Constants.Permissions.BodyFatPercentage,
+        AppleHealthKit.Constants.Permissions.LeanBodyMass,
+      ],
+      // write: ['Weight', 'StepCount', 'BodyMassIndex'],
+    },
+  } as HealthKitPermissions;
+  AppleHealthKit.initHealthKit(options, (error: string) => {
+    if (error) {
+      console.log('error initializing Healthkit: ', error);
+      return;
+    }
+  });
+};
+
 export const getWeight = (
   setState: React.Dispatch<React.SetStateAction<any>>,
 ) => {

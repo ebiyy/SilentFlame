@@ -36,12 +36,40 @@ const SearchMeals = ({route}) => {
   }, []);
 
   const generateHitObj = (inputText: string) => {
-    console.log(inputText);
-    const hitArr = [].concat(
-      NUTRIENTS.filter((obj) => obj.foodName.includes(inputText)),
-      NUTRIENTS.filter((obj) => obj.remarks.includes(inputText)),
-    );
-    console.log(hitArr);
+    console.log('inputText', inputText);
+    const fullSerach = (text) =>
+      Array.from(
+        new Set(
+          [].concat(
+            NUTRIENTS.filter((obj) => obj.foodName.includes(text)),
+            NUTRIENTS.filter((obj) => obj.remarks.includes(text)),
+          ),
+        ),
+      );
+
+    let hitArr = [];
+    const space = {
+      halfidth: ' ',
+      fullwidth: '　',
+      none: '',
+    };
+    const formatSpaceText = inputText.replace(/　/g, space.halfidth);
+    const searchTextArr = formatSpaceText
+      .split(space.halfidth)
+      .filter((str) => str !== space.none && str !== space.halfidth);
+    // ex. "卵 鶏卵　い" -> ["卵", "鶏卵", "い"]
+    // think: 一括処理できそう
+    if (searchTextArr.length > 1) {
+      searchTextArr.forEach((text, i) => {
+        if (i === 0) {
+          hitArr = fullSerach(text);
+        } else {
+          hitArr = hitArr.filter((obj) => obj.foodName.includes(text));
+        }
+      });
+    } else {
+      hitArr = fullSerach(searchTextArr[0]);
+    }
     return (
       hitArr.length > 0 &&
       hitArr.map((obj, i) => (
@@ -61,9 +89,15 @@ const SearchMeals = ({route}) => {
             activeOpacity={0.6}
             onPress={() =>
               navigation.navigate('NutrientsList', {
-                selectNutrient: {...obj, intake: 100},
+                selectNutrient: {
+                  ...obj,
+                  intake: 100,
+                  date: Date(),
+                  timePeriod: route.params.timePeriod,
+                },
                 setMeals: route.params.setMeals,
                 parentScreen: 'SearchMeals',
+                timePeriod: route.params.timePeriod,
               })
             }>
             <View
@@ -82,7 +116,14 @@ const SearchMeals = ({route}) => {
                 console.log('route.params', route.params);
                 console.log('route.params.setMeals', route.params.setMeals);
                 route.params.setMeals((preState) =>
-                  preState.concat([{...obj, intake: 100, date: Date()}]),
+                  preState.concat([
+                    {
+                      ...obj,
+                      intake: 100,
+                      date: Date(),
+                      timePeriod: route.params.timePeriod,
+                    },
+                  ]),
                 );
                 navigation.goBack();
               }}>

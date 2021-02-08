@@ -1,147 +1,122 @@
 import {useNavigation, useRoute} from '@react-navigation/native';
-import React, {useEffect, useState} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {TouchableHighlight} from 'react-native-gesture-handler';
-import CountSupplement from '../../components/count-supplement';
-import NavigationButton from '../../components/navigation-button';
-import {ComStyles} from '../../global-style';
-import {NUTRIENTS_LABEL} from '../meals/nutrients-list';
+import React, {Fragment, useEffect, useState} from 'react';
+import {
+  Dimensions,
+  Keyboard,
+  KeyboardAvoidingView,
+  Platform,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import {
+  ScrollView,
+  TouchableHighlight,
+  TouchableWithoutFeedback,
+} from 'react-native-gesture-handler';
+import Divider from '../../components/divider';
+import RegistrationMealCard from './registration-meal-card';
 
-const MOCK = [
-  {supplementName: 'Mega D-3 & MK-7'},
-  {supplementName: 'Vitamin A'},
-  {supplementName: 'AMINO COMPLETE'},
-  {supplementName: 'Ultra Omega-3'},
-  {supplementName: 'E-400'},
-  {supplementName: 'B-50'},
-  {supplementName: 'Magnesium Citrate'},
-  {supplementName: 'NO-FlUSH NAIACIN 500MG'},
-];
-
-const header = () => (
-  <View
-    style={{
-      flexDirection: 'row',
-      justifyContent: 'space-between',
-      marginBottom: 3,
-    }}>
-    <View
-      style={{
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}>
-      <Text>時間</Text>
-    </View>
-    <View
-      style={{
-        flex: 3,
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}>
-      <Text>食品名</Text>
-    </View>
-    <Text style={{flex: 3}}></Text>
-  </View>
-);
+const timePeriod = {
+  breakfast: '朝食',
+  lunch: '昼食',
+  dinner: '夕食',
+  snack: '間食',
+};
 
 const MealsScreen = () => {
   const navigation = useNavigation();
-  const route = useRoute();
   const [meals, setMeals] = useState([]);
 
   useEffect(() => {
-    // console.log(meals);
-    // console.log(meals.map((v) => v.foodName));
+    if (meals.length > 0) {
+      console.log('useEffect', meals[0].intake);
+    }
   }, [meals]);
 
+  const generateWideBtn = (key: string) => (
+    <TouchableHighlight
+      style={{width: Dimensions.get('window').width / 4}}
+      underlayColor="while"
+      onPress={() =>
+        navigation.navigate('SearchMeals', {
+          setMeals: setMeals,
+          timePeriod: key,
+        })
+      }>
+      <View style={Styles.registrationTimePeriodItems}>
+        <Text style={{fontSize: 18, fontFamily: 'Hiragino Sans'}}>
+          {timePeriod[key]}
+        </Text>
+      </View>
+    </TouchableHighlight>
+  );
+
   return (
-    <>
-      <View style={{marginTop: 20}}></View>
-      <NavigationButton
-        buttonTitle="食事を登録する"
-        toNavigate="SearchMeals"
-        params={{setMeals}}
-      />
-      {meals.length > 0 &&
-        meals.map((meal, i) => (
+    <KeyboardAvoidingView
+      style={{flex: 1}}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+        <ScrollView>
+          <View style={{margin: 10}}>
+            <Text style={{fontSize: 22}}>食品を登録</Text>
+          </View>
           <View
-            key={i}
-            onTouchStart={() =>
-              navigation.navigate('NutrientsList', {
-                selectNutrient: meal,
-                setMeals: setMeals,
-                index: i,
-                parentScreen: 'MealsScreen',
-              })
-            }
             style={{
-              flex: 7,
               flexDirection: 'row',
               justifyContent: 'space-between',
-              // borderWidth: 1,
-              // borderRadius: 15,
-              // borderColor: '#44577a',
-              maxHeight: 130,
-              backgroundColor: '#44577a',
-              marginTop: 10,
+              marginBottom: 30,
             }}>
-            <View style={{flex: 1, ...Styles.itemCenter}}>
-              <Text style={Styles.textColor}>
-                {new Intl.DateTimeFormat('ja-JP', {
-                  hour: 'numeric',
-                  minute: 'numeric',
-                }).format(new Date(meal.date))}
-              </Text>
-            </View>
-            <View style={{flex: 3, ...Styles.itemCenter}}>
-              <Text style={{...Styles.textColor, fontSize: 17}}>
-                {meal.foodName}
-              </Text>
-              <Text style={{marginTop: 20, ...Styles.textColor}}>
-                {meal.intake}g
-              </Text>
-            </View>
-            <View
-              style={{flex: 2, maxWidth: 75, marginLeft: 15, paddingTop: 5}}>
-              <Text style={Styles.nutrientLabel}>カロリー</Text>
-              <Text style={Styles.nutrientLabel}>たんぱく質</Text>
-              <Text style={Styles.nutrientLabel}>脂質</Text>
-              <Text style={Styles.nutrientLabel}>炭水化物</Text>
-            </View>
-            <View style={{flex: 1, ...Styles.itemCenter}}>
-              <Text style={Styles.nutrientLabel}>
-                {meal.ENERC_KCAL} {NUTRIENTS_LABEL.ENERC_KCAL.unit}
-              </Text>
-              <Text style={Styles.nutrientLabel}>
-                {meal.PROT} {NUTRIENTS_LABEL.PROT.unit}
-              </Text>
-              <Text style={Styles.nutrientLabel}>
-                {meal.FAT} {NUTRIENTS_LABEL.FAT.unit}
-              </Text>
-              <Text style={Styles.nutrientLabel}>
-                {meal.CHOCDF} {NUTRIENTS_LABEL.CHOCDF.unit}
-              </Text>
-            </View>
+            {Object.keys(timePeriod).map((key) => generateWideBtn(key))}
           </View>
-        ))}
-    </>
+          <View style={{margin: 10}}>
+            <Text style={{fontSize: 22}}>今日の食品</Text>
+          </View>
+
+          {Object.keys(timePeriod).map((key, i) => (
+            <Fragment key={i}>
+              <Divider borderColor="lightgreen">{timePeriod[key]}</Divider>
+              {meals.length > 0 &&
+                meals
+                  .filter((obj) => obj.timePeriod === key)
+                  .map((meal, ii) => (
+                    <RegistrationMealCard
+                      key={ii}
+                      meal={meal}
+                      setMeals={setMeals}
+                      index={ii}
+                    />
+                  ))}
+            </Fragment>
+          ))}
+          <View style={{height: 100}}></View>
+        </ScrollView>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
 
 const Styles = StyleSheet.create({
-  itemCenter: {
-    justifyContent: 'center',
+  registrationTimePeriodItems: {
+    margin: 3,
+    padding: 10,
     alignItems: 'center',
-  },
-  nutrientLabel: {
-    lineHeight: 30,
-    color: '#d2eacc',
-    fontWeight: 'bold',
-  },
-  textColor: {
-    color: '#d2eacc',
-    fontWeight: 'bold',
+    justifyContent: 'center',
+    // width: 150,
+    height: 80,
+    borderRadius: 10,
+    // backgroundColor: '#ddd',
+    shadowColor: '#ddd',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 1,
+    shadowRadius: 4,
+    elevation: 1,
+    backgroundColor: 'white',
+    borderWidth: 1,
+    borderColor: 'lightgreen',
   },
 });
 

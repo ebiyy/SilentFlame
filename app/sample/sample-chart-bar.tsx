@@ -3,19 +3,18 @@ import {View, StyleSheet, Dimensions} from 'react-native';
 import {BarChart} from 'react-native-chart-kit';
 
 const chartConfig = {
-  backgroundColor: '#e26a00',
-  backgroundGradientFrom: '#fb8c00',
-  backgroundGradientTo: '#ffa726',
-  decimalPlaces: 2, // optional, defaults to 2dp
-  color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-  labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+  backgroundGradientFrom: 'white',
+  backgroundGradientTo: 'white',
+  decimalPlaces: 1, // optional, defaults to 2dp
+  color: (opacity = 1) => `rgba(144, 238, 144, ${opacity})`,
+  labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
   style: {
     borderRadius: 16,
   },
   propsForDots: {
     r: '6',
     strokeWidth: '2',
-    stroke: '#ffa726',
+    stroke: '#90EE90',
   },
 };
 
@@ -31,7 +30,7 @@ const SampleChartBar = () => {
             },
           ],
         }}
-        width={Dimensions.get('window').width} // from react-native
+        width={Dimensions.get('window').width * 0.9} // from react-native
         height={Dimensions.get('window').height * 0.225}
         yAxisLabel=""
         yAxisSuffix="g"
