@@ -6,22 +6,21 @@ import {
   Route,
   getFocusedRouteNameFromRoute,
   DefaultTheme,
+  useNavigation,
 } from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome5Icons from 'react-native-vector-icons/FontAwesome5';
-import SampleFatsecret from './sample/fatsecret.sample';
 import SampleRealm from './sample/realm.sample';
 import SupplementScreen from './screen/supplement/supplement-screen';
 import SupplementForm from './screen/supplement/supplement-form';
-import SampleCameraRoll from './sample/camera-roll.sample';
-import SampleImagePicker from './sample/image-picker.sample';
-import NutrientForm from './screen/supplement/nutrient-from';
 import NutrientFormController from './screen/supplement/nutrient-from-controller';
 import MealsScreen from './screen/meals/meals-screen';
 import HomeScreen from './screen/home/home';
 import NutrientsList from './screen/meals/nutrients-list';
 import SearchMeals from './screen/meals/search-meals';
+import {Button, View} from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 const getHeaderTitle = (route: Route<string, object | undefined>) => {
   // If the focused route is not found, we need to assume it's the initial screen
@@ -92,7 +91,7 @@ const MyTabs = () => {
     <Tab.Navigator
       initialRouteName="Home"
       tabBarOptions={{
-        activeTintColor: '#e91e63',
+        activeTintColor: 'lightgreen',
       }}>
       {TabScreen('Home', HomeScreen, IconTypes.MCi, 'home')}
       {TabScreen('Suppl.', SupplementScreen, IconTypes.Fa5i, 'tablets')}
@@ -115,17 +114,32 @@ const MyTheme = {
 const NavigationScreen = () => {
   return (
     <NavigationContainer theme={MyTheme}>
-      <Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={{
+          // headerShown: false,
+          headerStyle: {},
+          // headerTransparent: true,
+        }}>
         <Stack.Screen
           name="Home"
           component={MyTabs}
-          options={({route}) => ({
+          options={({route, navigation}) => ({
             // headerTitle: getHeaderTitle(route),
             headerTitle: '',
             headerStyle: {
               backgroundColor: 'white',
               borderWidth: 0,
             },
+            headerRight: () => (
+              <View style={{marginRight: 10}}>
+                <Ionicons
+                  onPress={() => navigation.navigate('Settings')}
+                  name="settings"
+                  color="gray"
+                  size={30}
+                />
+              </View>
+            ),
           })}
         />
         <Stack.Screen name="Settings" component={SampleRealm} />

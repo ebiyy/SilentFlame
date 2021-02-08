@@ -14,7 +14,9 @@ import {
   TouchableHighlight,
   TouchableWithoutFeedback,
 } from 'react-native-gesture-handler';
+import {atom, useRecoilState} from 'recoil';
 import Divider from '../../components/divider';
+import {mealsState} from '../../recoil/meal';
 import RegistrationMealCard from './registration-meal-card';
 
 const timePeriod = {
@@ -26,7 +28,7 @@ const timePeriod = {
 
 const MealsScreen = () => {
   const navigation = useNavigation();
-  const [meals, setMeals] = useState([]);
+  const [meals, setMeals] = useRecoilState(mealsState);
 
   useEffect(() => {
     if (meals.length > 0) {

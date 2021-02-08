@@ -1,6 +1,13 @@
 import React from 'react';
 import {View, StyleSheet, Dimensions} from 'react-native';
 import {BarChart} from 'react-native-chart-kit';
+import {useRecoilValue} from 'recoil';
+import {
+  mealsCHOAVState,
+  mealsCHOCDFState,
+  mealsFatState,
+  mealsProteinState,
+} from '../recoil/meal';
 
 const chartConfig = {
   backgroundGradientFrom: 'white',
@@ -19,6 +26,11 @@ const chartConfig = {
 };
 
 const SampleChartBar = () => {
+  const sumProtein = useRecoilValue(mealsProteinState);
+  const sumFat = useRecoilValue(mealsFatState);
+  const sumCHOCDFS = useRecoilValue(mealsCHOCDFState);
+  const sumCHOAV = useRecoilValue(mealsCHOAVState);
+
   return (
     <View>
       <BarChart
@@ -26,7 +38,7 @@ const SampleChartBar = () => {
           labels: ['たんぱく質', '脂質', '炭水化物', '糖質'],
           datasets: [
             {
-              data: [24, 56, 24, 24],
+              data: [sumProtein, sumFat, sumCHOCDFS, sumCHOAV],
             },
           ],
         }}

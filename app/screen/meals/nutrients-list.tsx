@@ -281,11 +281,7 @@ const NutrientsList = ({navigation, route}) => {
       title: '栄養素',
     });
   }, []);
-  useEffect(() => {
-    console.log(isCollapsed);
-  }, [isCollapsed]);
-
-  console.log('NutrientsList', selectNutrient, setMeals, index);
+  useEffect(() => {}, [isCollapsed]);
 
   const setNutrientValue = (value: string, unit: string) => {
     if (value === '-' || value === 'Tr') {
@@ -437,7 +433,7 @@ const NutrientsList = ({navigation, route}) => {
                   );
                 }
               });
-              console.log(calNutrient, intake, index);
+
               if (index !== undefined) {
                 setMeals((preState) =>
                   preState.map((obj, i) =>
@@ -459,7 +455,7 @@ const NutrientsList = ({navigation, route}) => {
                   ]),
                 );
               }
-              console.log(navigation, route);
+
               if (parentScreen === 'SearchMeals') {
                 navigation.goBack();
                 navigation.goBack();

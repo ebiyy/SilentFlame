@@ -36,7 +36,6 @@ const SearchMeals = ({route}) => {
   }, []);
 
   const generateHitObj = (inputText: string) => {
-    console.log('inputText', inputText);
     const fullSerach = (text) =>
       Array.from(
         new Set(
@@ -113,8 +112,6 @@ const SearchMeals = ({route}) => {
           <View style={{maxWidth: 20, marginHorizontal: 3, marginTop: -3}}>
             <TouchableOpacity
               onPress={() => {
-                console.log('route.params', route.params);
-                console.log('route.params.setMeals', route.params.setMeals);
                 route.params.setMeals((preState) =>
                   preState.concat([
                     {

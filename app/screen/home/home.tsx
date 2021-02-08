@@ -16,6 +16,8 @@ import SampleChart from '../../sample/sample-chart';
 import * as Progress from 'react-native-progress';
 import SampleChartBar from '../../sample/sample-chart-bar';
 import {ComStyles} from '../../global-style';
+import {useRecoilValue} from 'recoil';
+import {mealsENERC_KCALState, mealsWATERState} from '../../recoil/meal';
 
 export interface HealthArr {
   startDate: string;
@@ -39,7 +41,7 @@ const generateSwitchBtn = (
   type: string,
 ) => {
   return (
-    <TouchableHighlight onPress={() => setState(type)}>
+    <TouchableHighlight onPress={() => setState(type)} underlayColor="white">
       <View style={state === type ? styles.activeBtn : styles.btnContainer}>
         <Text
           style={[
@@ -57,7 +59,7 @@ const generateSwitchBtn = (
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 
-const HomeScreen = ({navigation, route}) => {
+const HomeScreen = () => {
   const [weightArr, setWeightArr] = useState<HealthArr[]>();
   const [fatPercentageArr, setFatPercentageArr] = useState<HealthArr[]>();
   const [leanBodyMassArr, setLeanBodyMassArr] = useState<HealthArr[]>();
@@ -67,6 +69,8 @@ const HomeScreen = ({navigation, route}) => {
   const [switchNutrientChartView, setSwitchNutrientChartView] = useState(
     NutrientViewType.simple,
   );
+  const sumENERC_KCAL = useRecoilValue(mealsENERC_KCALState);
+  const sumWATER = useRecoilValue(mealsWATERState);
 
   useEffect(() => {
     getPermissions();
@@ -78,15 +82,21 @@ const HomeScreen = ({navigation, route}) => {
   return (
     <>
       <View>
-        <View style={styles.switchBtnContainer}>
-          {Object.keys(BodyViewType).map((key) =>
-            generateSwitchBtn(
-              switchBodyChartView,
-              setSwitchBodyChartView,
-              BodyViewType[key],
-            ),
-          )}
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <View style={{margin: 10}}>
+            <Text style={{fontSize: 22, marginLeft: 5}}>減量の状況</Text>
+          </View>
+          <View style={styles.switchBtnContainer}>
+            {Object.keys(BodyViewType).map((key) =>
+              generateSwitchBtn(
+                switchBodyChartView,
+                setSwitchBodyChartView,
+                BodyViewType[key],
+              ),
+            )}
+          </View>
         </View>
+
         <View style={[styles.chartContainer, ComStyles.greenBoxShadow]}>
           <SampleChart
             healthArr={
@@ -101,14 +111,19 @@ const HomeScreen = ({navigation, route}) => {
       </View>
       <View style={{marginTop: windowHeight * 0.01}}>
         <View>
-          <View style={styles.switchBtnContainer}>
-            {Object.keys(NutrientViewType).map((key) =>
-              generateSwitchBtn(
-                switchNutrientChartView,
-                setSwitchNutrientChartView,
-                NutrientViewType[key],
-              ),
-            )}
+          <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+            <View style={{margin: 10}}>
+              <Text style={{fontSize: 22, marginLeft: 5}}>栄養の情報</Text>
+            </View>
+            <View style={styles.switchBtnContainer}>
+              {Object.keys(NutrientViewType).map((key) =>
+                generateSwitchBtn(
+                  switchNutrientChartView,
+                  setSwitchNutrientChartView,
+                  NutrientViewType[key],
+                ),
+              )}
+            </View>
           </View>
         </View>
         <View style={[styles.chartContainer, ComStyles.greenBoxShadow]}>
@@ -118,16 +133,22 @@ const HomeScreen = ({navigation, route}) => {
       <View style={styles.barContainer}>
         <View style={styles.barTextContainer}>
           <Text style={styles.barText}>カロリー</Text>
-          <Text style={styles.barText}>600 / 2200 kcal</Text>
+          <Text style={styles.barText}>
+            {sumENERC_KCAL ? sumENERC_KCAL : 0} / 2200 kcal
+          </Text>
         </View>
-        <Progress.Bar progress={0.3} color="red" width={windowWidth * 0.8} />
+        <Progress.Bar
+          progress={sumENERC_KCAL / 2200}
+          color="red"
+          width={windowWidth * 0.8}
+        />
       </View>
       <View style={styles.barContainer}>
         <View style={styles.barTextContainer}>
           <Text style={styles.barText}>水分</Text>
-          <Text style={styles.barText}>1.5 / 2 L</Text>
+          <Text style={styles.barText}>{sumWATER ? sumWATER : 0} / 2 L</Text>
         </View>
-        <Progress.Bar progress={0.3} width={windowWidth * 0.8} />
+        <Progress.Bar progress={sumWATER / 2} width={windowWidth * 0.8} />
       </View>
     </>
   );
@@ -166,7 +187,7 @@ const styles = StyleSheet.create({
   barContainer: {
     marginHorizontal: 30,
     alignSelf: 'center',
-    marginTop: windowHeight * 0.025,
+    marginTop: windowHeight * 0.015,
   },
   barTextContainer: {
     flexDirection: 'row',

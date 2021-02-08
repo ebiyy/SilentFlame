@@ -15,7 +15,6 @@ type Props = {
 
 const RegistrationMealCard = (props: Props) => {
   const intakeStr = String(props.meal.intake);
-  console.log('RegistrationMealCard', intakeStr);
   const navigation = useNavigation();
   const [meal, setMeal] = useState(props.meal);
   const [intake, setIntake] = useState(intakeStr);
@@ -27,7 +26,6 @@ const RegistrationMealCard = (props: Props) => {
   }, [props]);
 
   const intakeOnChange = (v: string) => {
-    console.log(v);
     if (!showChangeBtn) {
       setShowChangeBtn(true);
     }
@@ -52,7 +50,6 @@ const RegistrationMealCard = (props: Props) => {
         );
       }
     });
-    console.log(calNutrient);
     setMeal(calNutrient);
   };
 
