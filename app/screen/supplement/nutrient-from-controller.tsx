@@ -1,52 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import {Text, View, TextInput, Button, Alert, StyleSheet} from 'react-native';
-import {useForm, Controller} from 'react-hook-form';
-import {Picker} from '@react-native-picker/picker';
+import {View, Button, StyleSheet} from 'react-native';
 import NutrientForm from './nutrient-from';
 import {ScrollView} from 'react-native-gesture-handler';
-
-const styles = StyleSheet.create({
-  header: {
-    marginTop: 0,
-  },
-  inputContainer: {
-    marginHorizontal: 30,
-  },
-  input: {
-    height: 60,
-    borderColor: 'gray',
-    borderWidth: 2,
-    borderRadius: 10,
-    marginVertical: 5,
-    padding: 10,
-  },
-  button: {
-    backgroundColor: 'purple',
-    marginHorizontal: 100,
-    marginTop: 40,
-    padding: 15,
-    borderRadius: 10,
-  },
-  wideButton: {
-    backgroundColor: 'purple',
-    marginHorizontal: 50,
-    padding: 15,
-    borderRadius: 10,
-    marginTop: 30,
-  },
-  splitForm: {
-    flexDirection: 'row',
-  },
-  pickerView: {
-    width: '33%',
-    marginTop: -72,
-    padding: 0,
-    maxHeight: 60,
-  },
-  nutrientContainer: {
-    marginBottom: 30,
-  },
-});
 
 export const UnitOfWeight = {
   mcg: 'mcg',
@@ -123,7 +78,6 @@ const isNutrientArr = (mySppliId: number): Nutrient[] => {
 };
 
 const NutrientFormController = ({navigation, route}) => {
-  // console.log(navigation);
   const {mySppliId, isEditable} = route.params;
   const [isEditableState, setIsEditableState] = useState(isEditable);
   const [nutrientArr, setNutrientArr] = useState(isNutrientArr(mySppliId));
@@ -174,5 +128,48 @@ const NutrientFormController = ({navigation, route}) => {
     </ScrollView>
   );
 };
+
+const styles = StyleSheet.create({
+  header: {
+    marginTop: 0,
+  },
+  inputContainer: {
+    marginHorizontal: 30,
+  },
+  input: {
+    height: 60,
+    borderColor: 'gray',
+    borderWidth: 2,
+    borderRadius: 10,
+    marginVertical: 5,
+    padding: 10,
+  },
+  button: {
+    backgroundColor: 'purple',
+    marginHorizontal: 100,
+    marginTop: 40,
+    padding: 15,
+    borderRadius: 10,
+  },
+  wideButton: {
+    backgroundColor: 'purple',
+    marginHorizontal: 50,
+    padding: 15,
+    borderRadius: 10,
+    marginTop: 30,
+  },
+  splitForm: {
+    flexDirection: 'row',
+  },
+  pickerView: {
+    width: '33%',
+    marginTop: -72,
+    padding: 0,
+    maxHeight: 60,
+  },
+  nutrientContainer: {
+    marginBottom: 30,
+  },
+});
 
 export default NutrientFormController;

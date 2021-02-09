@@ -30,26 +30,21 @@ const SampleChart = (props: Props) => {
 
   useEffect(() => {
     if (props.healthArr) {
-      console.log(props.healthArr);
       setData(props.healthArr.slice(0, 7).reverse());
     }
   }, [props.healthArr]);
 
   useEffect(() => {
     if (data.length > 0) {
-      console.log(data[0], 'SampleChart');
-
       const checkNum = (num: number) => {
         // ex. 60000.0000
         if (String(num).split('.')[0].length > 4) {
-          console.log(num, 'k');
           setUnitSig('kg');
           setFormatNum(0.001);
           return;
         }
         // ex. 0.3000
         if (String(num).split('.')[0].length === 1) {
-          console.log(num, '%');
           setUnitSig('%');
           setFormatNum(100);
           return;

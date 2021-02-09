@@ -15,7 +15,6 @@ export const ComStyles = StyleSheet.create({
     },
     shadowOpacity: 1,
     shadowRadius: 4,
-    elevation: 1,
     backgroundColor: 'white',
     borderWidth: 1,
     borderColor: 'lightgreen',

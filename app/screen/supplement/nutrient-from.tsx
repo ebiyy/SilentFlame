@@ -12,41 +12,6 @@ import {Picker} from '@react-native-picker/picker';
 import {Nutrient, UnitOfWeight} from './nutrient-from-controller';
 import NutrientNameModal from './nutrient-name-modal';
 
-const styles = StyleSheet.create({
-  input: {
-    height: 60,
-    borderColor: 'gray',
-    borderWidth: 2,
-    borderRadius: 10,
-    marginVertical: 5,
-    padding: 10,
-  },
-  button: {
-    backgroundColor: 'purple',
-    marginHorizontal: 40,
-    padding: 15,
-    borderRadius: 10,
-  },
-  splitForm: {
-    flexDirection: 'row',
-  },
-  pickerView: {
-    width: '33%',
-    marginTop: -72,
-    padding: 0,
-    maxHeight: 60,
-  },
-  nutrientContainer: {
-    marginTop: 20,
-  },
-  unitConteiner: {
-    margin: 20,
-  },
-  unitText: {
-    fontSize: 20,
-  },
-});
-
 type Props = {
   index: number;
   nutrientObj: Nutrient | null;
@@ -72,7 +37,6 @@ const NutrientForm = (props: Props) => {
   }, [props.isEditable]);
 
   const onSubmit = (data) => {
-    console.log(data);
     const tmp: Nutrient = {
       nutrientName: data.nutrientName,
       amountPerServing: {
@@ -218,5 +182,40 @@ const NutrientForm = (props: Props) => {
     </>
   );
 };
+
+const styles = StyleSheet.create({
+  input: {
+    height: 60,
+    borderColor: 'gray',
+    borderWidth: 2,
+    borderRadius: 10,
+    marginVertical: 5,
+    padding: 10,
+  },
+  button: {
+    backgroundColor: 'purple',
+    marginHorizontal: 40,
+    padding: 15,
+    borderRadius: 10,
+  },
+  splitForm: {
+    flexDirection: 'row',
+  },
+  pickerView: {
+    width: '33%',
+    marginTop: -72,
+    padding: 0,
+    maxHeight: 60,
+  },
+  nutrientContainer: {
+    marginTop: 20,
+  },
+  unitConteiner: {
+    margin: 20,
+  },
+  unitText: {
+    fontSize: 20,
+  },
+});
 
 export default NutrientForm;

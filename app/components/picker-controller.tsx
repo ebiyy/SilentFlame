@@ -12,9 +12,6 @@ type Props = {
 };
 
 const PickerController = (props: Props) => {
-  console.log(props.errors, 'PickerController');
-  console.log(props.errors[props.controlName], 'PickerController');
-  console.log(props.errors.priceValue, 'PickerController');
   return (
     <Controller
       control={props.control}

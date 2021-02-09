@@ -13,11 +13,10 @@ import {
   getWeight,
 } from '../../helpers/apple-heath-kit';
 import SampleChart from '../../sample/sample-chart';
-import * as Progress from 'react-native-progress';
 import SampleChartBar from '../../sample/sample-chart-bar';
 import {ComStyles} from '../../global-style';
-import {useRecoilValue} from 'recoil';
 import {mealsENERC_KCALState, mealsWATERState} from '../../recoil/meal';
+import RateProgressBar from '../../components/rate-progress-bar';
 
 export interface HealthArr {
   startDate: string;
@@ -69,8 +68,6 @@ const HomeScreen = () => {
   const [switchNutrientChartView, setSwitchNutrientChartView] = useState(
     NutrientViewType.simple,
   );
-  const sumENERC_KCAL = useRecoilValue(mealsENERC_KCALState);
-  const sumWATER = useRecoilValue(mealsWATERState);
 
   useEffect(() => {
     getPermissions();
@@ -130,26 +127,20 @@ const HomeScreen = () => {
           <SampleChartBar />
         </View>
       </View>
-      <View style={styles.barContainer}>
-        <View style={styles.barTextContainer}>
-          <Text style={styles.barText}>カロリー</Text>
-          <Text style={styles.barText}>
-            {sumENERC_KCAL ? sumENERC_KCAL : 0} / 2200 kcal
-          </Text>
-        </View>
-        <Progress.Bar
-          progress={sumENERC_KCAL / 2200}
-          color="red"
-          width={windowWidth * 0.8}
-        />
-      </View>
-      <View style={styles.barContainer}>
-        <View style={styles.barTextContainer}>
-          <Text style={styles.barText}>水分</Text>
-          <Text style={styles.barText}>{sumWATER ? sumWATER : 0} / 2 L</Text>
-        </View>
-        <Progress.Bar progress={sumWATER / 2} width={windowWidth * 0.8} />
-      </View>
+      <RateProgressBar
+        title="今日のカロリー"
+        rimit={2200}
+        unit="kcal"
+        color="red"
+        recoilSelector={mealsENERC_KCALState}
+      />
+      <RateProgressBar
+        title="今日の水分"
+        rimit={2}
+        unit="L"
+        color="blue"
+        recoilSelector={mealsWATERState}
+      />
     </>
   );
 };

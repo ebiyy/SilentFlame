@@ -24,7 +24,6 @@ export default function SampleImagePicker() {
   const [response, setResponse] = useState(null);
 
   useEffect(() => {
-    console.log(response);
     // ex.
     // {
     //   fileName: "5C99555B-7CFC-430B-8695-AB6F5012349C.jpg"

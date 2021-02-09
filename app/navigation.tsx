@@ -21,6 +21,7 @@ import NutrientsList from './screen/meals/nutrients-list';
 import SearchMeals from './screen/meals/search-meals';
 import {Button, View} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import WaterScreen from './screen/water/water-screen';
 
 const getHeaderTitle = (route: Route<string, object | undefined>) => {
   // If the focused route is not found, we need to assume it's the initial screen
@@ -96,7 +97,8 @@ const MyTabs = () => {
       {TabScreen('Home', HomeScreen, IconTypes.MCi, 'home')}
       {TabScreen('Suppl.', SupplementScreen, IconTypes.Fa5i, 'tablets')}
       {TabScreen('Meals', MealsScreen, IconTypes.MCi, 'silverware-fork-knife')}
-      {TabScreen('Water', MealsScreen, IconTypes.MCi, 'cup-water')}
+      {TabScreen('Water', WaterScreen, IconTypes.MCi, 'cup-water')}
+      {TabScreen('sleep', MealsScreen, IconTypes.MCi, 'cup-water')}
     </Tab.Navigator>
   );
 };

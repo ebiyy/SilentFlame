@@ -5,8 +5,12 @@ export const mealsState = atom({
   default: [],
 });
 
+export const waterIntakeState = atom({
+  key: 'waterIntakeState',
+  default: [],
+});
+
 const sum = (arr) => {
-  console.log('arr', arr);
   return arr.reduce((prev: number, current: number) => {
     return prev + current;
   });
@@ -15,7 +19,6 @@ const sum = (arr) => {
 const formatArr = (arr: number[] | string[]) =>
   arr
     .map((num: number | string) => {
-      console.log(1, num);
       if (Number.isFinite(Number(num))) {
         return Number(num);
       } else if (num === '-' || num === 'Tr') {
@@ -87,9 +90,19 @@ export const mealsWATERState = selector({
   key: 'mealsWATERState',
   get: ({get}) => {
     const meals = get(mealsState);
-    return (
-      meals.length > 0 &&
-      (sum(formatArr(meals.map((meal) => meal.WATER))) / 1000).toFixed(1)
-    );
+    const waterIntake = get(waterIntakeState);
+    const waterIntakeNumArr = waterIntake.map((obj) => obj.intake);
+
+    if (meals.length > 0 && waterIntakeNumArr.length > 0) {
+      return (
+        sum(
+          formatArr(meals.map((meal) => meal.WATER)).concat(waterIntakeNumArr),
+        ) / 1000
+      ).toFixed(1);
+    } else if (waterIntakeNumArr.length > 0) {
+      return (sum(waterIntakeNumArr) / 1000).toFixed(1);
+    } else {
+      return 0;
+    }
   },
 });

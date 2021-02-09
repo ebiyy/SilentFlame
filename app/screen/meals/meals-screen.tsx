@@ -14,7 +14,7 @@ import {
   TouchableHighlight,
   TouchableWithoutFeedback,
 } from 'react-native-gesture-handler';
-import {atom, useRecoilState} from 'recoil';
+import {useRecoilState} from 'recoil';
 import Divider from '../../components/divider';
 import {mealsState} from '../../recoil/meal';
 import RegistrationMealCard from './registration-meal-card';
@@ -32,12 +32,12 @@ const MealsScreen = () => {
 
   useEffect(() => {
     if (meals.length > 0) {
-      console.log('useEffect', meals[0].intake);
     }
   }, [meals]);
 
-  const generateWideBtn = (key: string) => (
+  const generateWideBtn = (key: string, i: number) => (
     <TouchableHighlight
+      key={i}
       style={{width: Dimensions.get('window').width / 4}}
       underlayColor="while"
       onPress={() =>
@@ -69,7 +69,7 @@ const MealsScreen = () => {
               justifyContent: 'space-between',
               marginBottom: 30,
             }}>
-            {Object.keys(timePeriod).map((key) => generateWideBtn(key))}
+            {Object.keys(timePeriod).map((key, i) => generateWideBtn(key, i))}
           </View>
           <View style={{margin: 10}}>
             <Text style={{fontSize: 22}}>今日の食品</Text>
