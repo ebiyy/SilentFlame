@@ -1,26 +1,20 @@
 import React, {useEffect} from 'react';
 import {
-  Text,
   View,
-  TextInput,
   Button,
-  Alert,
   StyleSheet,
-  Image,
   KeyboardAvoidingView,
   Platform,
   TouchableWithoutFeedback,
   Keyboard,
-  StatusBar,
 } from 'react-native';
-import {useForm, Controller} from 'react-hook-form';
+import {useForm} from 'react-hook-form';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {UnitOfWeight} from './nutrient-from-controller';
-import {Picker} from '@react-native-picker/picker';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useHeaderHeight} from '@react-navigation/stack';
 import PickerController from '../../components/picker-controller';
 import TextInputController from '../../components/text-input-controller';
+import {UnitOfWeight} from './constant';
 
 const styles = StyleSheet.create({
   container: {

@@ -1,6 +1,7 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {
+  Dimensions,
   Image,
   ImageBackground,
   StyleSheet,
@@ -10,7 +11,7 @@ import {
 } from 'react-native';
 import CountSupplement from '../../components/count-supplement';
 import WideBtn from '../../components/wide-button';
-import {ComStyles} from '../../global-style';
+import {ComStyles, shadowStyles} from '../../global-style';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {TouchableHighlight} from 'react-native-gesture-handler';
 import RateProgressBar from '../../components/rate-progress-bar';
@@ -18,6 +19,9 @@ import {mealsWATERState, waterIntakeState} from '../../recoil/meal';
 import Ioniconsfrom from 'react-native-vector-icons/Ionicons';
 import {useRecoilState} from 'recoil';
 import TitleText from '../../components/title-text';
+import CardEditIcons from './card-edit-icons';
+import WaterCardBodyBtn from './water-card-body-btn';
+import {WaterIntak} from '../../helpers/interface';
 
 const MOCK = [
   {supplementName: 'Mega D-3 & MK-7'},
@@ -43,6 +47,7 @@ const registWater = [
 const WaterScreen = () => {
   const navigation = useNavigation();
   const [waterIntake, setwWterIntake] = useRecoilState(waterIntakeState);
+  const [isMinus, setIsMinus] = useState(false);
 
   return (
     <View style={Styles.screenContainer}>
@@ -61,107 +66,48 @@ const WaterScreen = () => {
       <View style={Styles.waterContentContainer}>
         {registWater.map((obj, i) => (
           <View style={Styles.waterContent} key={i}>
-            <WideBtn
-              navigate={() => {}}
-              widthRate={1.05}
-              color="white"
-              type="card">
-              <View style={Styles.card}>
-                <View style={Styles.cardHeader}>
+            <View style={Styles.card}>
+              <View style={Styles.cardHeader}>
+                <View>
                   <Text style={Styles.cardTitle}>{obj.name}</Text>
                 </View>
-                <View style={Styles.cardBody}>
-                  <View style={Styles.imageContainer}>
-                    <Image
-                      style={[
-                        Styles.imageContext,
-                        ComStyles.greenBoxShadow,
-                        {shadowColor: 'black', borderColor: '#ddd'},
-                      ]}
-                      source={obj.image}
-                    />
-                  </View>
-                  <View style={{flexDirection: 'column'}}>
-                    {inputWaterPatten.map((patten, i) => (
-                      <View style={Styles.bodyContent} key={i}>
-                        <View style={Styles.iconBtnConatiner}>
-                          <TouchableHighlight
-                            underlayColor="white"
-                            onPress={() =>
-                              setwWterIntake((preState) => [
-                                ...preState,
-                                {name: obj.name, intake: patten.label},
-                              ])
-                            }>
-                            <View
-                              style={[
-                                Styles.iconContext,
-                                ComStyles.greenBoxShadow,
-                              ]}>
-                              <View style={Styles.iconContainer}>
-                                <MaterialCommunityIcons
-                                  size={20}
-                                  name={patten.name}
-                                  color="lightblue"
-                                />
-                              </View>
-                              <View style={Styles.labelContainer}>
-                                <Text style={Styles.labelText}>
-                                  {patten.label}ml
-                                </Text>
-                              </View>
-                            </View>
-                          </TouchableHighlight>
-                        </View>
-                        <View style={[Styles.badgeContainer]}>
-                          <TouchableHighlight
-                            underlayColor="white"
-                            onPress={() =>
-                              setwWterIntake((preState) => {
-                                let t = 0;
-                                const temp = [...preState]
-                                  .map((ooo) => {
-                                    if (ooo.intake === patten.label) {
-                                      if (t === 0) {
-                                        t++;
-                                        return '';
-                                      }
-                                      return ooo;
-                                    } else {
-                                      return ooo;
-                                    }
-                                  })
-                                  .filter((o1) => typeof o1 === 'object');
-                                return temp;
-                              })
-                            }>
-                            <View style={Styles.badgeContent}>
-                              <Ioniconsfrom
-                                style={Styles.badgeIcon}
-                                name="water-outline"
-                                color="lightblue"
-                                size={35}>
-                                <View style={Styles.badgeTextContainer}>
-                                  <Text style={Styles.badgeText}>
-                                    {
-                                      waterIntake
-                                        .filter((o) => o.name === obj.name)
-                                        .filter(
-                                          (oo) => oo.intake === patten.label,
-                                        ).length
-                                    }
-                                  </Text>
-                                </View>
-                              </Ioniconsfrom>
-                            </View>
-                          </TouchableHighlight>
-                        </View>
-                      </View>
+                <View>
+                  <CardEditIcons
+                    selectItem={obj}
+                    index={i}
+                    color="lightblue"
+                    recoilSelector={waterIntakeState}
+                    onPress={() => console.log('test')}
+                    isMinus={isMinus}
+                    setIsMinus={setIsMinus}
+                  />
+                </View>
+              </View>
+              <View style={Styles.cardBody}>
+                <View style={Styles.imageContainer}>
+                  <Image
+                    style={[
+                      Styles.imageContext,
+                      shadowStyles('lightblue').boxShadow,
+                      {shadowColor: 'black', borderColor: 'lightblue'},
+                    ]}
+                    source={obj.image}
+                  />
+                </View>
+                <View style={{flexDirection: 'column'}}>
+                  <View style={Styles.bodyContent}>
+                    {inputWaterPatten.map((patten, ii) => (
+                      <WaterCardBodyBtn
+                        key={ii}
+                        patten={patten}
+                        waterName={obj.name}
+                        isMinus={isMinus}
+                      />
                     ))}
                   </View>
                 </View>
               </View>
-            </WideBtn>
+            </View>
           </View>
         ))}
         <View style={Styles.moreWaterContent}>
@@ -196,13 +142,32 @@ const Styles = StyleSheet.create({
   },
   waterContent: {},
   moreWaterContent: {},
-  card: {},
+  card: {
+    width: Dimensions.get('window').width / 1.05,
+    margin: 3,
+    padding: 10,
+    borderRadius: 10,
+    shadowColor: 'lightblue',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 1,
+    shadowRadius: 4,
+    elevation: 1,
+    // backgroundColor: 'white',
+    borderWidth: 1,
+    borderColor: 'lightblue',
+  },
   cardHeader: {
     // marginLeft: 15,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     margin: 5,
   },
   cardTitle: {
-    fontSize: 17,
+    padding: 7,
+    fontSize: 20,
     textDecorationLine: 'underline',
     textDecorationColor: 'lightblue',
   },
@@ -222,47 +187,6 @@ const Styles = StyleSheet.create({
   bodyContent: {
     flexDirection: 'row',
     justifyContent: 'space-around',
-    marginHorizontal: 10,
-  },
-  iconBtnConatiner: {
-    marginHorizontal: 5,
-  },
-  iconContext: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-    padding: 5,
-    margin: 3,
-    borderRadius: 5,
-  },
-  iconContainer: {},
-  labelContainer: {},
-  labelText: {
-    color: 'gray',
-    fontSize: 13,
-    lineHeight: 20,
-  },
-  badgeContainer: {
-    marginLeft: 5,
-    shadowColor: 'lightblue',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.7,
-    shadowRadius: 4,
-    elevation: 1,
-  },
-  badgeContent: {
-    position: 'relative',
-  },
-  badgeIcon: {},
-  badgeTextContainer: {},
-  badgeText: {
-    position: 'absolute',
-    top: -23,
-    right: 14,
-    color: 'gray',
-    fontSize: 12,
   },
 });
 

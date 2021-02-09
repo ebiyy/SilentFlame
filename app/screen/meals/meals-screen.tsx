@@ -16,6 +16,7 @@ import {
 } from 'react-native-gesture-handler';
 import {useRecoilState} from 'recoil';
 import Divider from '../../components/divider';
+import TitleText from '../../components/title-text';
 import {mealsState} from '../../recoil/meal';
 import RegistrationMealCard from './registration-meal-card';
 
@@ -59,9 +60,7 @@ const MealsScreen = () => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <ScrollView>
-          <View style={{margin: 10}}>
-            <Text style={{fontSize: 22}}>食品を登録</Text>
-          </View>
+          <TitleText title="食品を登録" />
           <View
             style={{
               flexDirection: 'row',
@@ -70,9 +69,7 @@ const MealsScreen = () => {
             }}>
             {Object.keys(timePeriod).map((key, i) => generateWideBtn(key, i))}
           </View>
-          <View style={{margin: 10}}>
-            <Text style={{fontSize: 22}}>今日の食品</Text>
-          </View>
+          <TitleText title="今日の食品" />
 
           {Object.keys(timePeriod).map((key, i) => (
             <Fragment key={i}>

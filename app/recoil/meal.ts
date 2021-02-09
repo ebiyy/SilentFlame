@@ -1,11 +1,12 @@
 import {atom, selector} from 'recoil';
+import {WaterIntak} from '../helpers/interface';
 
 export const mealsState = atom({
   key: 'mealsState',
   default: [],
 });
 
-export const waterIntakeState = atom({
+export const waterIntakeState = atom<WaterIntak[]>({
   key: 'waterIntakeState',
   default: [],
 });

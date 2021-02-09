@@ -20,3 +20,19 @@ export const ComStyles = StyleSheet.create({
     borderColor: 'lightgreen',
   },
 });
+
+export const shadowStyles = (color: string) =>
+  StyleSheet.create({
+    boxShadow: {
+      shadowColor: '#ddd',
+      shadowOffset: {
+        width: 0,
+        height: 2,
+      },
+      shadowOpacity: 1,
+      shadowRadius: 4,
+      backgroundColor: 'white',
+      borderWidth: 1,
+      borderColor: color,
+    },
+  });
