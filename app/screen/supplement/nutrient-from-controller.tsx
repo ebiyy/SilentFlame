@@ -2,13 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {View, Button, StyleSheet} from 'react-native';
 import NutrientForm from './nutrient-from';
 import {ScrollView} from 'react-native-gesture-handler';
-
-export const UnitOfWeight = {
-  mcg: 'mcg',
-  mg: 'mg',
-  g: 'g',
-  μg: 'μg',
-};
+import {Nutrient, UnitOfWeight} from './constant';
 
 const Mode = {
   read: 'read',
@@ -19,15 +13,6 @@ type Props = {
   mode: typeof Mode[keyof typeof Mode];
   nutrientObj?: Nutrient[];
 };
-
-export interface Nutrient {
-  nutrientName: string;
-  amountPerServing: {
-    value: number;
-    unit: typeof UnitOfWeight[keyof typeof UnitOfWeight];
-  };
-  perDailyValue: number;
-}
 
 export interface MySuppli {
   mySppliId: number;

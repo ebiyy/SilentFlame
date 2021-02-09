@@ -17,6 +17,7 @@ import RateProgressBar from '../../components/rate-progress-bar';
 import {mealsWATERState, waterIntakeState} from '../../recoil/meal';
 import Ioniconsfrom from 'react-native-vector-icons/Ionicons';
 import {useRecoilState} from 'recoil';
+import TitleText from '../../components/title-text';
 
 const MOCK = [
   {supplementName: 'Mega D-3 & MK-7'},
@@ -45,9 +46,10 @@ const WaterScreen = () => {
 
   return (
     <View style={Styles.screenContainer}>
+      <TitleText title="今日の水分" key={1} />
       <View style={Styles.rateBarContainer}>
         <RateProgressBar
-          title="今日の水分"
+          title=""
           rimit={2}
           unit="L"
           color="blue"
@@ -55,12 +57,13 @@ const WaterScreen = () => {
         />
       </View>
 
+      <TitleText title="水分を登録" key={2} />
       <View style={Styles.waterContentContainer}>
         {registWater.map((obj, i) => (
-          <View style={Styles.waterContent}>
+          <View style={Styles.waterContent} key={i}>
             <WideBtn
               navigate={() => {}}
-              widthRate={1.25}
+              widthRate={1.05}
               color="white"
               type="card">
               <View style={Styles.card}>
@@ -79,8 +82,8 @@ const WaterScreen = () => {
                     />
                   </View>
                   <View style={{flexDirection: 'column'}}>
-                    {inputWaterPatten.map((patten) => (
-                      <View style={Styles.bodyContent}>
+                    {inputWaterPatten.map((patten, i) => (
+                      <View style={Styles.bodyContent} key={i}>
                         <View style={Styles.iconBtnConatiner}>
                           <TouchableHighlight
                             underlayColor="white"
@@ -179,7 +182,7 @@ const Styles = StyleSheet.create({
   screenContainer: {
     flex: 1,
     flexDirection: 'column',
-    marginTop: 20,
+    // marginTop: 20,
   },
   rateBarContainer: {
     margin: 30,

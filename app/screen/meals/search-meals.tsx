@@ -9,7 +9,6 @@ import {
   Text,
   Platform,
   TouchableWithoutFeedback,
-  Button,
   Keyboard,
   Dimensions,
 } from 'react-native';
@@ -19,15 +18,17 @@ import {
   TouchableOpacity,
 } from 'react-native-gesture-handler';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import {useRecoilState} from 'recoil';
 import NavigationButton from '../../components/navigation-button';
 import {NUTRIENTS} from '../../helpers/csvtojson/nutrients';
-import CollapsibleSample from '../../sample/collapsible';
+import {mealsState} from '../../recoil/meal';
 
 const SearchMeals = ({route}) => {
   const navigation = useNavigation();
   const {control, handleSubmit, errors} = useForm();
   const [inputText, setInputText] = useState('');
   const [submitEditing, setSubmitEditing] = useState(false);
+  const [meals, setMeals] = useRecoilState(mealsState);
 
   useEffect(() => {
     navigation.setOptions({
@@ -94,7 +95,6 @@ const SearchMeals = ({route}) => {
                   date: Date(),
                   timePeriod: route.params.timePeriod,
                 },
-                setMeals: route.params.setMeals,
                 parentScreen: 'SearchMeals',
                 timePeriod: route.params.timePeriod,
               })
@@ -112,7 +112,7 @@ const SearchMeals = ({route}) => {
           <View style={{maxWidth: 20, marginHorizontal: 3, marginTop: -3}}>
             <TouchableOpacity
               onPress={() => {
-                route.params.setMeals((preState) =>
+                setMeals((preState) =>
                   preState.concat([
                     {
                       ...obj,

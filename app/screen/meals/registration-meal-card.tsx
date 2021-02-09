@@ -1,21 +1,23 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {Button, Dimensions, StyleSheet, Text, View} from 'react-native';
-import {NUTRIENTS_LABEL} from './nutrients-list';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {TextInput} from 'react-native-gesture-handler';
 import {nutrientRecalculation} from './function';
 import DeleteConfirmationModal from '../../components/delete-confirmation-modal';
+import {useRecoilState} from 'recoil';
+import {mealsState} from '../../recoil/meal';
+import {NUTRIENTS_LABEL} from './constant';
 
 type Props = {
   meal: any;
-  setMeals: React.Dispatch<React.SetStateAction<never[]>>;
   index: number;
 };
 
 const RegistrationMealCard = (props: Props) => {
   const intakeStr = String(props.meal.intake);
   const navigation = useNavigation();
+  const [meals, setMeals] = useRecoilState(mealsState);
   const [meal, setMeal] = useState(props.meal);
   const [intake, setIntake] = useState(intakeStr);
   const [showChangeBtn, setShowChangeBtn] = useState(false);
@@ -54,7 +56,7 @@ const RegistrationMealCard = (props: Props) => {
   };
 
   const submitBtnPress = () => {
-    props.setMeals((preState) =>
+    setMeals((preState) =>
       preState.map((obj, i) => (i === props.index ? meal : obj)),
     );
     setShowChangeBtn(false);
@@ -104,7 +106,6 @@ const RegistrationMealCard = (props: Props) => {
                 onPress={() =>
                   navigation.navigate('NutrientsList', {
                     selectNutrient: props.meal,
-                    setMeals: props.setMeals,
                     index: props.index,
                     parentScreen: 'MealsScreen',
                   })
@@ -180,9 +181,7 @@ const RegistrationMealCard = (props: Props) => {
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
         deleteFunc={() =>
-          props.setMeals((preState) =>
-            preState.filter((obj, i) => i !== props.index),
-          )
+          setMeals((preState) => preState.filter((obj, i) => i !== props.index))
         }
       />
     </>

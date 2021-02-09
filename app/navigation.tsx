@@ -1,13 +1,6 @@
 import React from 'react';
-
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {
-  NavigationContainer,
-  Route,
-  getFocusedRouteNameFromRoute,
-  DefaultTheme,
-  useNavigation,
-} from '@react-navigation/native';
+import {NavigationContainer, DefaultTheme} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome5Icons from 'react-native-vector-icons/FontAwesome5';
@@ -19,29 +12,29 @@ import MealsScreen from './screen/meals/meals-screen';
 import HomeScreen from './screen/home/home';
 import NutrientsList from './screen/meals/nutrients-list';
 import SearchMeals from './screen/meals/search-meals';
-import {Button, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import WaterScreen from './screen/water/water-screen';
 
-const getHeaderTitle = (route: Route<string, object | undefined>) => {
-  // If the focused route is not found, we need to assume it's the initial screen
-  // This can happen during if there hasn't been any navigation inside the screen
-  // In our case, it's "Feed" as that's the first screen inside the navigator
-  const routeName = getFocusedRouteNameFromRoute(route) ?? 'Home';
+// const getHeaderTitle = (route: Route<string, object | undefined>) => {
+//   // If the focused route is not found, we need to assume it's the initial screen
+//   // This can happen during if there hasn't been any navigation inside the screen
+//   // In our case, it's "Feed" as that's the first screen inside the navigator
+//   const routeName = getFocusedRouteNameFromRoute(route) ?? 'Home';
 
-  switch (routeName) {
-    case 'Home':
-      return '今日';
-    case 'Suppl.':
-      return '今日のサプリ';
-    case 'Meals':
-      return '';
-    case 'Water':
-      return 'Water';
-    case 'SupplementForm':
-      return '新しいサプリを登録';
-  }
-};
+//   switch (routeName) {
+//     case 'Home':
+//       return '今日';
+//     case 'Suppl.':
+//       return '今日のサプリ';
+//     case 'Meals':
+//       return '';
+//     case 'Water':
+//       return 'Water';
+//     case 'SupplementForm':
+//       return '新しいサプリを登録';
+//   }
+// };
 
 const IconTypes = {
   MCi: 'MaterialCommunityIcons',
@@ -92,13 +85,13 @@ const MyTabs = () => {
     <Tab.Navigator
       initialRouteName="Home"
       tabBarOptions={{
-        activeTintColor: 'lightgreen',
+        activeTintColor: '#e91e63',
       }}>
       {TabScreen('Home', HomeScreen, IconTypes.MCi, 'home')}
       {TabScreen('Suppl.', SupplementScreen, IconTypes.Fa5i, 'tablets')}
       {TabScreen('Meals', MealsScreen, IconTypes.MCi, 'silverware-fork-knife')}
       {TabScreen('Water', WaterScreen, IconTypes.MCi, 'cup-water')}
-      {TabScreen('sleep', MealsScreen, IconTypes.MCi, 'cup-water')}
+      {/* {TabScreen('sleep', MealsScreen, IconTypes.MCi, 'cup-water')} */}
     </Tab.Navigator>
   );
 };
@@ -125,7 +118,7 @@ const NavigationScreen = () => {
         <Stack.Screen
           name="Home"
           component={MyTabs}
-          options={({route, navigation}) => ({
+          options={({navigation}) => ({
             // headerTitle: getHeaderTitle(route),
             headerTitle: '',
             headerStyle: {
@@ -133,7 +126,7 @@ const NavigationScreen = () => {
               borderWidth: 0,
             },
             headerRight: () => (
-              <View style={{marginRight: 10}}>
+              <View style={Styles.headerIconContainer}>
                 <Ionicons
                   onPress={() => navigation.navigate('Settings')}
                   name="settings"
@@ -156,5 +149,11 @@ const NavigationScreen = () => {
     </NavigationContainer>
   );
 };
+
+const Styles = StyleSheet.create({
+  headerIconContainer: {
+    marginRight: 10,
+  },
+});
 
 export default NavigationScreen;

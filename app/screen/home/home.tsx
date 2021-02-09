@@ -17,6 +17,7 @@ import SampleChartBar from '../../sample/sample-chart-bar';
 import {ComStyles} from '../../global-style';
 import {mealsENERC_KCALState, mealsWATERState} from '../../recoil/meal';
 import RateProgressBar from '../../components/rate-progress-bar';
+import TitleText from '../../components/title-text';
 
 export interface HealthArr {
   startDate: string;
@@ -38,14 +39,18 @@ const generateSwitchBtn = (
   state: string,
   setState: React.Dispatch<React.SetStateAction<string>>,
   type: string,
+  i: number,
 ) => {
   return (
-    <TouchableHighlight onPress={() => setState(type)} underlayColor="white">
+    <TouchableHighlight
+      key={i}
+      onPress={() => setState(type)}
+      underlayColor="white">
       <View style={state === type ? styles.activeBtn : styles.btnContainer}>
         <Text
           style={[
             styles.switchText,
-            state === type ? {color: 'black'} : {color: 'white'},
+            {color: state === type ? 'black' : 'white'},
             type === NutrientViewType.simple && {fontSize: 10},
           ]}>
           {type}
@@ -56,7 +61,7 @@ const generateSwitchBtn = (
 };
 
 const windowHeight = Dimensions.get('window').height;
-const windowWidth = Dimensions.get('window').width;
+// const windowWidth = Dimensions.get('window').width;
 
 const HomeScreen = () => {
   const [weightArr, setWeightArr] = useState<HealthArr[]>();
@@ -80,15 +85,14 @@ const HomeScreen = () => {
     <>
       <View>
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <View style={{margin: 10}}>
-            <Text style={{fontSize: 22, marginLeft: 5}}>減量の状況</Text>
-          </View>
+          <TitleText title="減量の状況" />
           <View style={styles.switchBtnContainer}>
-            {Object.keys(BodyViewType).map((key) =>
+            {Object.keys(BodyViewType).map((key, i) =>
               generateSwitchBtn(
                 switchBodyChartView,
                 setSwitchBodyChartView,
                 BodyViewType[key],
+                i,
               ),
             )}
           </View>
@@ -109,15 +113,14 @@ const HomeScreen = () => {
       <View style={{marginTop: windowHeight * 0.01}}>
         <View>
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-            <View style={{margin: 10}}>
-              <Text style={{fontSize: 22, marginLeft: 5}}>栄養の情報</Text>
-            </View>
+            <TitleText title="栄養の情報" />
             <View style={styles.switchBtnContainer}>
-              {Object.keys(NutrientViewType).map((key) =>
+              {Object.keys(NutrientViewType).map((key, i) =>
                 generateSwitchBtn(
                   switchNutrientChartView,
                   setSwitchNutrientChartView,
                   NutrientViewType[key],
+                  i,
                 ),
               )}
             </View>
@@ -127,28 +130,29 @@ const HomeScreen = () => {
           <SampleChartBar />
         </View>
       </View>
-      <RateProgressBar
-        title="今日のカロリー"
-        rimit={2200}
-        unit="kcal"
-        color="red"
-        recoilSelector={mealsENERC_KCALState}
-      />
-      <RateProgressBar
-        title="今日の水分"
-        rimit={2}
-        unit="L"
-        color="blue"
-        recoilSelector={mealsWATERState}
-      />
+      <View style={styles.progressBarContainer}>
+        <RateProgressBar
+          title="今日のカロリー"
+          rimit={2200}
+          unit="kcal"
+          color="red"
+          recoilSelector={mealsENERC_KCALState}
+        />
+      </View>
+      <View style={styles.progressBarContainer}>
+        <RateProgressBar
+          title="今日の水分"
+          rimit={2}
+          unit="L"
+          color="blue"
+          recoilSelector={mealsWATERState}
+        />
+      </View>
     </>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-  },
   switchBtnContainer: {
     flexDirection: 'row',
     marginHorizontal: 10,
@@ -180,18 +184,11 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: windowHeight * 0.015,
   },
-  barTextContainer: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  barText: {
-    marginTop: 10,
-    marginHorizontal: 10,
-    marginBottom: 2,
-    fontSize: 15,
-  },
   switchText: {
     fontSize: 13,
+  },
+  progressBarContainer: {
+    marginTop: windowHeight * 0.03,
   },
 });
 

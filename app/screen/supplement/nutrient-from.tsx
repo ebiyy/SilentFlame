@@ -9,8 +9,8 @@ import {
 } from 'react-native';
 import {useForm, Controller} from 'react-hook-form';
 import {Picker} from '@react-native-picker/picker';
-import {Nutrient, UnitOfWeight} from './nutrient-from-controller';
 import NutrientNameModal from './nutrient-name-modal';
+import {Nutrient, UnitOfWeight} from './constant';
 
 type Props = {
   index: number;

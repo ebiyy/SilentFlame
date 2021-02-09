@@ -39,14 +39,14 @@ const styles = StyleSheet.create({
   barContainer: {
     marginHorizontal: 30,
     alignSelf: 'center',
-    marginTop: windowHeight * 0.015,
+    // marginTop: windowHeight * 0.015,
   },
   barTextContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   barText: {
-    marginTop: 10,
+    // marginTop: 10,
     marginHorizontal: 10,
     marginBottom: 2,
     fontSize: 15,

@@ -42,7 +42,6 @@ const MealsScreen = () => {
       underlayColor="while"
       onPress={() =>
         navigation.navigate('SearchMeals', {
-          setMeals: setMeals,
           timePeriod: key,
         })
       }>
@@ -82,12 +81,7 @@ const MealsScreen = () => {
                 meals
                   .filter((obj) => obj.timePeriod === key)
                   .map((meal, ii) => (
-                    <RegistrationMealCard
-                      key={ii}
-                      meal={meal}
-                      setMeals={setMeals}
-                      index={ii}
-                    />
+                    <RegistrationMealCard key={ii} meal={meal} index={ii} />
                   ))}
             </Fragment>
           ))}
