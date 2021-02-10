@@ -22,6 +22,7 @@ import TitleText from '../../components/title-text';
 import CardEditIcons from './card-edit-icons';
 import WaterCardBodyBtn from './water-card-body-btn';
 import {WaterIntak} from '../../helpers/interface';
+import TestAdmod from '../../admob';
 
 const MOCK = [
   {supplementName: 'Mega D-3 & MK-7'},
@@ -61,6 +62,7 @@ const WaterScreen = () => {
           recoilSelector={mealsWATERState}
         />
       </View>
+      <TestAdmod />
 
       <TitleText title="水分を登録" key={2} />
       <View style={Styles.waterContentContainer}>

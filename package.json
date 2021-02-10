@@ -9,13 +9,16 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint .",
-    "clean-pod": "rm -rf ios/Pods && npx pod-install && yarn start -- --reset-cache",
+    "clean-pod": "rm -rf ios/Pods && rm ios/Podfile.lock && npx pod-install && yarn start -- --reset-cache",
+    "clean-package": "rm -rf node_modules && rm yarn.lock && yarn && yarn clean-pod",
     "pod-restart": "cd ios && pod repo remove master && pod setup && pod install && cd ../",
     "csvtojson": "node ./app/helpers/csvtojson/index.js"
   },
   "dependencies": {
     "@react-native-community/cameraroll": "^4.0.1",
     "@react-native-community/masked-view": "^0.1.10",
+    "@react-native-firebase/admob": "^10.7.0",
+    "@react-native-firebase/app": "^10.7.0",
     "@react-native-picker/picker": "^1.9.10",
     "@react-navigation/bottom-tabs": "^5.11.2",
     "@react-navigation/native": "^5.8.10",

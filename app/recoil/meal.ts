@@ -102,6 +102,10 @@ export const mealsWATERState = selector({
       ).toFixed(1);
     } else if (waterIntakeNumArr.length > 0) {
       return (sum(waterIntakeNumArr) / 1000).toFixed(1);
+    } else if (meals.length > 0) {
+      return (sum(formatArr(meals.map((meal) => meal.WATER))) / 1000).toFixed(
+        1,
+      );
     } else {
       return 0;
     }

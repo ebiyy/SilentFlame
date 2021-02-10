@@ -43,7 +43,7 @@ const SampleChartBar = () => {
           ],
         }}
         width={Dimensions.get('window').width * 0.9} // from react-native
-        height={Dimensions.get('window').height * 0.225}
+        height={Dimensions.get('window').height * 0.205}
         yAxisLabel=""
         yAxisSuffix="g"
         fromZero={true}

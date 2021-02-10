@@ -15,6 +15,7 @@ import SearchMeals from './screen/meals/search-meals';
 import {StyleSheet, View} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import WaterScreen from './screen/water/water-screen';
+import TestAdmod from './admob';
 
 // const getHeaderTitle = (route: Route<string, object | undefined>) => {
 //   // If the focused route is not found, we need to assume it's the initial screen
@@ -82,17 +83,25 @@ const Tab = createBottomTabNavigator();
 
 const MyTabs = () => {
   return (
-    <Tab.Navigator
-      initialRouteName="Home"
-      tabBarOptions={{
-        activeTintColor: '#e91e63',
-      }}>
-      {TabScreen('Home', HomeScreen, IconTypes.MCi, 'home')}
-      {TabScreen('Suppl.', SupplementScreen, IconTypes.Fa5i, 'tablets')}
-      {TabScreen('Meals', MealsScreen, IconTypes.MCi, 'silverware-fork-knife')}
-      {TabScreen('Water', WaterScreen, IconTypes.MCi, 'cup-water')}
-      {/* {TabScreen('sleep', MealsScreen, IconTypes.MCi, 'cup-water')} */}
-    </Tab.Navigator>
+    <>
+      <TestAdmod />
+      <Tab.Navigator
+        initialRouteName="Home"
+        tabBarOptions={{
+          activeTintColor: '#e91e63',
+        }}>
+        {TabScreen('Home', HomeScreen, IconTypes.MCi, 'home')}
+        {TabScreen('Suppl.', SupplementScreen, IconTypes.Fa5i, 'tablets')}
+        {TabScreen(
+          'Meals',
+          MealsScreen,
+          IconTypes.MCi,
+          'silverware-fork-knife',
+        )}
+        {TabScreen('Water', WaterScreen, IconTypes.MCi, 'cup-water')}
+        {/* {TabScreen('sleep', MealsScreen, IconTypes.MCi, 'cup-water')} */}
+      </Tab.Navigator>
+    </>
   );
 };
 
@@ -121,10 +130,20 @@ const NavigationScreen = () => {
           options={({navigation}) => ({
             // headerTitle: getHeaderTitle(route),
             headerTitle: '',
-            headerStyle: {
-              backgroundColor: 'white',
-              borderWidth: 0,
-            },
+            // headerTitle: () => (
+            //   <View style={Styles.headerIconContainer}>
+            //     <Ionicons
+            //       onPress={() => navigation.navigate('Settings')}
+            //       name="settings"
+            //       color="gray"
+            //       size={30}
+            //     />
+            //   </View>
+            // ),
+            // headerStyle: {
+            //   backgroundColor: 'white',
+            //   borderWidth: 0,
+            // },
             headerRight: () => (
               <View style={Styles.headerIconContainer}>
                 <Ionicons

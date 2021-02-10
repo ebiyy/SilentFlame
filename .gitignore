@@ -69,3 +69,7 @@ credencial.ts
 app/helpers/csvtojson/index.js
 app/helpers/csvtojson/nutrients.csv
 app/helpers/csvtojson/nutrients.ts
+
+# firebase
+firebase.json
+app/admob.tsx
