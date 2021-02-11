@@ -14,7 +14,7 @@ import {NUTRIENTS_LABEL} from './constant';
 import {nutrientRecalculation} from './function';
 
 const NutrientsList = ({navigation, route}) => {
-  const {selectNutrient, index, parentScreen} = route.params;
+  const {selectNutrient, mealId, parentScreen} = route.params;
   const [isCollapsed, setIsCollapsed] = useState({});
   const [intake, setIntake] = useState(selectNutrient.intake || 100);
   const [meals, setMeals] = useRecoilState(mealsState);
@@ -176,10 +176,10 @@ const NutrientsList = ({navigation, route}) => {
                 }
               });
 
-              if (index !== undefined) {
+              if (mealId !== undefined) {
                 setMeals((preState) =>
                   preState.map((obj, i) =>
-                    i === index
+                    obj.meal === mealId
                       ? {
                           ...calNutrient,
                           intake: Number(intake),

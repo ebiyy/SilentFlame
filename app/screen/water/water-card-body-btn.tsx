@@ -50,7 +50,7 @@ const WaterCardBodyBtn = (props: Props) => {
         <MaterialCommunityIcons
           name={patten.name}
           color="lightblue"
-          size={60}
+          size={45}
         />
         <Text style={Styles.labelText}>{patten.label} ml</Text>
         <View style={Styles.badgeContainer}>

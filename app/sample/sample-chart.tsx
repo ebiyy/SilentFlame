@@ -5,12 +5,11 @@ import {LineChart} from 'react-native-chart-kit';
 const chartConfig = {
   backgroundGradientFrom: 'white',
   backgroundGradientTo: 'white',
-
-  decimalPlaces: 2, // optional, defaults to 2dp
+  decimalPlaces: 1, // optional, defaults to 2dp
   color: (opacity = 1) => `rgba(144, 238, 144, ${opacity})`,
   labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
   propsForDots: {
-    r: '6',
+    r: '3',
     strokeWidth: '2',
     stroke: '#90EE90',
   },
@@ -72,7 +71,7 @@ const SampleChart = (props: Props) => {
             ],
           }}
           width={Dimensions.get('window').width * 0.9} // from react-native
-          height={Dimensions.get('window').height * 0.2}
+          height={160}
           yAxisSuffix={unitSig}
           yAxisInterval={1} // optional, defaults to 1
           chartConfig={chartConfig}

@@ -62,7 +62,6 @@ const WaterScreen = () => {
           recoilSelector={mealsWATERState}
         />
       </View>
-      <TestAdmod />
 
       <TitleText title="水分を登録" key={2} />
       <View style={Styles.waterContentContainer}>
@@ -133,7 +132,7 @@ const Styles = StyleSheet.create({
     // marginTop: 20,
   },
   rateBarContainer: {
-    margin: 30,
+    marginBottom: 15,
     marginTop: 0,
   },
   waterContentContainer: {

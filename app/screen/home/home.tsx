@@ -18,6 +18,8 @@ import {ComStyles} from '../../global-style';
 import {mealsENERC_KCALState, mealsWATERState} from '../../recoil/meal';
 import RateProgressBar from '../../components/rate-progress-bar';
 import TitleText from '../../components/title-text';
+import SampleChartPie from '../../sample/sample-chart-pie';
+import {ScrollView} from 'react-native-gesture-handler';
 
 export interface HealthArr {
   startDate: string;
@@ -79,10 +81,15 @@ const HomeScreen = () => {
     getWeight(setWeightArr);
     getBodyFatPercentage(setFatPercentageArr);
     getLeanBodyMass(setLeanBodyMassArr);
+    console.log(Dimensions.get('window').height);
+    // height
+    // 6s, 7, SE: 667
+    // 11: 667
+    // X: 812
   }, []);
 
   return (
-    <>
+    <ScrollView scrollEnabled={Dimensions.get('window').height < 800}>
       <View>
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
           <TitleText title="減量の状況" />
@@ -127,7 +134,7 @@ const HomeScreen = () => {
           </View>
         </View>
         <View style={[styles.chartContainer, ComStyles.greenBoxShadow]}>
-          <SampleChartBar />
+          <SampleChartPie />
         </View>
       </View>
       <View style={styles.progressBarContainer}>
@@ -148,7 +155,7 @@ const HomeScreen = () => {
           recoilSelector={mealsWATERState}
         />
       </View>
-    </>
+    </ScrollView>
   );
 };
 

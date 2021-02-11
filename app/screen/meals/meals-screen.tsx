@@ -8,16 +8,16 @@ import {
   StyleSheet,
   Text,
   View,
-} from 'react-native';
-import {
-  ScrollView,
-  TouchableHighlight,
   TouchableWithoutFeedback,
-} from 'react-native-gesture-handler';
-import {useRecoilState} from 'recoil';
+} from 'react-native';
+import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
+import {useRecoilState, useRecoilValue} from 'recoil';
 import Divider from '../../components/divider';
+import RateProgressBar from '../../components/rate-progress-bar';
 import TitleText from '../../components/title-text';
-import {mealsState} from '../../recoil/meal';
+import {ComStyles} from '../../global-style';
+import {mealsENERC_KCALState, mealsState} from '../../recoil/meal';
+import SampleChartPie from '../../sample/sample-chart-pie';
 import RegistrationMealCard from './registration-meal-card';
 
 const timePeriod = {
@@ -30,6 +30,7 @@ const timePeriod = {
 const MealsScreen = () => {
   const navigation = useNavigation();
   const [meals, setMeals] = useRecoilState(mealsState);
+  const sumValue = useRecoilValue(mealsENERC_KCALState);
 
   useEffect(() => {
     if (meals.length > 0) {
@@ -37,10 +38,9 @@ const MealsScreen = () => {
   }, [meals]);
 
   const generateWideBtn = (key: string, i: number) => (
-    <TouchableHighlight
+    <TouchableOpacity
       key={i}
       style={{width: Dimensions.get('window').width / 4}}
-      underlayColor="while"
       onPress={() =>
         navigation.navigate('SearchMeals', {
           timePeriod: key,
@@ -51,7 +51,7 @@ const MealsScreen = () => {
           {timePeriod[key]}
         </Text>
       </View>
-    </TouchableHighlight>
+    </TouchableOpacity>
   );
 
   return (
@@ -60,20 +60,36 @@ const MealsScreen = () => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <ScrollView>
+          <TitleText title="今日のカロリー" />
+          <View style={{marginBottom: 15}}>
+            <RateProgressBar
+              title=""
+              rimit={2200}
+              unit="kcal"
+              color="red"
+              recoilSelector={mealsENERC_KCALState}
+            />
+          </View>
+          <TitleText title="PFCバランス" />
+          <View style={[Styles.chartContainer, ComStyles.greenBoxShadow]}>
+            <SampleChartPie />
+          </View>
           <TitleText title="食品を登録" />
           <View
             style={{
               flexDirection: 'row',
               justifyContent: 'space-between',
-              marginBottom: 30,
+              marginBottom: 10,
             }}>
             {Object.keys(timePeriod).map((key, i) => generateWideBtn(key, i))}
           </View>
-          <TitleText title="今日の食品" />
 
+          <TitleText title="今日の食品" />
           {Object.keys(timePeriod).map((key, i) => (
             <Fragment key={i}>
-              <Divider borderColor="lightgreen">{timePeriod[key]}</Divider>
+              <Divider borderColor="lightgreen" index={i}>
+                {timePeriod[key]}
+              </Divider>
               {meals.length > 0 &&
                 meals
                   .filter((obj) => obj.timePeriod === key)
@@ -110,6 +126,14 @@ const Styles = StyleSheet.create({
     backgroundColor: 'white',
     borderWidth: 1,
     borderColor: 'lightgreen',
+  },
+  chartContainer: {
+    marginTop: 2,
+    marginHorizontal: 10,
+    marginBottom: 15,
+    borderWidth: 1,
+    borderColor: 'lightgreen',
+    borderRadius: 10,
   },
 });
 

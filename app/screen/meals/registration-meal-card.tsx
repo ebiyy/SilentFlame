@@ -2,7 +2,7 @@ import {useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {Button, Dimensions, StyleSheet, Text, View} from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
-import {TextInput} from 'react-native-gesture-handler';
+import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 import {nutrientRecalculation} from './function';
 import DeleteConfirmationModal from '../../components/delete-confirmation-modal';
 import {useRecoilState} from 'recoil';
@@ -57,7 +57,7 @@ const RegistrationMealCard = (props: Props) => {
 
   const submitBtnPress = () => {
     setMeals((preState) =>
-      preState.map((obj, i) => (i === props.index ? meal : obj)),
+      preState.map((obj) => (obj.date === props.meal.date ? meal : obj)),
     );
     setShowChangeBtn(false);
   };
@@ -98,28 +98,22 @@ const RegistrationMealCard = (props: Props) => {
             </Text>
           </View>
           <View style={Styles.iconContainer}>
-            <View style={[Styles.icon, Styles.infoIcon]}>
-              <Icon
-                name="infocirlceo"
-                size={22}
-                color="white"
-                onPress={() =>
-                  navigation.navigate('NutrientsList', {
-                    selectNutrient: props.meal,
-                    index: props.index,
-                    parentScreen: 'MealsScreen',
-                  })
-                }
-              />
-            </View>
-            <View style={[Styles.icon, Styles.closeIcon]}>
-              <Icon
-                name="closecircleo"
-                size={22}
-                color="white"
-                onPress={() => setModalVisible(true)}
-              />
-            </View>
+            <TouchableOpacity
+              style={[Styles.icon, Styles.infoIcon]}
+              onPress={() =>
+                navigation.navigate('NutrientsList', {
+                  selectNutrient: props.meal,
+                  mealId: props.meal.date,
+                  parentScreen: 'MealsScreen',
+                })
+              }>
+              <Icon name="infocirlceo" size={22} color="white" />
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[Styles.icon, Styles.closeIcon]}
+              onPress={() => setModalVisible(true)}>
+              <Icon name="closecircleo" size={22} color="white" />
+            </TouchableOpacity>
           </View>
         </View>
         <View style={Styles.cardBody}>
@@ -181,7 +175,9 @@ const RegistrationMealCard = (props: Props) => {
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
         deleteFunc={() =>
-          setMeals((preState) => preState.filter((obj, i) => i !== props.index))
+          setMeals((preState) =>
+            preState.filter((obj) => obj.date !== props.meal.date),
+          )
         }
       />
     </>

@@ -16,6 +16,7 @@ import {StyleSheet, View} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import WaterScreen from './screen/water/water-screen';
 import TestAdmod from './admob';
+import {shadowStyles} from './global-style';
 
 // const getHeaderTitle = (route: Route<string, object | undefined>) => {
 //   // If the focused route is not found, we need to assume it's the initial screen
@@ -89,6 +90,20 @@ const MyTabs = () => {
         initialRouteName="Home"
         tabBarOptions={{
           activeTintColor: '#e91e63',
+          style: {
+            height: 80,
+            shadowColor: '#ddd',
+            shadowOffset: {
+              width: 0,
+              height: 2,
+            },
+            shadowOpacity: 1,
+            shadowRadius: 4,
+            backgroundColor: 'white',
+            borderWidth: 1,
+            // borderRadius: 30,
+            borderColor: 'lightgreen',
+          },
         }}>
         {TabScreen('Home', HomeScreen, IconTypes.MCi, 'home')}
         {TabScreen('Suppl.', SupplementScreen, IconTypes.Fa5i, 'tablets')}

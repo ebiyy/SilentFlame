@@ -10,42 +10,52 @@ type Props = {
   borderColor?: string;
   orientation?: 'left' | 'center' | 'right';
   children?: string;
+  index?: number;
 };
 
+// borderColor: '#e8e8e8',
 const DEFAULT_PROPS = {
   dashed: false,
-  orientation: 'left',
+  orientation: 'center',
   color: 'rgba(0,0,0,.85)',
-  borderColor: '#e8e8e8',
-  children: 'test',
+  borderColor: 'black',
+  children: '',
 };
 
 export const Divider = (props: Props) => {
-  useEffect(() => {
-    Object.keys(props).forEach((key) => {
-      if (props[key] === undefined) {
-        props[key] = DEFAULT_PROPS[key];
-      }
-    });
-  }, [props]);
+  const {
+    dashed = DEFAULT_PROPS.dashed,
+    color = DEFAULT_PROPS.color,
+    borderColor = DEFAULT_PROPS.borderColor,
+    orientation = DEFAULT_PROPS.orientation,
+    children = DEFAULT_PROPS.children,
+    index,
+  } = props;
+  // useEffect(() => {
+  //   Object.keys(props).forEach((key) => {
+  //     if (props[key] === undefined) {
+  //       props[key] = DEFAULT_PROPS[key];
+  //     }
+  //   });
+  // }, [props]);
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {marginTop: index === 0 ? 0 : 3}]}>
       <View
         style={[
           styles.line,
-          {borderColor: props.borderColor},
-          props.dashed && styles.dashed,
-          props.orientation === 'left' ? styles.shortWidth : {flex: 1},
+          {borderColor: borderColor},
+          dashed && styles.dashed,
+          orientation === 'left' ? styles.shortWidth : {flex: 1},
         ]}
       />
-      <Text style={[styles.text, {color: props.color}]}>{props.children}</Text>
+      <Text style={[styles.text, {color: color}]}>{children}</Text>
       <View
         style={[
           styles.line,
-          {borderColor: props.borderColor},
-          props.dashed && styles.dashed,
-          props.orientation === 'right' ? styles.shortWidth : {flex: 1},
+          {borderColor: borderColor},
+          dashed && styles.dashed,
+          orientation === 'right' ? styles.shortWidth : {flex: 1},
         ]}
       />
     </View>
