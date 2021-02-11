@@ -2,7 +2,6 @@ import React from 'react';
 
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import SampleFatsecret from '../sample/fatsecret.sample';
-import SampleRealm from '../sample/realm.sample';
 import {NavigationContainer, Route} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 
@@ -30,7 +29,7 @@ function MyTabs() {
   return (
     <Tab.Navigator>
       <Tab.Screen name="Feed" component={SampleFatsecret} />
-      <Tab.Screen name="Profile" component={SampleRealm} />
+      {/* <Tab.Screen name="Profile" component={SampleRealm} /> */}
     </Tab.Navigator>
   );
 }
@@ -48,7 +47,7 @@ export default function NavigationScreen() {
             headerTitle: getHeaderTitle(route),
           })}
         />
-        <Stack.Screen name="Settings" component={SampleRealm} />
+        {/* <Stack.Screen name="Settings" component={SampleRealm} /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );

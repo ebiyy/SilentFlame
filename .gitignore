@@ -73,3 +73,7 @@ app/helpers/csvtojson/nutrients.ts
 # firebase
 firebase.json
 app/admob.tsx
+app/helpers/databases/realm-config.json
+.env
+ios/SilentFlame/GoogleService-Info.plist
+app/helpers/databases/realm-config.ts

@@ -4,7 +4,6 @@ import {NavigationContainer, DefaultTheme} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome5Icons from 'react-native-vector-icons/FontAwesome5';
-import SampleRealm from './sample/realm.sample';
 import SupplementScreen from './screen/supplement/supplement-screen';
 import SupplementForm from './screen/supplement/supplement-form';
 import NutrientFormController from './screen/supplement/nutrient-from-controller';
@@ -16,7 +15,7 @@ import {StyleSheet, View} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import WaterScreen from './screen/water/water-screen';
 import TestAdmod from './admob';
-import {shadowStyles} from './global-style';
+import FirebaseCustomEvent from './sample/sample-firebase-event';
 
 // const getHeaderTitle = (route: Route<string, object | undefined>) => {
 //   // If the focused route is not found, we need to assume it's the initial screen
@@ -114,7 +113,7 @@ const MyTabs = () => {
           'silverware-fork-knife',
         )}
         {TabScreen('Water', WaterScreen, IconTypes.MCi, 'cup-water')}
-        {/* {TabScreen('sleep', MealsScreen, IconTypes.MCi, 'cup-water')} */}
+        {TabScreen('Firebase', FirebaseCustomEvent, IconTypes.MCi, 'cup-water')}
       </Tab.Navigator>
     </>
   );
@@ -171,7 +170,7 @@ const NavigationScreen = () => {
             ),
           })}
         />
-        <Stack.Screen name="Settings" component={SampleRealm} />
+        <Stack.Screen name="Settings" component={FirebaseCustomEvent} />
         <Stack.Screen name="SupplementForm" component={SupplementForm} />
         <Stack.Screen
           name="NutrientFormController"

@@ -1,4 +1,4 @@
-import Realm from 'realm';
+// import Realm from 'realm';
 export const SUPPLEMENT_SCHEMA = 'SupplementList';
 export const USER_SCHEMA = 'UserData';
 export const NUTRIENT_SCHEMA = 'NutrientList';
@@ -117,68 +117,68 @@ export const UserSchema = {
   },
 };
 
-const createRealm = (
-  realm: Realm,
-  schemaName: string,
-  insertObj: any,
-  modified: boolean,
-) => {
-  modified
-    ? realm.create(schemaName, insertObj, Realm.UpdateMode.Modified)
-    : realm.create(schemaName, insertObj);
-};
+// const createRealm = (
+//   realm: Realm,
+//   schemaName: string,
+//   insertObj: any,
+//   modified: boolean,
+// ) => {
+//   modified
+//     ? realm.create(schemaName, insertObj, Realm.UpdateMode.Modified)
+//     : realm.create(schemaName, insertObj);
+// };
 
-// スキーマにインサート
-const writeRealm = (
-  schema: any,
-  schemaName: string,
-  insertObj: any,
-  modified = false,
-) => {
-  Realm.open({
-    schema: [schema],
-  })
-    .then((realm: Realm) => {
-      realm.write(() => {
-        createRealm(realm, schemaName, insertObj, modified);
-      });
-      realm.close();
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-};
+// // スキーマにインサート
+// const writeRealm = (
+//   schema: any,
+//   schemaName: string,
+//   insertObj: any,
+//   modified = false,
+// ) => {
+//   Realm.open({
+//     schema: [schema],
+//   })
+//     .then((realm: Realm) => {
+//       realm.write(() => {
+//         createRealm(realm, schemaName, insertObj, modified);
+//       });
+//       realm.close();
+//     })
+//     .catch((error) => {
+//       console.log(error);
+//     });
+// };
 
-// DataListスキーマにデリート
-const deleteSchema = (schema: any, schemaName: string, schemaId: any) => {
-  Realm.open({
-    schema: [schema],
-  })
-    .then((realm: Realm) => {
-      realm.write(() => {
-        let deletingDataList = realm.objectForPrimaryKey(schemaName, schemaId);
-        realm.delete(deletingDataList);
-      });
-      realm.close();
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-};
+// // DataListスキーマにデリート
+// const deleteSchema = (schema: any, schemaName: string, schemaId: any) => {
+//   Realm.open({
+//     schema: [schema],
+//   })
+//     .then((realm: Realm) => {
+//       realm.write(() => {
+//         let deletingDataList = realm.objectForPrimaryKey(schemaName, schemaId);
+//         realm.delete(deletingDataList);
+//       });
+//       realm.close();
+//     })
+//     .catch((error) => {
+//       console.log(error);
+//     });
+// };
 
-// DataListスキーマを全デリート
-const allDeleteSchema = (schema: any, schemaName: string) => {
-  Realm.open({
-    schema: [schema],
-  })
-    .then((realm: Realm) => {
-      realm.write(() => {
-        let allTodoLists = realm.objects(schemaName);
-        realm.delete(allTodoLists);
-      });
-      realm.close();
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-};
+// // DataListスキーマを全デリート
+// const allDeleteSchema = (schema: any, schemaName: string) => {
+//   Realm.open({
+//     schema: [schema],
+//   })
+//     .then((realm: Realm) => {
+//       realm.write(() => {
+//         let allTodoLists = realm.objects(schemaName);
+//         realm.delete(allTodoLists);
+//       });
+//       realm.close();
+//     })
+//     .catch((error) => {
+//       console.log(error);
+//     });
+// };
