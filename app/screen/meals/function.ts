@@ -48,3 +48,20 @@ export const nutrientRecalculation = (
   // ex. 100
   return cal(numV);
 };
+
+export const replaceFoodName = (name: string) => {
+  const replaceStr = (str: string, str1: string, str2: string) => {
+    return str.substring(
+      str.indexOf(str1),
+      str.indexOf(str2) > 0 ? str.indexOf(str2) + str2.length + 1 : -1,
+    );
+  };
+  // console.log(name, name.toString()); // =>  <牛乳及び乳製品> (チーズ ) ナチュラルチーズ エダム
+  // console.log('name.indexOf(str2)', name.indexOf('類)')); // => 14
+  // console.log('name.indexOf(str2)', name.indexOf('類)')); // => -1
+  const replaceName = name
+    .replace(replaceStr(name, '<', '>'), '')
+    .replace(replaceStr(name, '[', ']'), '')
+    .replace(replaceStr(name, '(', '類)'), '');
+  return replaceName;
+};

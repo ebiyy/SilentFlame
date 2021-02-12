@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react';
 import {Button, Dimensions, StyleSheet, Text, View} from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
-import {nutrientRecalculation} from './function';
+import {nutrientRecalculation, replaceFoodName} from './function';
 import DeleteConfirmationModal from '../../components/delete-confirmation-modal';
 import {useRecoilState} from 'recoil';
 import {mealsState} from '../../recoil/meal';
@@ -57,7 +57,7 @@ const RegistrationMealCard = (props: Props) => {
 
   const submitBtnPress = () => {
     setMeals((preState) =>
-      preState.map((obj) => (obj.date === props.meal.date ? meal : obj)),
+      preState.map((obj) => (obj.addedAt === props.meal.addedAt ? meal : obj)),
     );
     setShowChangeBtn(false);
   };
@@ -66,20 +66,6 @@ const RegistrationMealCard = (props: Props) => {
     setIntake(intakeStr);
     setMeal(props.meal);
     setShowChangeBtn(false);
-  };
-
-  const replaceFoodName = (name: string) => {
-    const replaceStr = (str: string, str1: string, str2: string) => {
-      return str.substring(
-        str.indexOf(str1),
-        str.indexOf(str2) > 0 ? str.indexOf(str2) + 2 : -1,
-      );
-    };
-    const replaceName = name
-      .replace(replaceStr(name, '<', '>'), '')
-      .replace(replaceStr(name, '[', ']'), '')
-      .replace(replaceStr(name, '(', ')'), '');
-    return replaceName;
   };
 
   return (
@@ -94,7 +80,7 @@ const RegistrationMealCard = (props: Props) => {
               {new Intl.DateTimeFormat('ja-JP', {
                 hour: 'numeric',
                 minute: 'numeric',
-              }).format(new Date(meal.date))}
+              }).format(new Date(meal.addedAt))}
             </Text>
           </View>
           <View style={Styles.iconContainer}>
@@ -103,7 +89,7 @@ const RegistrationMealCard = (props: Props) => {
               onPress={() =>
                 navigation.navigate('NutrientsList', {
                   selectNutrient: props.meal,
-                  mealId: props.meal.date,
+                  mealId: props.meal.addedAt,
                   parentScreen: 'MealsScreen',
                 })
               }>
@@ -176,7 +162,7 @@ const RegistrationMealCard = (props: Props) => {
         setModalVisible={setModalVisible}
         deleteFunc={() =>
           setMeals((preState) =>
-            preState.filter((obj) => obj.date !== props.meal.date),
+            preState.filter((obj) => obj.addedAt !== props.meal.addedAt),
           )
         }
       />

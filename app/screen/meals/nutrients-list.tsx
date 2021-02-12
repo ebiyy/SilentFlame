@@ -44,7 +44,12 @@ const NutrientsList = ({navigation, route}) => {
       return (
         <View key={i} style={{margin: 10}}>
           <Text style={{marginBottom: 10}}>{label}</Text>
-          <Text>{setNutrientValue(value, unit)}</Text>
+          <Text>{value}</Text>
+          {value !== '' && value.match(/\d/) && (
+            <Text style={{marginTop: 10}}>
+              ※備考の数値は入力値によって再計算されません。
+            </Text>
+          )}
         </View>
       );
     }
@@ -213,13 +218,16 @@ const NutrientsList = ({navigation, route}) => {
       <View style={{alignItems: 'flex-end', marginTop: 10, marginRight: 20}}>
         {/* <Text style={{fontSize: 11.5, color: 'gray'}}>※100gあたりの栄養素</Text> */}
       </View>
-      <Divider>{`${Number(intake)}g あたりの栄養素`}</Divider>
 
+      <Divider>{`${Number(intake)}g あたりの栄養素`}</Divider>
       <ScrollView>
         <View style={{margin: 10}}>
           {Object.keys(NUTRIENTS_LABEL).map((key: string, i) =>
             generateItems(key, i, NUTRIENTS_LABEL),
           )}
+          <View style={{alignSelf: 'flex-end', marginBottom: 10}}>
+            <Text>※データ元: 日本食品標準成分表2020年版（八訂）</Text>
+          </View>
         </View>
       </ScrollView>
     </>

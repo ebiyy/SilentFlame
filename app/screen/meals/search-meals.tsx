@@ -1,4 +1,4 @@
-import {useNavigation, useRoute} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {Controller, useForm} from 'react-hook-form';
 import {
@@ -18,10 +18,13 @@ import {
   TouchableOpacity,
 } from 'react-native-gesture-handler';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import {useRecoilState} from 'recoil';
+import {useRecoilState, useRecoilValue} from 'recoil';
 import NavigationButton from '../../components/navigation-button';
+import {getDocRef} from '../../firebase/meal';
 import {NUTRIENTS} from '../../helpers/csvtojson/nutrients';
 import {mealsState} from '../../recoil/meal';
+import {userIdState} from '../../recoil/user';
+import {replaceFoodName} from './function';
 
 const SearchMeals = ({route}) => {
   const navigation = useNavigation();
@@ -29,6 +32,7 @@ const SearchMeals = ({route}) => {
   const [inputText, setInputText] = useState('');
   const [submitEditing, setSubmitEditing] = useState(false);
   const [meals, setMeals] = useRecoilState(mealsState);
+  const userId = useRecoilValue(userIdState);
 
   useEffect(() => {
     navigation.setOptions({
@@ -102,7 +106,7 @@ const SearchMeals = ({route}) => {
             <View
               style={{flexDirection: 'row', justifyContent: 'space-between'}}>
               <View style={{width: Dimensions.get('window').width * 0.6}}>
-                <Text>{obj.foodName}</Text>
+                <Text>{replaceFoodName(obj.foodName)}</Text>
               </View>
               <View style={{}}>
                 <Text style={{fontSize: 12}}>{obj.ENERC_KCAL} kcal</Text>
@@ -112,17 +116,21 @@ const SearchMeals = ({route}) => {
           <View style={{maxWidth: 20, marginHorizontal: 3, marginTop: -3}}>
             <TouchableOpacity
               onPress={() => {
-                setMeals((preState) =>
-                  preState.concat([
-                    {
-                      ...obj,
-                      intake: 100,
-                      date: Date(),
-                      timePeriod: route.params.timePeriod,
-                    },
-                  ]),
-                );
-                navigation.goBack();
+                const docRef = getDocRef(obj.id, userId);
+                const addItem = {
+                  ...obj,
+                  intake: 100,
+                  addedAt: Date(),
+                  timePeriod: route.params.timePeriod,
+                  id: docRef.id,
+                };
+                docRef
+                  .set(addItem)
+                  .then(() => console.log('add item', addItem))
+                  .catch(() =>
+                    setMeals((preState) => preState.concat([addItem])),
+                  )
+                  .finally(() => navigation.goBack());
               }}>
               <FontAwesome5 name="plus-circle" size={20} />
             </TouchableOpacity>

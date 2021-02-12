@@ -1,5 +1,5 @@
-import {useNavigation, useRoute} from '@react-navigation/native';
-import React, {Fragment, useEffect, useState} from 'react';
+import {useNavigation} from '@react-navigation/native';
+import React, {Fragment, useEffect} from 'react';
 import {
   Dimensions,
   Keyboard,
@@ -17,8 +17,11 @@ import RateProgressBar from '../../components/rate-progress-bar';
 import TitleText from '../../components/title-text';
 import {ComStyles} from '../../global-style';
 import {mealsENERC_KCALState, mealsState} from '../../recoil/meal';
+import {userIdState} from '../../recoil/user';
 import SampleChartPie from '../../sample/sample-chart-pie';
 import RegistrationMealCard from './registration-meal-card';
+import firestore from '@react-native-firebase/firestore';
+import {useCollection} from 'react-firebase-hooks/firestore';
 
 const timePeriod = {
   breakfast: '朝食',
@@ -27,15 +30,28 @@ const timePeriod = {
   snack: '間食',
 };
 
+const toDay = new Intl.DateTimeFormat('ja-JP', {
+  year: 'numeric',
+  month: 'numeric',
+  day: 'numeric',
+})
+  .format(new Date())
+  .replaceAll('/', '-');
+
 const MealsScreen = () => {
   const navigation = useNavigation();
   const [meals, setMeals] = useRecoilState(mealsState);
-  const sumValue = useRecoilValue(mealsENERC_KCALState);
+  const userId = useRecoilValue(userIdState);
+  const [value, loading, error] = useCollection(
+    firestore().collection('Meal').doc(userId).collection(toDay),
+    {
+      snapshotListenOptions: {includeMetadataChanges: true},
+    },
+  );
 
   useEffect(() => {
-    if (meals.length > 0) {
-    }
-  }, [meals]);
+    setMeals(value && value.docs.map((meal) => meal.data()));
+  }, [value]);
 
   const generateWideBtn = (key: string, i: number) => (
     <TouchableOpacity
@@ -70,10 +86,16 @@ const MealsScreen = () => {
               recoilSelector={mealsENERC_KCALState}
             />
           </View>
-          <TitleText title="PFCバランス" />
-          <View style={[Styles.chartContainer, ComStyles.greenBoxShadow]}>
-            <SampleChartPie />
-          </View>
+
+          {meals && meals.length > 0 && (
+            <>
+              <TitleText title="PFCバランス" />
+              <View style={[Styles.chartContainer, ComStyles.greenBoxShadow]}>
+                <SampleChartPie />
+              </View>
+            </>
+          )}
+
           <TitleText title="食品を登録" />
           <View
             style={{
@@ -90,7 +112,8 @@ const MealsScreen = () => {
               <Divider borderColor="lightgreen" index={i}>
                 {timePeriod[key]}
               </Divider>
-              {meals.length > 0 &&
+              {meals &&
+                meals.length > 0 &&
                 meals
                   .filter((obj) => obj.timePeriod === key)
                   .map((meal, ii) => (
