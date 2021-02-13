@@ -1,3 +1,10 @@
+type ActionMealType = 'set' | 'delete';
+
+interface ActionMeal {
+  item: CloudMeal | LocalMeal;
+  action: ActionMealType;
+}
+
 type MargeMeal = LocalMeal | CloudMeal;
 
 interface CloudMeal extends LocalMeal {

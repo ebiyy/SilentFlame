@@ -6,14 +6,9 @@ export const mealsState = atom<MargeMeal[]>({
   default: [],
 });
 
-export const cloudMealsState = atom<CloudMeal[]>({
-  key: 'cloudMealsState',
-  default: [],
-});
-
-export const localMealsState = atom<LocalMeal[]>({
-  key: 'localMealsState',
-  default: [],
+export const actionMealState = atom<ActionMeal>({
+  key: 'actionMealState',
+  default: {} as ActionMeal,
 });
 
 export const waterIntakeState = atom<WaterIntak[]>({

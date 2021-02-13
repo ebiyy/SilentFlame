@@ -9,7 +9,7 @@ import {
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useRecoilState} from 'recoil';
 import Divider from '../../components/divider';
-import {mealsState} from './recoil.meal';
+import {actionMealState, mealsState} from './recoil.meal';
 import {NUTRIENTS_LABEL} from './constant.meal';
 import {
   calNutrient,
@@ -28,7 +28,7 @@ const NutrientsList = ({navigation, route}) => {
   const {selectMeal, parentScreen, timePeriod} = route.params as Params;
   const [isCollapsed, setIsCollapsed] = useState({});
   const [intake, setIntake] = useState(selectMeal.intake || 100);
-  const {setActionMeal} = useMargeMealState();
+  const [actionMeal, setActionMeal] = useRecoilState(actionMealState);
   useEffect(() => {
     navigation.setOptions({
       title: '栄養素',

@@ -3,21 +3,14 @@ import {useState, useEffect} from 'react';
 import {useCollection} from 'react-firebase-hooks/firestore';
 import {useRecoilState, useRecoilValue} from 'recoil';
 import {firestoreState, getDocRef, toDay} from '../../firebase/meal';
-import {cloudMealsState, localMealsState, mealsState} from './recoil.meal';
+import {actionMealState, mealsState} from './recoil.meal';
 import {userIdState} from '../../recoil/user';
 
-type ActionMealType = 'set' | 'delete';
-
-interface ActionMeal {
-  item: CloudMeal | LocalMeal;
-  action: ActionMealType;
-}
-
 export const useMargeMealState = () => {
-  const [actionMeal, setActionMeal] = useState<ActionMeal>();
+  const [actionMeal, setActionMeal] = useRecoilState(actionMealState);
   const [meals, setMeals] = useRecoilState(mealsState);
-  const [localMeals, setLocalMeals] = useRecoilState(localMealsState);
-  const [cloudMeals, setCloudMeals] = useRecoilState(cloudMealsState);
+  const [localMeals, setLocalMeals] = useState<LocalMeal[]>();
+  const [cloudMeals, setCloudMeals] = useState<CloudMeal[]>();
   const userId = useRecoilValue(userIdState);
   const firestore = useRecoilValue(firestoreState);
   const [value, loading, error] = useCollection(
@@ -62,7 +55,9 @@ export const useMargeMealState = () => {
       })
       .catch((e) => {
         console.log(e, item.foodName);
-        setLocalMeals((preState) => preState.concat([item]));
+        setLocalMeals((preState) =>
+          preState ? preState.concat([item]) : [item],
+        );
       });
   };
 
@@ -75,7 +70,9 @@ export const useMargeMealState = () => {
         .catch((e) => console.warn(e, 'delete Error'));
     } else {
       setLocalMeals((preState) =>
-        preState.filter((meal) => meal.addedAt !== item.addedAt),
+        preState
+          ? preState.filter((meal) => meal.addedAt !== item.addedAt)
+          : [item],
       );
     }
   };
@@ -98,8 +95,14 @@ export const useMargeMealState = () => {
   // ローカルデータとクラウドデータをマージ
   useEffect(() => {
     console.log('useMargeMealState::marge::start');
-    setMeals(localMeals.concat(cloudMeals));
+    if (localMeals && cloudMeals) {
+      setMeals(localMeals.concat(cloudMeals));
+    } else if (cloudMeals) {
+      setMeals(cloudMeals);
+    } else if (localMeals) {
+      setMeals(localMeals);
+    }
   }, [localMeals, cloudMeals]);
 
-  return {meals, setActionMeal};
+  return meals;
 };

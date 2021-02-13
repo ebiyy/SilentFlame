@@ -30,7 +30,7 @@ const timePeriod: TimePeriod = {
 
 const MealsScreen = () => {
   const navigation = useNavigation();
-  const {meals} = useMargeMealState();
+  const meals = useMargeMealState();
 
   const generateWideBtn = (key: string, i: number) => (
     <TouchableOpacity

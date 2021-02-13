@@ -18,10 +18,12 @@ import {
   TouchableOpacity,
 } from 'react-native-gesture-handler';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import {useRecoilState} from 'recoil';
 import NavigationButton from '../../components/navigation-button';
 import {NUTRIENTS} from '../../helpers/csvtojson/nutrients';
 import {replaceFoodName} from './function.meal';
 import {useMargeMealState} from './hook.meal';
+import {actionMealState} from './recoil.meal';
 
 type Params = {
   timePeriod: TimePeriodKey;
@@ -33,7 +35,7 @@ const SearchMeals = ({route}) => {
   const {control, handleSubmit, errors} = useForm();
   const [inputText, setInputText] = useState('');
   const [submitEditing, setSubmitEditing] = useState(false);
-  const {setActionMeal} = useMargeMealState();
+  const [actionMeal, setActionMeal] = useRecoilState(actionMealState);
 
   useEffect(() => {
     navigation.setOptions({

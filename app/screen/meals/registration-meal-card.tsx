@@ -10,7 +10,7 @@ import {
 } from './function.meal';
 import DeleteConfirmationModal from '../../components/delete-confirmation-modal';
 import {useRecoilState} from 'recoil';
-import {mealsState} from './recoil.meal';
+import {actionMealState, mealsState} from './recoil.meal';
 import {NUTRIENTS_LABEL} from './constant.meal';
 import {useMargeMealState} from './hook.meal';
 
@@ -25,7 +25,7 @@ const RegistrationMealCard = (props: Props) => {
   const [intake, setIntake] = useState(String(meal.intake));
   const [showChangeBtn, setShowChangeBtn] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  const {setActionMeal} = useMargeMealState();
+  const [actionMeal, setActionMeal] = useRecoilState(actionMealState);
 
   useEffect(() => {
     cancelBtnPress();
