@@ -65,3 +65,41 @@ export const replaceFoodName = (name: string) => {
     .replace(replaceStr(name, '(', '類)'), '');
   return replaceName;
 };
+
+export const calNutrient = (meal: MargeMeal, v: string) => {
+  const temp = {} as MargeMeal;
+  Object.keys(meal).forEach((key) => {
+    if (
+      [
+        'foodGroup',
+        'foodNumber',
+        'indexNumber',
+        'foodName',
+        'remarks',
+        'addedAt',
+        'upDatedAt',
+        'timePeriod',
+        'id',
+      ].includes(key)
+    ) {
+      temp[key] = meal[key];
+    } else {
+      temp[key] = nutrientRecalculation(meal[key], v, meal.intake);
+    }
+  });
+  return temp;
+};
+
+export const generateMeal = (
+  nutrient: Nutrients,
+  intake: number,
+  timePeriod: TimePeriodKey,
+): LocalMeal => {
+  return {
+    ...nutrient,
+    intake: intake,
+    addedAt: new Date(),
+    upDatedAt: new Date(),
+    timePeriod: timePeriod,
+  };
+};

@@ -7,7 +7,7 @@ import {
   mealsCHOCDFState,
   mealsFatState,
   mealsProteinState,
-} from '../recoil/meal';
+} from '../screen/meals/recoil.meal';
 
 const chartConfig = {
   backgroundGradientFrom: 'white',

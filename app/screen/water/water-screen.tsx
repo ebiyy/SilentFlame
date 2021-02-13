@@ -15,7 +15,7 @@ import {ComStyles, shadowStyles} from '../../global-style';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {TouchableHighlight} from 'react-native-gesture-handler';
 import RateProgressBar from '../../components/rate-progress-bar';
-import {mealsWATERState, waterIntakeState} from '../../recoil/meal';
+import {mealsWATERState, waterIntakeState} from '../meals/recoil.meal';
 import Ioniconsfrom from 'react-native-vector-icons/Ionicons';
 import {useRecoilState} from 'recoil';
 import TitleText from '../../components/title-text';

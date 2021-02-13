@@ -1,13 +1,13 @@
 import React from 'react';
-import {View, StyleSheet, Dimensions} from 'react-native';
-import {BarChart, PieChart} from 'react-native-chart-kit';
+import {View, Dimensions} from 'react-native';
+import {PieChart} from 'react-native-chart-kit';
 import {useRecoilValue} from 'recoil';
 import {
   mealsCHOAVState,
   mealsCHOCDFState,
   mealsFatState,
   mealsProteinState,
-} from '../recoil/meal';
+} from '../screen/meals/recoil.meal';
 
 const chartConfig = {
   decimalPlaces: 2, // optional, defaults to 2dp
@@ -20,10 +20,11 @@ const SampleChartPie = () => {
   const sumFat = useRecoilValue(mealsFatState);
   const sumCHOCDF = useRecoilValue(mealsCHOCDFState);
   const sumCHOAV = useRecoilValue(mealsCHOAVState);
+  const height = Dimensions.get('window').height * 0.205;
 
   // color: https://codepen.io/giana/pen/BoWoQR
   return (
-    <View>
+    <View style={{height: height}}>
       <PieChart
         data={[
           {
@@ -48,7 +49,7 @@ const SampleChartPie = () => {
             legendFontSize: 15,
           },
           {
-            name: '炭水化物(糖質)',
+            name: '糖質',
             nutrinet: sumCHOAV,
             color: '#ea4bbc',
             legendFontColor: '#7F7F7F',
@@ -67,12 +68,5 @@ const SampleChartPie = () => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  chart: {
-    marginVertical: 8,
-    // borderRadius: 16,
-  },
-});
 
 export default SampleChartPie;

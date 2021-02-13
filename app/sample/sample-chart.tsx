@@ -16,7 +16,7 @@ const chartConfig = {
 };
 
 type Props = {
-  healthArr: {
+  healthArr?: {
     startDate: string;
     value: number;
   }[];
@@ -26,6 +26,7 @@ const SampleChart = (props: Props) => {
   const [data, setData] = useState<{startDate: string; value: number}[]>([]);
   const [unitSig, setUnitSig] = useState<string>();
   const [formatNum, setFormatNum] = useState<number>(0);
+  const height = 160;
 
   useEffect(() => {
     if (props.healthArr) {
@@ -54,7 +55,7 @@ const SampleChart = (props: Props) => {
   }, [data]);
 
   return (
-    <View>
+    <View style={{height: height + 20}}>
       {data.length > 0 && unitSig && formatNum && (
         <LineChart
           data={{
@@ -71,7 +72,7 @@ const SampleChart = (props: Props) => {
             ],
           }}
           width={Dimensions.get('window').width * 0.9} // from react-native
-          height={160}
+          height={height}
           yAxisSuffix={unitSig}
           yAxisInterval={1} // optional, defaults to 1
           chartConfig={chartConfig}

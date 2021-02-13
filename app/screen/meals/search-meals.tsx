@@ -18,21 +18,22 @@ import {
   TouchableOpacity,
 } from 'react-native-gesture-handler';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import {useRecoilState, useRecoilValue} from 'recoil';
 import NavigationButton from '../../components/navigation-button';
-import {getDocRef} from '../../firebase/meal';
 import {NUTRIENTS} from '../../helpers/csvtojson/nutrients';
-import {mealsState} from '../../recoil/meal';
-import {userIdState} from '../../recoil/user';
-import {replaceFoodName} from './function';
+import {replaceFoodName} from './function.meal';
+import {useMargeMealState} from './hook.meal';
+
+type Params = {
+  timePeriod: TimePeriodKey;
+};
 
 const SearchMeals = ({route}) => {
   const navigation = useNavigation();
+  const {timePeriod} = route.params as Params;
   const {control, handleSubmit, errors} = useForm();
   const [inputText, setInputText] = useState('');
   const [submitEditing, setSubmitEditing] = useState(false);
-  const [meals, setMeals] = useRecoilState(mealsState);
-  const userId = useRecoilValue(userIdState);
+  const {setActionMeal} = useMargeMealState();
 
   useEffect(() => {
     navigation.setOptions({
@@ -76,7 +77,7 @@ const SearchMeals = ({route}) => {
     }
     return (
       hitArr.length > 0 &&
-      hitArr.map((obj, i) => (
+      hitArr.map((obj: Nutrients, i) => (
         <View
           key={i}
           style={{
@@ -93,14 +94,15 @@ const SearchMeals = ({route}) => {
             activeOpacity={0.6}
             onPress={() =>
               navigation.navigate('NutrientsList', {
-                selectNutrient: {
+                selectMeal: {
                   ...obj,
                   intake: 100,
-                  date: Date(),
-                  timePeriod: route.params.timePeriod,
-                },
+                  addedAt: new Date(),
+                  upDatedAt: new Date(),
+                  timePeriod: timePeriod,
+                } as LocalMeal,
                 parentScreen: 'SearchMeals',
-                timePeriod: route.params.timePeriod,
+                timePeriod: timePeriod,
               })
             }>
             <View
@@ -116,21 +118,15 @@ const SearchMeals = ({route}) => {
           <View style={{maxWidth: 20, marginHorizontal: 3, marginTop: -3}}>
             <TouchableOpacity
               onPress={() => {
-                const docRef = getDocRef(obj.id, userId);
-                const addItem = {
+                const addItem: LocalMeal = {
                   ...obj,
                   intake: 100,
-                  addedAt: Date(),
-                  timePeriod: route.params.timePeriod,
-                  id: docRef.id,
+                  addedAt: new Date(),
+                  upDatedAt: new Date(),
+                  timePeriod: timePeriod,
                 };
-                docRef
-                  .set(addItem)
-                  .then(() => console.log('add item', addItem))
-                  .catch(() =>
-                    setMeals((preState) => preState.concat([addItem])),
-                  )
-                  .finally(() => navigation.goBack());
+                setActionMeal({item: addItem, action: 'set'});
+                navigation.goBack();
               }}>
               <FontAwesome5 name="plus-circle" size={20} />
             </TouchableOpacity>

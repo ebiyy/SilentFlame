@@ -3,25 +3,29 @@ import React, {useEffect, useState} from 'react';
 import {Button, Dimensions, StyleSheet, Text, View} from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
-import {nutrientRecalculation, replaceFoodName} from './function';
+import {
+  calNutrient,
+  nutrientRecalculation,
+  replaceFoodName,
+} from './function.meal';
 import DeleteConfirmationModal from '../../components/delete-confirmation-modal';
 import {useRecoilState} from 'recoil';
-import {mealsState} from '../../recoil/meal';
-import {NUTRIENTS_LABEL} from './constant';
+import {mealsState} from './recoil.meal';
+import {NUTRIENTS_LABEL} from './constant.meal';
+import {useMargeMealState} from './hook.meal';
 
 type Props = {
-  meal: any;
-  index: number;
+  meal: MargeMeal;
 };
 
 const RegistrationMealCard = (props: Props) => {
-  const intakeStr = String(props.meal.intake);
+  const {meal} = props;
   const navigation = useNavigation();
-  const [meals, setMeals] = useRecoilState(mealsState);
-  const [meal, setMeal] = useState(props.meal);
-  const [intake, setIntake] = useState(intakeStr);
+  const [tempMeal, setTempMeal] = useState(meal);
+  const [intake, setIntake] = useState(String(meal.intake));
   const [showChangeBtn, setShowChangeBtn] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
+  const {setActionMeal} = useMargeMealState();
 
   useEffect(() => {
     cancelBtnPress();
@@ -32,39 +36,17 @@ const RegistrationMealCard = (props: Props) => {
       setShowChangeBtn(true);
     }
     setIntake(v);
-    const calNutrient = {};
-    Object.keys(props.meal).forEach((key) => {
-      if (
-        [
-          'foodGroup',
-          'foodNumber',
-          'indexNumber',
-          'foodName',
-          'remarks',
-        ].includes(key)
-      ) {
-        calNutrient[key] = props.meal[key];
-      } else {
-        calNutrient[key] = nutrientRecalculation(
-          props.meal[key],
-          v,
-          props.meal.intake,
-        );
-      }
-    });
-    setMeal(calNutrient);
+    setTempMeal(calNutrient(meal, v));
   };
 
   const submitBtnPress = () => {
-    setMeals((preState) =>
-      preState.map((obj) => (obj.addedAt === props.meal.addedAt ? meal : obj)),
-    );
+    setActionMeal({item: tempMeal, action: 'set'});
     setShowChangeBtn(false);
   };
 
   const cancelBtnPress = () => {
-    setIntake(intakeStr);
-    setMeal(props.meal);
+    setIntake(String(meal.intake));
+    setTempMeal(meal);
     setShowChangeBtn(false);
   };
 
@@ -74,13 +56,13 @@ const RegistrationMealCard = (props: Props) => {
         <View style={Styles.cardHeader}>
           <View style={Styles.titleContainer}>
             <Text style={Styles.titleText}>
-              {replaceFoodName(meal.foodName)}
+              {replaceFoodName(tempMeal.foodName)}
             </Text>
             <Text style={Styles.timeText}>
               {new Intl.DateTimeFormat('ja-JP', {
                 hour: 'numeric',
                 minute: 'numeric',
-              }).format(new Date(meal.addedAt))}
+              }).format(tempMeal.addedAt)}
             </Text>
           </View>
           <View style={Styles.iconContainer}>
@@ -88,8 +70,8 @@ const RegistrationMealCard = (props: Props) => {
               style={[Styles.icon, Styles.infoIcon]}
               onPress={() =>
                 navigation.navigate('NutrientsList', {
-                  selectNutrient: props.meal,
-                  mealId: props.meal.addedAt,
+                  selectMeal: meal,
+                  timePeriod: meal.timePeriod,
                   parentScreen: 'MealsScreen',
                 })
               }>
@@ -112,7 +94,7 @@ const RegistrationMealCard = (props: Props) => {
                 placeholder="摂取量"
                 clearButtonMode="always"
                 keyboardType="numeric"
-                defaultValue={intakeStr}
+                defaultValue={String(meal.intake)}
               />
               <Text style={Styles.gramUnit}>g</Text>
             </View>
@@ -137,21 +119,21 @@ const RegistrationMealCard = (props: Props) => {
             </View>
             <View style={Styles.nutrientContentValue}>
               <Text style={Styles.nutrientLable}>
-                {meal.ENERC_KCAL} {NUTRIENTS_LABEL.ENERC_KCAL.unit}
+                {tempMeal.ENERC_KCAL} {NUTRIENTS_LABEL.ENERC_KCAL.unit}
               </Text>
               <Text style={Styles.nutrientLable}>
-                {meal.PROT} {NUTRIENTS_LABEL.PROT.unit}
+                {tempMeal.PROT} {NUTRIENTS_LABEL.PROT.unit}
               </Text>
               <Text style={Styles.nutrientLable}>
-                {meal.FAT} {NUTRIENTS_LABEL.FAT.unit}
+                {tempMeal.FAT} {NUTRIENTS_LABEL.FAT.unit}
               </Text>
               <Text style={Styles.nutrientLable}>
-                {meal.CHOCDF} {NUTRIENTS_LABEL.CHOCDF.unit}
+                {tempMeal.CHOCDF} {NUTRIENTS_LABEL.CHOCDF.unit}
               </Text>
               <Text style={Styles.nutrientLable}>
-                {meal.CHOAVLM
-                  ? `${meal.CHOAVLM} ${NUTRIENTS_LABEL.CHOCDF.detail.CHOAV.detail.CHOAVLM.unit}`
-                  : `${meal.CHOAVLDF} ${NUTRIENTS_LABEL.CHOCDF.detail.CHOAV.detail.CHOAVLDF.unit}`}
+                {tempMeal.CHOAVLM
+                  ? `${tempMeal.CHOAVLM} ${NUTRIENTS_LABEL.CHOCDF.detail.CHOAV.detail.CHOAVLM.unit}`
+                  : `${tempMeal.CHOAVLDF} ${NUTRIENTS_LABEL.CHOCDF.detail.CHOAV.detail.CHOAVLDF.unit}`}
               </Text>
             </View>
           </View>
@@ -160,11 +142,7 @@ const RegistrationMealCard = (props: Props) => {
       <DeleteConfirmationModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
-        deleteFunc={() =>
-          setMeals((preState) =>
-            preState.filter((obj) => obj.addedAt !== props.meal.addedAt),
-          )
-        }
+        deleteFunc={() => setActionMeal({item: tempMeal, action: 'delete'})}
       />
     </>
   );

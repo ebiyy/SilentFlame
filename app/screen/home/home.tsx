@@ -13,20 +13,29 @@ import {
   getWeight,
 } from '../../helpers/apple-heath-kit';
 import SampleChart from '../../sample/sample-chart';
-import SampleChartBar from '../../sample/sample-chart-bar';
 import {ComStyles} from '../../global-style';
-import {mealsENERC_KCALState, mealsWATERState} from '../../recoil/meal';
+import {mealsENERC_KCALState, mealsWATERState} from '../meals/recoil.meal';
 import RateProgressBar from '../../components/rate-progress-bar';
 import TitleText from '../../components/title-text';
 import SampleChartPie from '../../sample/sample-chart-pie';
 import {ScrollView} from 'react-native-gesture-handler';
+import FadeInView from '../../components/fade-in-view';
 
 export interface HealthArr {
   startDate: string;
   value: number;
 }
 
-const BodyViewType = {
+type BodyViewType = '体重' | '体脂肪' | '除脂肪体重';
+
+interface BodyView {
+  [x: string]: BodyViewType;
+  weight: BodyViewType;
+  fatPercentage: BodyViewType;
+  leanBodyMass: BodyViewType;
+}
+
+const bodyViewType: BodyView = {
   weight: '体重',
   fatPercentage: '体脂肪',
   leanBodyMass: '除脂肪体重',
@@ -39,8 +48,8 @@ const NutrientViewType = {
 
 const generateSwitchBtn = (
   state: string,
-  setState: React.Dispatch<React.SetStateAction<string>>,
-  type: string,
+  setState: React.Dispatch<React.SetStateAction<BodyViewType>>,
+  type: BodyViewType,
   i: number,
 ) => {
   return (
@@ -69,19 +78,30 @@ const HomeScreen = () => {
   const [weightArr, setWeightArr] = useState<HealthArr[]>();
   const [fatPercentageArr, setFatPercentageArr] = useState<HealthArr[]>();
   const [leanBodyMassArr, setLeanBodyMassArr] = useState<HealthArr[]>();
-  const [switchBodyChartView, setSwitchBodyChartView] = useState(
-    BodyViewType.weight,
+  const [switchBodyChartView, setSwitchBodyChartView] = useState<BodyViewType>(
+    bodyViewType.weight,
   );
   const [switchNutrientChartView, setSwitchNutrientChartView] = useState(
     NutrientViewType.simple,
   );
+
+  const setChatData = (state: '体重' | '体脂肪' | '除脂肪体重') => {
+    switch (state) {
+      case '体重':
+        return weightArr;
+      case '体脂肪':
+        return fatPercentageArr;
+      case '除脂肪体重':
+        return leanBodyMassArr;
+    }
+  };
 
   useEffect(() => {
     getPermissions();
     getWeight(setWeightArr);
     getBodyFatPercentage(setFatPercentageArr);
     getLeanBodyMass(setLeanBodyMassArr);
-    console.log(Dimensions.get('window').height);
+    // console.log(Dimensions.get('window').height);
     // height
     // 6s, 7, SE: 667
     // 11: 667
@@ -89,73 +109,70 @@ const HomeScreen = () => {
   }, []);
 
   return (
-    <ScrollView scrollEnabled={Dimensions.get('window').height < 800}>
-      <View>
-        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <TitleText title="減量の状況" />
-          <View style={styles.switchBtnContainer}>
-            {Object.keys(BodyViewType).map((key, i) =>
-              generateSwitchBtn(
-                switchBodyChartView,
-                setSwitchBodyChartView,
-                BodyViewType[key],
-                i,
-              ),
-            )}
-          </View>
-        </View>
-
-        <View style={[styles.chartContainer, ComStyles.greenBoxShadow]}>
-          <SampleChart
-            healthArr={
-              (switchBodyChartView === BodyViewType.weight && weightArr) ||
-              (switchBodyChartView === BodyViewType.fatPercentage &&
-                fatPercentageArr) ||
-              (switchBodyChartView === BodyViewType.leanBodyMass &&
-                leanBodyMassArr)
-            }
-          />
-        </View>
-      </View>
-      <View style={{marginTop: windowHeight * 0.01}}>
+    <FadeInView>
+      <ScrollView scrollEnabled={Dimensions.get('window').height < 800}>
         <View>
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-            <TitleText title="栄養の情報" />
-            <View style={styles.switchBtnContainer}>
-              {Object.keys(NutrientViewType).map((key, i) =>
+            <TitleText title="減量の状況" />
+            <View style={[styles.switchBtnContainer, {height: 40}]}>
+              {Object.keys(bodyViewType).map((key, i) =>
                 generateSwitchBtn(
-                  switchNutrientChartView,
-                  setSwitchNutrientChartView,
-                  NutrientViewType[key],
+                  switchBodyChartView,
+                  setSwitchBodyChartView,
+                  bodyViewType[key],
                   i,
                 ),
               )}
             </View>
           </View>
+
+          <View style={[styles.chartContainer, ComStyles.greenBoxShadow]}>
+            <SampleChart healthArr={setChatData(switchBodyChartView)} />
+          </View>
         </View>
-        <View style={[styles.chartContainer, ComStyles.greenBoxShadow]}>
-          <SampleChartPie />
+        <View style={{marginTop: windowHeight * 0.01}}>
+          <View>
+            <View
+              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+              <TitleText title="栄養の情報" />
+              <View style={[styles.switchBtnContainer, {height: 40}]}>
+                {Object.keys(NutrientViewType).map((key, i) =>
+                  generateSwitchBtn(
+                    switchNutrientChartView,
+                    setSwitchNutrientChartView,
+                    NutrientViewType[key],
+                    i,
+                  ),
+                )}
+              </View>
+            </View>
+          </View>
+          <View style={[styles.chartContainer, ComStyles.greenBoxShadow]}>
+            <SampleChartPie />
+          </View>
         </View>
-      </View>
-      <View style={styles.progressBarContainer}>
-        <RateProgressBar
-          title="今日のカロリー"
-          rimit={2200}
-          unit="kcal"
-          color="red"
-          recoilSelector={mealsENERC_KCALState}
-        />
-      </View>
-      <View style={styles.progressBarContainer}>
-        <RateProgressBar
-          title="今日の水分"
-          rimit={2}
-          unit="L"
-          color="blue"
-          recoilSelector={mealsWATERState}
-        />
-      </View>
-    </ScrollView>
+        <View>
+          <View style={styles.progressBarContainer}>
+            <RateProgressBar
+              title="今日のカロリー"
+              rimit={2200}
+              unit="kcal"
+              color="red"
+              recoilSelector={mealsENERC_KCALState}
+            />
+          </View>
+          <View style={styles.progressBarContainer}>
+            <RateProgressBar
+              title="今日の水分"
+              rimit={2}
+              unit="L"
+              color="blue"
+              recoilSelector={mealsWATERState}
+            />
+          </View>
+        </View>
+      </ScrollView>
+    </FadeInView>
   );
 };
 

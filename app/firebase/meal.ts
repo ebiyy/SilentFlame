@@ -17,3 +17,11 @@ export const toDay = new Intl.DateTimeFormat('ja-JP', {
 
 export const getDocRef = (docName: string | undefined, userId: string) =>
   firestore().collection('Meal').doc(userId).collection(toDay).doc(docName);
+
+export const getDocRef2 = (docName: string | undefined, userId: string) =>
+  firestore()
+    .collection('Meal')
+    .doc(userId)
+    .collection(toDay)
+    .doc(docName)
+    .onSnapshot((v) => v.data());

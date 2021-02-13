@@ -1,8 +1,18 @@
 import {atom, selector} from 'recoil';
-import {WaterIntak} from '../helpers/interface';
+import {WaterIntak} from '../../helpers/interface';
 
-export const mealsState = atom({
+export const mealsState = atom<MargeMeal[]>({
   key: 'mealsState',
+  default: [],
+});
+
+export const cloudMealsState = atom<CloudMeal[]>({
+  key: 'cloudMealsState',
+  default: [],
+});
+
+export const localMealsState = atom<LocalMeal[]>({
+  key: 'localMealsState',
   default: [],
 });
 

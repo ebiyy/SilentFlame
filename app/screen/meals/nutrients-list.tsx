@@ -9,15 +9,26 @@ import {
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {useRecoilState} from 'recoil';
 import Divider from '../../components/divider';
-import {mealsState} from '../../recoil/meal';
-import {NUTRIENTS_LABEL} from './constant';
-import {nutrientRecalculation} from './function';
+import {mealsState} from './recoil.meal';
+import {NUTRIENTS_LABEL} from './constant.meal';
+import {
+  calNutrient,
+  generateMeal,
+  nutrientRecalculation,
+} from './function.meal';
+import {useMargeMealState} from './hook.meal';
+
+type Params = {
+  selectMeal: LocalMeal;
+  parentScreen: string;
+  timePeriod: TimePeriodKey;
+};
 
 const NutrientsList = ({navigation, route}) => {
-  const {selectNutrient, mealId, parentScreen} = route.params;
+  const {selectMeal, parentScreen, timePeriod} = route.params as Params;
   const [isCollapsed, setIsCollapsed] = useState({});
-  const [intake, setIntake] = useState(selectNutrient.intake || 100);
-  const [meals, setMeals] = useRecoilState(mealsState);
+  const [intake, setIntake] = useState(selectMeal.intake || 100);
+  const {setActionMeal} = useMargeMealState();
   useEffect(() => {
     navigation.setOptions({
       title: '栄養素',
@@ -29,9 +40,12 @@ const NutrientsList = ({navigation, route}) => {
     if (value === '-' || value === 'Tr') {
       return value;
     }
-    return unit
-      ? `${nutrientRecalculation(value, intake, selectNutrient.intake)} ${unit}`
-      : nutrientRecalculation(value, intake, selectNutrient.intake);
+    const resultValue = nutrientRecalculation(
+      value,
+      String(intake),
+      selectMeal.intake,
+    );
+    return unit ? `${resultValue} ${unit}` : resultValue;
   };
 
   const generateItemList = (
@@ -88,15 +102,13 @@ const NutrientsList = ({navigation, route}) => {
           </Text>
         </View>
         <View>
-          <Text>
-            {setNutrientValue(selectNutrient[objKey], nutrientObj.unit)}
-          </Text>
+          <Text>{setNutrientValue(selectMeal[objKey], nutrientObj.unit)}</Text>
         </View>
       </View>
       {/* {generateItemList(
         1,
         nutrientObj.label,
-        selectNutrient[objKey],
+        selectMeal[objKey],
         nutrientObj.unit,
       )} */}
     </TouchableHighlight>
@@ -120,7 +132,7 @@ const NutrientsList = ({navigation, route}) => {
     return generateItemList(
       i,
       mapObj[key].label,
-      selectNutrient[key],
+      selectMeal[key],
       mapObj[key].unit,
     );
   };
@@ -160,49 +172,14 @@ const NutrientsList = ({navigation, route}) => {
           <Button
             title="この量で登録"
             onPress={() => {
-              const calNutrient = {};
-              Object.keys(selectNutrient).forEach((key) => {
-                if (
-                  [
-                    'foodGroup',
-                    'foodNumber',
-                    'indexNumber',
-                    'foodName',
-                    'remarks',
-                  ].includes(key)
-                ) {
-                  calNutrient[key] = selectNutrient[key];
-                } else {
-                  calNutrient[key] = nutrientRecalculation(
-                    selectNutrient[key],
-                    intake,
-                    selectNutrient.intake,
-                  );
-                }
+              setActionMeal({
+                item: generateMeal(
+                  calNutrient(selectMeal, String(intake)),
+                  Number(intake),
+                  timePeriod,
+                ),
+                action: 'set',
               });
-
-              if (mealId !== undefined) {
-                setMeals((preState) =>
-                  preState.map((obj, i) =>
-                    obj.meal === mealId
-                      ? {
-                          ...calNutrient,
-                          intake: Number(intake),
-                        }
-                      : obj,
-                  ),
-                );
-              } else {
-                setMeals((preState) =>
-                  preState.concat([
-                    {
-                      ...calNutrient,
-                      intake: Number(intake),
-                    },
-                  ]),
-                );
-              }
-
               if (parentScreen === 'SearchMeals') {
                 navigation.goBack();
                 navigation.goBack();

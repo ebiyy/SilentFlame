@@ -11,47 +11,26 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
-import {useRecoilState, useRecoilValue} from 'recoil';
 import Divider from '../../components/divider';
 import RateProgressBar from '../../components/rate-progress-bar';
 import TitleText from '../../components/title-text';
 import {ComStyles} from '../../global-style';
-import {mealsENERC_KCALState, mealsState} from '../../recoil/meal';
-import {userIdState} from '../../recoil/user';
+import {mealsENERC_KCALState} from './recoil.meal';
 import SampleChartPie from '../../sample/sample-chart-pie';
 import RegistrationMealCard from './registration-meal-card';
-import firestore from '@react-native-firebase/firestore';
-import {useCollection} from 'react-firebase-hooks/firestore';
+import FadeInView from '../../components/fade-in-view';
+import {useMargeMealState} from './hook.meal';
 
-const timePeriod = {
+const timePeriod: TimePeriod = {
   breakfast: '朝食',
   lunch: '昼食',
   dinner: '夕食',
   snack: '間食',
 };
 
-const toDay = new Intl.DateTimeFormat('ja-JP', {
-  year: 'numeric',
-  month: 'numeric',
-  day: 'numeric',
-})
-  .format(new Date())
-  .replaceAll('/', '-');
-
 const MealsScreen = () => {
   const navigation = useNavigation();
-  const [meals, setMeals] = useRecoilState(mealsState);
-  const userId = useRecoilValue(userIdState);
-  const [value, loading, error] = useCollection(
-    firestore().collection('Meal').doc(userId).collection(toDay),
-    {
-      snapshotListenOptions: {includeMetadataChanges: true},
-    },
-  );
-
-  useEffect(() => {
-    setMeals(value && value.docs.map((meal) => meal.data()));
-  }, [value]);
+  const {meals} = useMargeMealState();
 
   const generateWideBtn = (key: string, i: number) => (
     <TouchableOpacity
@@ -88,12 +67,12 @@ const MealsScreen = () => {
           </View>
 
           {meals && meals.length > 0 && (
-            <>
+            <FadeInView>
               <TitleText title="PFCバランス" />
               <View style={[Styles.chartContainer, ComStyles.greenBoxShadow]}>
                 <SampleChartPie />
               </View>
-            </>
+            </FadeInView>
           )}
 
           <TitleText title="食品を登録" />
@@ -112,13 +91,15 @@ const MealsScreen = () => {
               <Divider borderColor="lightgreen" index={i}>
                 {timePeriod[key]}
               </Divider>
-              {meals &&
-                meals.length > 0 &&
-                meals
-                  .filter((obj) => obj.timePeriod === key)
-                  .map((meal, ii) => (
-                    <RegistrationMealCard key={ii} meal={meal} index={ii} />
-                  ))}
+              {meals && meals.length > 0 && (
+                <FadeInView>
+                  {meals
+                    .filter((obj) => obj.timePeriod === key)
+                    .map((meal, ii) => (
+                      <RegistrationMealCard key={ii} meal={meal} />
+                    ))}
+                </FadeInView>
+              )}
             </Fragment>
           ))}
           <View style={{height: 100}}></View>

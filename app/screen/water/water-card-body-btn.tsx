@@ -3,7 +3,7 @@ import {StyleSheet, Text, View} from 'react-native';
 import {shadowStyles} from '../../global-style';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import {waterIntakeState} from '../../recoil/meal';
+import {waterIntakeState} from '../meals/recoil.meal';
 import {useRecoilState} from 'recoil';
 
 type Props = {
