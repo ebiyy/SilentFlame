@@ -6,9 +6,9 @@ export const mealsState = atom<MargeMeal[]>({
   default: [],
 });
 
-export const actionMealState = atom<ActionMeal>({
+export const actionMealState = atom<ActionMeal | undefined>({
   key: 'actionMealState',
-  default: {} as ActionMeal,
+  default: undefined,
 });
 
 export const waterIntakeState = atom<WaterIntak[]>({

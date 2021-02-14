@@ -32,6 +32,8 @@ const MealsScreen = () => {
   const navigation = useNavigation();
   const meals = useMargeMealState();
 
+  useEffect(() => {}, [meals]);
+
   const generateWideBtn = (key: string, i: number) => (
     <TouchableOpacity
       key={i}

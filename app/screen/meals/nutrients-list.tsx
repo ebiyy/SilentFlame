@@ -1,5 +1,5 @@
 import React, {Fragment, useEffect, useState} from 'react';
-import {Button, StyleSheet, Text, View} from 'react-native';
+import {Button, LogBox, StyleSheet, Text, View} from 'react-native';
 import Collapsible from 'react-native-collapsible';
 import {
   ScrollView,
@@ -16,13 +16,16 @@ import {
   generateMeal,
   nutrientRecalculation,
 } from './function.meal';
-import {useMargeMealState} from './hook.meal';
 
 type Params = {
   selectMeal: LocalMeal;
   parentScreen: string;
   timePeriod: TimePeriodKey;
 };
+
+LogBox.ignoreLogs([
+  'Non-serializable values were found in the navigation state',
+]);
 
 const NutrientsList = ({navigation, route}) => {
   const {selectMeal, parentScreen, timePeriod} = route.params as Params;

@@ -7,13 +7,13 @@ export const userExistenceCheck = (userId: string) => {
     .then((doc) => {
       if (doc.exists) {
         docRef.update({
-          updateAt: new Date().toUTCString(),
+          updatedAt: new Date().toUTCString(),
         });
       } else {
         docRef.set({
           id: userId,
           createdAt: new Date().toUTCString(),
-          updateAt: new Date().toUTCString(),
+          updatedAt: new Date().toUTCString(),
         });
       }
     })

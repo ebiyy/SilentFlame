@@ -6,7 +6,10 @@ export const firestoreState = atom({
   default: firestore(), // default value (aka initial value)
 });
 
-// ex. 2021-02-12
+const replaceDate = (date: string) =>
+  date.length === 9 ? date.replace('21-', '21-0') : date;
+
+// ex. 2021-2-12
 export const toDay = new Intl.DateTimeFormat('ja-JP', {
   year: 'numeric',
   month: 'numeric',
@@ -15,13 +18,16 @@ export const toDay = new Intl.DateTimeFormat('ja-JP', {
   .format(new Date())
   .replaceAll('/', '-');
 
-export const getDocRef = (docName: string | undefined, userId: string) =>
-  firestore().collection('Meal').doc(userId).collection(toDay).doc(docName);
+export const getOtherDay = (num: number) => {
+  const date = new Intl.DateTimeFormat('ja-JP', {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+  })
+    .format(new Date().setDate(new Date().getDate() + num))
+    .replaceAll('/', '-');
+  return replaceDate(date);
+};
 
-export const getDocRef2 = (docName: string | undefined, userId: string) =>
-  firestore()
-    .collection('Meal')
-    .doc(userId)
-    .collection(toDay)
-    .doc(docName)
-    .onSnapshot((v) => v.data());
+export const getDocRef = (docName: string | undefined, userId: string) =>
+  firestore().collection('Meal').doc(userId).collection('Meal').doc(docName);

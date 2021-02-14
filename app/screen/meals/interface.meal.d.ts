@@ -13,7 +13,7 @@ interface CloudMeal extends LocalMeal {
 
 interface LocalMeal extends Nutrients {
   addedAt: Date;
-  upDatedAt: Date;
+  updatedAt: Date;
   intake: number;
   timePeriod: string;
 }

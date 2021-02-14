@@ -1,5 +1,6 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
+import {useCollection, useDocument} from 'react-firebase-hooks/firestore';
 import {Controller, useForm} from 'react-hook-form';
 import {
   View,
@@ -18,11 +19,15 @@ import {
   TouchableOpacity,
 } from 'react-native-gesture-handler';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import {useRecoilState} from 'recoil';
+import {useRecoilState, useRecoilValue} from 'recoil';
 import NavigationButton from '../../components/navigation-button';
+import {firestoreState, toDay} from '../../firebase/meal';
 import {NUTRIENTS} from '../../helpers/csvtojson/nutrients';
-import {replaceFoodName} from './function.meal';
+import {userIdState} from '../../recoil/user';
+import {generateMeal, replaceFoodName} from './function.meal';
 import {useMargeMealState} from './hook.meal';
+import LogMeals from './log-meals';
+import MealsLsit from './meals-linst';
 import {actionMealState} from './recoil.meal';
 
 type Params = {
@@ -36,11 +41,35 @@ const SearchMeals = ({route}) => {
   const [inputText, setInputText] = useState('');
   const [submitEditing, setSubmitEditing] = useState(false);
   const [actionMeal, setActionMeal] = useRecoilState(actionMealState);
+  const [isSerach, setIsSerach] = useState(true);
+  const userId = useRecoilValue(userIdState);
+  const firestore = useRecoilValue(firestoreState);
+  const [value, loading, error] = useCollection(
+    firestore
+      .collection('Meal')
+      .doc(userId)
+      .collection('Meal')
+      .orderBy('addedAt')
+      .limit(10),
+    {
+      snapshotListenOptions: {includeMetadataChanges: true},
+    },
+  );
 
   useEffect(() => {
     navigation.setOptions({
       title: '食事を登録',
     });
+  }, []);
+
+  useEffect(() => {
+    firestore
+      .collection('Meal')
+      .doc(userId)
+      .collection('2021-02-13')
+      .doc('4ZvUQkuqavEEWFF9OOL5')
+      .get()
+      .then((result) => console.log('result.data()', result.data()));
   }, []);
 
   const generateHitObj = (inputText: string) => {
@@ -77,65 +106,7 @@ const SearchMeals = ({route}) => {
     } else {
       hitArr = fullSerach(searchTextArr[0]);
     }
-    return (
-      hitArr.length > 0 &&
-      hitArr.map((obj: Nutrients, i) => (
-        <View
-          key={i}
-          style={{
-            padding: 10,
-            paddingVertical: 20,
-            borderWidth: 1,
-            borderRadius: 3,
-            borderBottomWidth: i === hitArr.length - 1 ? 1 : 0,
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-          }}>
-          <TouchableHighlight
-            underlayColor="while"
-            activeOpacity={0.6}
-            onPress={() =>
-              navigation.navigate('NutrientsList', {
-                selectMeal: {
-                  ...obj,
-                  intake: 100,
-                  addedAt: new Date(),
-                  upDatedAt: new Date(),
-                  timePeriod: timePeriod,
-                } as LocalMeal,
-                parentScreen: 'SearchMeals',
-                timePeriod: timePeriod,
-              })
-            }>
-            <View
-              style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-              <View style={{width: Dimensions.get('window').width * 0.6}}>
-                <Text>{replaceFoodName(obj.foodName)}</Text>
-              </View>
-              <View style={{}}>
-                <Text style={{fontSize: 12}}>{obj.ENERC_KCAL} kcal</Text>
-              </View>
-            </View>
-          </TouchableHighlight>
-          <View style={{maxWidth: 20, marginHorizontal: 3, marginTop: -3}}>
-            <TouchableOpacity
-              onPress={() => {
-                const addItem: LocalMeal = {
-                  ...obj,
-                  intake: 100,
-                  addedAt: new Date(),
-                  upDatedAt: new Date(),
-                  timePeriod: timePeriod,
-                };
-                setActionMeal({item: addItem, action: 'set'});
-                navigation.goBack();
-              }}>
-              <FontAwesome5 name="plus-circle" size={20} />
-            </TouchableOpacity>
-          </View>
-        </View>
-      ))
-    );
+    return hitArr;
   };
 
   return (
@@ -145,47 +116,69 @@ const SearchMeals = ({route}) => {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <ScrollView>
           <View style={styles.inner}>
-            <NavigationButton
-              buttonTitle="履歴から登録"
-              toNavigate="SearchMeals"
-            />
-            <Controller
-              control={control}
-              render={({onChange, onBlur, value}) => (
-                <TextInput
-                  style={styles.textInput}
-                  onBlur={onBlur}
-                  onChangeText={(value) => {
-                    onChange(value);
-                    setInputText(value);
-                  }}
-                  value={value}
-                  placeholder="食品名"
-                  onSubmitEditing={() => {
-                    setSubmitEditing(!submitEditing);
-                    // Keyboard.dismiss;
-                  }}
-                  onFocus={() => setSubmitEditing(false)}
-                  clearButtonMode="always"
-                />
-              )}
-              name="supplementName"
-              rules={{required: true}}
-              defaultValue=""
-            />
-            <View>
-              <View
+            <View style={{alignItems: 'center', marginBottom: 20}}>
+              <TouchableOpacity
                 style={{
-                  flexDirection: 'row',
-                  marginBottom: 10,
-                  justifyContent: 'space-between',
-                }}>
-                <Text>「{inputText}」で検索</Text>
-                <Text style={{fontSize: 12}}>（100gあたりのカロリー）</Text>
-              </View>
-              {(inputText.length > 1 || submitEditing) &&
-                generateHitObj(inputText)}
+                  width: Dimensions.get('window').width / 2,
+                }}
+                onPress={() => setIsSerach((preState) => !preState)}>
+                <View style={styles.registrationTimePeriodItems}>
+                  <Text style={{fontSize: 18, fontFamily: 'Hiragino Sans'}}>
+                    {isSerach ? '履歴から登録' : '検索から登録'}
+                  </Text>
+                </View>
+              </TouchableOpacity>
             </View>
+
+            {isSerach ? (
+              <View>
+                <Controller
+                  control={control}
+                  render={({onChange, onBlur, value}) => (
+                    <TextInput
+                      style={styles.textInput}
+                      onBlur={onBlur}
+                      onChangeText={(value) => {
+                        onChange(value);
+                        setInputText(value);
+                      }}
+                      value={value}
+                      placeholder="食品名"
+                      onSubmitEditing={() => {
+                        setSubmitEditing(!submitEditing);
+                        // Keyboard.dismiss;
+                      }}
+                      onFocus={() => setSubmitEditing(false)}
+                      clearButtonMode="always"
+                    />
+                  )}
+                  name="supplementName"
+                  rules={{required: true}}
+                  defaultValue=""
+                />
+                {(inputText.length > 1 || submitEditing) && (
+                  <View>
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        marginBottom: 10,
+                        justifyContent: 'space-between',
+                      }}>
+                      <Text>「{inputText}」の検索結果</Text>
+                      <Text style={{fontSize: 12}}>
+                        （100gあたりのカロリー）
+                      </Text>
+                    </View>
+                    <MealsLsit
+                      meals={generateHitObj(inputText)}
+                      timePeriod={timePeriod}
+                    />
+                  </View>
+                )}
+              </View>
+            ) : (
+              <LogMeals timePeriod={timePeriod} />
+            )}
           </View>
         </ScrollView>
       </TouchableWithoutFeedback>
@@ -216,6 +209,27 @@ const styles = StyleSheet.create({
   btnContainer: {
     backgroundColor: 'white',
     marginTop: 12,
+  },
+  registrationTimePeriodItems: {
+    margin: 3,
+    padding: 10,
+    alignItems: 'center',
+    justifyContent: 'center',
+    // width: 150,
+    height: 80,
+    borderRadius: 10,
+    // backgroundColor: '#ddd',
+    shadowColor: '#ddd',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 1,
+    shadowRadius: 4,
+    elevation: 1,
+    backgroundColor: 'white',
+    borderWidth: 1,
+    borderColor: 'lightgreen',
   },
 });
 

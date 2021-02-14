@@ -1,3 +1,5 @@
+import {Timestamp} from '@react-native-firebase/firestore';
+
 export const nutrientRecalculation = (
   nutrientValue: string,
   intake: string,
@@ -77,7 +79,7 @@ export const calNutrient = (meal: MargeMeal, v: string) => {
         'foodName',
         'remarks',
         'addedAt',
-        'upDatedAt',
+        'updatedAt',
         'timePeriod',
         'id',
       ].includes(key)
@@ -99,7 +101,17 @@ export const generateMeal = (
     ...nutrient,
     intake: intake,
     addedAt: new Date(),
-    upDatedAt: new Date(),
+    updatedAt: new Date(),
     timePeriod: timePeriod,
   };
 };
+
+export const useFirestoreCollection = (
+  collection: string,
+  options?: {snapshotListenOptions?: any} | undefined,
+) =>
+  useCollection(firebase.firestore().collection(collection), options) as [
+    firebase.firestore.QuerySnapshot | undefined,
+    boolean,
+    Error | undefined,
+  ];

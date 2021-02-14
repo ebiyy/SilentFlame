@@ -2,7 +2,7 @@ import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
 import {useState, useEffect} from 'react';
 import {useCollection} from 'react-firebase-hooks/firestore';
 import {useRecoilState, useRecoilValue} from 'recoil';
-import {firestoreState, getDocRef, toDay} from '../../firebase/meal';
+import {firestoreState, getDocRef, getOtherDay} from '../../firebase/meal';
 import {actionMealState, mealsState} from './recoil.meal';
 import {userIdState} from '../../recoil/user';
 
@@ -14,12 +14,16 @@ export const useMargeMealState = () => {
   const userId = useRecoilValue(userIdState);
   const firestore = useRecoilValue(firestoreState);
   const [value, loading, error] = useCollection(
-    firestore.collection('Meal').doc(userId).collection(toDay),
+    firestore
+      .collection('Meal')
+      .doc(userId)
+      .collection('Meal')
+      .where('addedAt', '>', new Date(getOtherDay(-1)))
+      .where('addedAt', '<', new Date(getOtherDay(1))),
     {
       snapshotListenOptions: {includeMetadataChanges: true},
     },
   );
-
   // 下記の用途で使用
   // アプリ起動時にcloudからデータを取得
   // cloudでデータの更新があったときにデータを取得
@@ -84,10 +88,12 @@ export const useMargeMealState = () => {
       case 'set':
         console.log('useMargeMealState::actionMeal::set');
         setItem(actionMeal.item);
+        setActionMeal(undefined);
         break;
       case 'delete':
         console.log('useMargeMealState::actionMeal::delete');
         deleteItem(actionMeal.item);
+        setActionMeal(undefined);
         break;
     }
   }, [actionMeal]);

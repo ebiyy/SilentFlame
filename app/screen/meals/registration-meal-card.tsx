@@ -62,7 +62,7 @@ const RegistrationMealCard = (props: Props) => {
               {new Intl.DateTimeFormat('ja-JP', {
                 hour: 'numeric',
                 minute: 'numeric',
-              }).format(tempMeal.addedAt)}
+              }).format(tempMeal.addedAt.toDate())}
             </Text>
           </View>
           <View style={Styles.iconContainer}>
