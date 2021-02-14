@@ -13,7 +13,7 @@ import {
   getWeight,
 } from '../../helpers/apple-heath-kit';
 import SampleChart from '../../sample/sample-chart';
-import {ComStyles} from '../../global-style';
+import {ComStyles, shadowStyles} from '../../global-style';
 import {mealsENERC_KCALState, mealsWATERState} from '../meals/recoil.meal';
 import RateProgressBar from '../../components/rate-progress-bar';
 import TitleText from '../../components/title-text';
@@ -126,7 +126,8 @@ const HomeScreen = () => {
             </View>
           </View>
 
-          <View style={[styles.chartContainer, ComStyles.greenBoxShadow]}>
+          <View
+            style={[styles.chartContainer, shadowStyles('black').boxShadow]}>
             <SampleChart healthArr={setChatData(switchBodyChartView)} />
           </View>
         </View>
@@ -147,26 +148,27 @@ const HomeScreen = () => {
               </View>
             </View>
           </View>
-          <View style={[styles.chartContainer, ComStyles.greenBoxShadow]}>
+          <View
+            style={[styles.chartContainer, shadowStyles('black').boxShadow]}>
             <SampleChartPie />
           </View>
         </View>
         <View>
           <View style={styles.progressBarContainer}>
             <RateProgressBar
-              title="今日のカロリー"
+              title="今週のカロリー"
               rimit={2200}
               unit="kcal"
-              color="red"
+              color="#FF6E6B"
               recoilSelector={mealsENERC_KCALState}
             />
           </View>
           <View style={styles.progressBarContainer}>
             <RateProgressBar
-              title="今日の水分"
+              title="今週の水分"
               rimit={2}
               unit="L"
-              color="blue"
+              color="#86C5DA"
               recoilSelector={mealsWATERState}
             />
           </View>

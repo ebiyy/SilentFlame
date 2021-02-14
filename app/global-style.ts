@@ -1,5 +1,8 @@
 import React from 'react'; // need
-import {StyleSheet} from 'react-native';
+import {Dimensions, StyleSheet} from 'react-native';
+
+const {width, height} = Dimensions.get('window');
+export const [winWidth, winHeight] = [width, height];
 
 export const ComStyles = StyleSheet.create({
   centeringContainer: {

@@ -116,7 +116,7 @@ const SearchMeals = ({route}) => {
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <ScrollView>
           <View style={styles.inner}>
-            <View style={{alignItems: 'center', marginBottom: 20}}>
+            <View style={{alignItems: 'center', marginBottom: 8}}>
               <TouchableOpacity
                 style={{
                   width: Dimensions.get('window').width / 2,
@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   inner: {
-    padding: 24,
+    padding: 12,
     flex: 1,
     justifyContent: 'space-around',
   },

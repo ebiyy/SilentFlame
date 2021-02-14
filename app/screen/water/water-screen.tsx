@@ -58,7 +58,7 @@ const WaterScreen = () => {
           title=""
           rimit={2}
           unit="L"
-          color="blue"
+          color="#86C5DA"
           recoilSelector={mealsWATERState}
         />
       </View>

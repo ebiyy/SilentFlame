@@ -63,7 +63,7 @@ const MealsScreen = () => {
               title=""
               rimit={2200}
               unit="kcal"
-              color="red"
+              color="#FF6E6B"
               recoilSelector={mealsENERC_KCALState}
             />
           </View>

@@ -1,5 +1,3 @@
-import {Timestamp} from '@react-native-firebase/firestore';
-
 export const nutrientRecalculation = (
   nutrientValue: string,
   intake: string,

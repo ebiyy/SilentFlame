@@ -13,9 +13,11 @@ import NutrientsList from './screen/meals/nutrients-list';
 import SearchMeals from './screen/meals/search-meals';
 import {StyleSheet, View} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 import WaterScreen from './screen/water/water-screen';
-import TestAdmod from './admob';
 import FirebaseCustomEvent from './sample/sample-firebase-event';
+import {winHeight} from './global-style';
+import AnimateHeader from './screen/animate-header';
 
 // const getHeaderTitle = (route: Route<string, object | undefined>) => {
 //   // If the focused route is not found, we need to assume it's the initial screen
@@ -40,6 +42,7 @@ import FirebaseCustomEvent from './sample/sample-firebase-event';
 const IconTypes = {
   MCi: 'MaterialCommunityIcons',
   Fa5i: 'FontAwesome5Icons',
+  Ioni: 'Ionicons',
 };
 
 const materiaComIcon = (name: string, color: string, size: number) => (
@@ -50,6 +53,10 @@ const fontAwesome5Icon = (name: string, color: string, size: number) => (
   <FontAwesome5Icons name={name} color={color} size={size} />
 );
 
+const ionicons = (name: string, color: string, size: number) => (
+  <Ionicons name={name} color={color} size={size} />
+);
+
 const generateIcon = (
   iconType: string,
 ): ((name: string, color: string, size: number) => JSX.Element) => {
@@ -58,6 +65,8 @@ const generateIcon = (
       return materiaComIcon;
     case IconTypes.Fa5i:
       return fontAwesome5Icon;
+    case IconTypes.Ioni:
+      return ionicons;
   }
   return materiaComIcon;
 };
@@ -84,11 +93,10 @@ const Tab = createBottomTabNavigator();
 const MyTabs = () => {
   return (
     <>
-      <TestAdmod />
       <Tab.Navigator
-        initialRouteName="Home"
+        initialRouteName="weeky"
         tabBarOptions={{
-          activeTintColor: '#e91e63',
+          activeTintColor: 'lightgreen',
           style: {
             height: 80,
             shadowColor: '#ddd',
@@ -104,7 +112,7 @@ const MyTabs = () => {
             borderColor: 'lightgreen',
           },
         }}>
-        {TabScreen('Home', HomeScreen, IconTypes.MCi, 'home')}
+        {TabScreen('weeky', HomeScreen, IconTypes.MCi, 'home')}
         {TabScreen('Suppl.', SupplementScreen, IconTypes.Fa5i, 'tablets')}
         {TabScreen(
           'Meals',
@@ -113,7 +121,7 @@ const MyTabs = () => {
           'silverware-fork-knife',
         )}
         {TabScreen('Water', WaterScreen, IconTypes.MCi, 'cup-water')}
-        {TabScreen('Firebase', FirebaseCustomEvent, IconTypes.MCi, 'cup-water')}
+        {TabScreen('setting', FirebaseCustomEvent, IconTypes.Ioni, 'settings')}
       </Tab.Navigator>
     </>
   );
@@ -133,41 +141,48 @@ const NavigationScreen = () => {
   return (
     <NavigationContainer theme={MyTheme}>
       <Stack.Navigator
-        screenOptions={{
+        screenOptions={({navigation}) => ({
           // headerShown: false,
-          headerStyle: {},
-          // headerTransparent: true,
-        }}>
+          headerTitle: () => (
+            <View style={Styles.headerIconContainer}>
+              <AntDesign
+                onPress={() => navigation.navigate('Settings')}
+                name="calendar"
+                color="black"
+                size={30}
+              />
+            </View>
+          ),
+          headerStyle: {
+            // height: 170,
+            // paddinTop: 50,
+          },
+          cardStyle: {marginTop: winHeight * 0.08},
+          headerBackground: () => <AnimateHeader />,
+          headerBackTitleStyle: {
+            color: 'indigo',
+          },
+        })}>
         <Stack.Screen
-          name="Home"
+          name="weeky"
           component={MyTabs}
           options={({navigation}) => ({
             // headerTitle: getHeaderTitle(route),
-            headerTitle: '',
-            // headerTitle: () => (
+            // headerTitle: '',
+            // headerStyle: {
+            //   backgroundColor: 'white',
+            //   borderWidth: 0,
+            // },
+            // headerRight: () => (
             //   <View style={Styles.headerIconContainer}>
-            //     <Ionicons
+            //     <AntDesign
             //       onPress={() => navigation.navigate('Settings')}
-            //       name="settings"
+            //       name="calendar"
             //       color="gray"
             //       size={30}
             //     />
             //   </View>
             // ),
-            // headerStyle: {
-            //   backgroundColor: 'white',
-            //   borderWidth: 0,
-            // },
-            headerRight: () => (
-              <View style={Styles.headerIconContainer}>
-                <Ionicons
-                  onPress={() => navigation.navigate('Settings')}
-                  name="settings"
-                  color="gray"
-                  size={30}
-                />
-              </View>
-            ),
           })}
         />
         <Stack.Screen name="Settings" component={FirebaseCustomEvent} />
@@ -185,7 +200,7 @@ const NavigationScreen = () => {
 
 const Styles = StyleSheet.create({
   headerIconContainer: {
-    marginRight: 10,
+    // marginRight: 10,
   },
 });
 

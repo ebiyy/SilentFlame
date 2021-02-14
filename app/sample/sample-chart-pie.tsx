@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View, Dimensions} from 'react-native';
 import {PieChart} from 'react-native-chart-kit';
 import {useRecoilValue} from 'recoil';
@@ -22,6 +22,24 @@ const SampleChartPie = () => {
   const sumCHOAV = useRecoilValue(mealsCHOAVState);
   const height = Dimensions.get('window').height * 0.205;
 
+  useEffect(() => {
+    console.log('--------SampleChartPie---------');
+    console.log('sumProtein', sumProtein);
+    console.log('sumFat', sumFat);
+    console.log('sumCHOCDF', sumCHOCDF);
+    console.log('sumCHOAV', sumCHOAV);
+    console.log('--------SampleChartPie---------');
+  }, []);
+
+  // ex. キャッサバでん粉の場合 炭水化物 < 糖質当量
+  const calCHOCDF = () => {
+    if (sumCHOCDF > sumCHOAV) {
+      return Number((sumCHOCDF - sumCHOAV).toFixed(1));
+    } else {
+      return 0;
+    }
+  };
+
   // color: https://codepen.io/giana/pen/BoWoQR
   return (
     <View style={{height: height}}>
@@ -31,29 +49,29 @@ const SampleChartPie = () => {
             name: 'たんぱく質',
             nutrinet: sumProtein,
             color: '#5eee7d',
-            legendFontColor: '#7F7F7F',
+            legendFontColor: 'black',
             legendFontSize: 15,
           },
           {
             name: '脂質',
             nutrinet: sumFat,
             color: '#86cbf3',
-            legendFontColor: '#7F7F7F',
+            legendFontColor: 'black',
             legendFontSize: 15,
           },
           {
             name: '炭水化物',
-            nutrinet: Number((sumCHOCDF - sumCHOAV).toFixed(1)),
+            nutrinet: calCHOCDF(),
             color: '#f18fc2',
-            legendFontColor: '#7F7F7F',
+            legendFontColor: 'black',
             legendFontSize: 15,
           },
           {
             name: '糖質',
             nutrinet: sumCHOAV,
             color: '#ea4bbc',
-            legendFontColor: '#7F7F7F',
-            legendFontSize: 13,
+            legendFontColor: 'black',
+            legendFontSize: 15,
           },
         ]}
         width={Dimensions.get('window').width * 0.9}

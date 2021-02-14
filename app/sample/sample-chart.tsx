@@ -71,7 +71,7 @@ const SampleChart = (props: Props) => {
               },
             ],
           }}
-          width={Dimensions.get('window').width * 0.9} // from react-native
+          width={Dimensions.get('window').width * 0.92} // from react-native
           height={height}
           yAxisSuffix={unitSig}
           yAxisInterval={1} // optional, defaults to 1
@@ -87,6 +87,7 @@ const SampleChart = (props: Props) => {
 const styles = StyleSheet.create({
   chart: {
     marginVertical: 8,
+    marginHorizontal: 8,
     // borderRadius: 16,
   },
 });
