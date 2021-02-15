@@ -29,6 +29,7 @@ const RegistrationMealCard = (props: Props) => {
 
   useEffect(() => {
     cancelBtnPress();
+    console.log(props);
   }, [props]);
 
   const intakeOnChange = (v: string) => {

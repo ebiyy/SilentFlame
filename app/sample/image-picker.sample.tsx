@@ -33,7 +33,7 @@ export default function SampleImagePicker() {
     //   uri: "file:///Users/homepc/Library/Developer/CoreSimulator/Devices/0B9A1B75-81BA-4C09-8E5F-E20F15253157/data/Containers/Data/Application/888A656F-6E9E-492C-B596-AE8326B97FED/tmp/5C99555B-7CFC-430B-8695-AB6F5012349C.jpg"
     //   width: 200
     // }
-  }, [response]);
+  }, []);
 
   return (
     <SafeAreaView>

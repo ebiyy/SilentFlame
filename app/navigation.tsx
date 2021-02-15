@@ -18,6 +18,8 @@ import WaterScreen from './screen/water/water-screen';
 import FirebaseCustomEvent from './sample/sample-firebase-event';
 import {winHeight} from './global-style';
 import AnimateHeader from './screen/animate-header';
+import CustomCalendar from './sample/calender';
+import HeaderRightDate from './components/header-right-date';
 
 // const getHeaderTitle = (route: Route<string, object | undefined>) => {
 //   // If the focused route is not found, we need to assume it's the initial screen
@@ -146,7 +148,7 @@ const NavigationScreen = () => {
           headerTitle: () => (
             <View style={Styles.headerIconContainer}>
               <AntDesign
-                onPress={() => navigation.navigate('Settings')}
+                onPress={() => navigation.navigate('CustomCalendar')}
                 name="calendar"
                 color="black"
                 size={30}
@@ -162,6 +164,7 @@ const NavigationScreen = () => {
           headerBackTitleStyle: {
             color: 'indigo',
           },
+          headerRight: () => <HeaderRightDate />,
         })}>
         <Stack.Screen
           name="weeky"
@@ -193,6 +196,7 @@ const NavigationScreen = () => {
         />
         <Stack.Screen name="NutrientsList" component={NutrientsList} />
         <Stack.Screen name="SearchMeals" component={SearchMeals} />
+        <Stack.Screen name="CustomCalendar" component={CustomCalendar} />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -6,6 +6,7 @@ export const firestoreState = atom({
   default: firestore(), // default value (aka initial value)
 });
 
+// 2021年のみ対応
 const replaceDate = (date: string) =>
   date.length === 9 ? date.replace('21-', '21-0') : date;
 
@@ -27,6 +28,17 @@ export const getOtherDay = (num: number) => {
     .format(new Date().setDate(new Date().getDate() + num))
     .replaceAll('/', '-');
   return replaceDate(date);
+};
+
+export const getFormatDate = (date: Date) => {
+  const temp = new Intl.DateTimeFormat('ja-JP', {
+    year: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+  })
+    .format(date)
+    .replaceAll('/', '-');
+  return replaceDate(temp);
 };
 
 export const getDocRef = (docName: string | undefined, userId: string) =>

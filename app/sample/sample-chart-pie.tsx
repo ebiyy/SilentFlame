@@ -23,12 +23,12 @@ const SampleChartPie = () => {
   const height = Dimensions.get('window').height * 0.205;
 
   useEffect(() => {
-    console.log('--------SampleChartPie---------');
-    console.log('sumProtein', sumProtein);
-    console.log('sumFat', sumFat);
-    console.log('sumCHOCDF', sumCHOCDF);
-    console.log('sumCHOAV', sumCHOAV);
-    console.log('--------SampleChartPie---------');
+    // console.log('--------SampleChartPie---------');
+    // console.log('sumProtein', sumProtein);
+    // console.log('sumFat', sumFat);
+    // console.log('sumCHOCDF', sumCHOCDF);
+    // console.log('sumCHOAV', sumCHOAV);
+    // console.log('--------SampleChartPie---------');
   }, []);
 
   // ex. キャッサバでん粉の場合 炭水化物 < 糖質当量

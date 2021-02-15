@@ -37,7 +37,6 @@ const NutrientsList = ({navigation, route}) => {
       title: '栄養素',
     });
   }, []);
-  useEffect(() => {}, [isCollapsed]);
 
   const setNutrientValue = (value: string, unit: string) => {
     if (value === '-' || value === 'Tr') {
