@@ -22,7 +22,9 @@ const initFirebase = async () => {
   const config = {
     name: 'Blue Flame',
   };
-  await firebase.initializeApp(credentials, config);
+  if (firebase.apps && firebase.apps.length === 0) {
+    await firebase.initializeApp(credentials, config);
+  }
   await inAppMessaging().setMessagesDisplaySuppressed(true);
 };
 

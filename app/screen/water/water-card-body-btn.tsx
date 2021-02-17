@@ -1,15 +1,17 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {shadowStyles} from '../../global-style';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {waterIntakeState} from '../meals/recoil.meal';
 import {useRecoilState} from 'recoil';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 
 type Props = {
   patten: {
     name: string;
     label: number;
+    iconElm: string;
   };
   waterName: string;
   isMinus: boolean;
@@ -47,11 +49,16 @@ const WaterCardBodyBtn = (props: Props) => {
     <TouchableOpacity onPress={isMinus ? minusWater : addWater}>
       <View
         style={[Styles.iconBtnConatiner, shadowStyles('lightblue').boxShadow]}>
-        <MaterialCommunityIcons
-          name={patten.name}
-          color="lightblue"
-          size={45}
-        />
+        {patten.iconElm === 'MaterialCommunityIcons' ? (
+          <MaterialCommunityIcons
+            name={patten.name}
+            color="lightblue"
+            size={45}
+          />
+        ) : (
+          <SimpleLineIcons name={patten.name} color="lightblue" size={45} />
+        )}
+
         <Text style={Styles.labelText}>{patten.label} ml</Text>
         <View style={Styles.badgeContainer}>
           <Text style={Styles.badgeText}>{badge}</Text>

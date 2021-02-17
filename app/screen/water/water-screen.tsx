@@ -36,9 +36,9 @@ const MOCK = [
 ];
 
 const inputWaterPatten = [
-  {name: 'cup-water', label: 250},
-  {name: 'bottle-soda-classic', label: 500},
-  {name: 'bottle-wine', label: 1000},
+  {name: 'cup', label: 120, iconElm: 'SimpleLineIcons'},
+  {name: 'cup-water', label: 200, iconElm: 'MaterialCommunityIcons'},
+  {name: 'bottle-soda-classic', label: 500, iconElm: 'MaterialCommunityIcons'},
 ];
 
 const registWater = [
@@ -47,7 +47,6 @@ const registWater = [
 
 const WaterScreen = () => {
   const navigation = useNavigation();
-  const [waterIntake, setwWterIntake] = useRecoilState(waterIntakeState);
   const [isMinus, setIsMinus] = useState(false);
 
   return (

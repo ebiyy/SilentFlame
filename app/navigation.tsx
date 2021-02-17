@@ -9,7 +9,6 @@ import SupplementForm from './screen/supplement/supplement-form';
 import NutrientFormController from './screen/supplement/nutrient-from-controller';
 import MealsScreen from './screen/meals/meals-screen';
 import HomeScreen from './screen/home/home';
-import NutrientsList from './screen/meals/nutrients-list';
 import SearchMeals from './screen/meals/search-meals';
 import {StyleSheet, View} from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -20,6 +19,8 @@ import {winHeight} from './global-style';
 import AnimateHeader from './screen/animate-header';
 import CustomCalendar from './sample/calender';
 import HeaderRightDate from './components/header-right-date';
+import SettingScreen from './screen/setting/setting-screen';
+import NutrientsScreen from './screen/meals/nutrients-screen';
 
 // const getHeaderTitle = (route: Route<string, object | undefined>) => {
 //   // If the focused route is not found, we need to assume it's the initial screen
@@ -123,7 +124,7 @@ const MyTabs = () => {
           'silverware-fork-knife',
         )}
         {TabScreen('Water', WaterScreen, IconTypes.MCi, 'cup-water')}
-        {TabScreen('setting', FirebaseCustomEvent, IconTypes.Ioni, 'settings')}
+        {TabScreen('setting', SettingScreen, IconTypes.Ioni, 'settings')}
       </Tab.Navigator>
     </>
   );
@@ -194,7 +195,7 @@ const NavigationScreen = () => {
           name="NutrientFormController"
           component={NutrientFormController}
         />
-        <Stack.Screen name="NutrientsList" component={NutrientsList} />
+        <Stack.Screen name="NutrientsScreen" component={NutrientsScreen} />
         <Stack.Screen name="SearchMeals" component={SearchMeals} />
         <Stack.Screen name="CustomCalendar" component={CustomCalendar} />
       </Stack.Navigator>

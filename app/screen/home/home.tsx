@@ -14,12 +14,22 @@ import {
 } from '../../helpers/apple-heath-kit';
 import SampleChart from '../../sample/sample-chart';
 import {ComStyles, shadowStyles} from '../../global-style';
-import {mealsENERC_KCALState, mealsWATERState} from '../meals/recoil.meal';
+import {
+  mealsCHOAVState,
+  mealsCHOCDFState,
+  mealsENERC_KCALState,
+  mealsFatState,
+  mealsProteinState,
+  mealsState,
+  mealsWATERState,
+} from '../meals/recoil.meal';
 import RateProgressBar from '../../components/rate-progress-bar';
 import TitleText from '../../components/title-text';
 import SampleChartPie from '../../sample/sample-chart-pie';
 import {ScrollView} from 'react-native-gesture-handler';
 import FadeInView from '../../components/fade-in-view';
+import {useRecoilValue, useResetRecoilState} from 'recoil';
+import PfcPieChart from '../meals/components/pfc-pie-chart';
 
 export interface HealthArr {
   startDate: string;
@@ -84,6 +94,7 @@ const HomeScreen = () => {
   const [switchNutrientChartView, setSwitchNutrientChartView] = useState(
     NutrientViewType.simple,
   );
+  const meals = useRecoilValue(mealsState);
 
   const setChatData = (state: '体重' | '体脂肪' | '除脂肪体重') => {
     switch (state) {
@@ -131,7 +142,7 @@ const HomeScreen = () => {
             <SampleChart healthArr={setChatData(switchBodyChartView)} />
           </View>
         </View>
-        <View style={{marginTop: windowHeight * 0.01}}>
+        {/* <View style={{marginTop: windowHeight * 0.01}}>
           <View>
             <View
               style={{flexDirection: 'row', justifyContent: 'space-between'}}>
@@ -147,12 +158,13 @@ const HomeScreen = () => {
                 )}
               </View>
             </View>
-          </View>
-          <View
+          </View> */}
+        <PfcPieChart meals={meals} boxShadow="black" />
+        {/* <View
             style={[styles.chartContainer, shadowStyles('black').boxShadow]}>
-            <SampleChartPie />
-          </View>
-        </View>
+            
+          </View> */}
+        {/* </View> */}
         <View>
           <View style={styles.progressBarContainer}>
             <RateProgressBar

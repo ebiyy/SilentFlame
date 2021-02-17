@@ -1,21 +1,43 @@
-type ActionMealType = 'set' | 'delete';
+interface MealDocs extends DateMeals {
+  author: string;
+  createAt: Date;
+  updatedAt: Date;
+  appVersion: string;
+}
+
+interface DateMeals {
+  [dateKey: string]: {
+    meals: Meal[];
+  };
+}
+
+type ActionMealType = 'add' | 'update' | 'delete';
 
 interface ActionMeal {
   item: CloudMeal | LocalMeal;
   action: ActionMealType;
 }
 
-type MargeMeal = LocalMeal | CloudMeal;
-
-interface CloudMeal extends LocalMeal {
-  id: string;
+interface CloudDocs {
+  meals: CloudMeal[];
+  author: string;
+  createAt: Date;
+  updatedAt: Date;
+  appVersion: string;
 }
 
-interface LocalMeal extends Nutrients {
+// type MargeMeal = LocalMeal | CloudMeal;
+
+// interface CloudMeal extends LocalMeal {}
+
+interface Meal extends Nutrients {
+  id: number;
+  author: string;
   addedAt: Date;
   updatedAt: Date;
   intake: number;
   timePeriod: string;
+  failed?: ActionMealType;
 }
 
 type TimePeriodValue = '朝食' | '昼食' | '夕食' | '間食';

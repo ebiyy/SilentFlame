@@ -15,7 +15,12 @@ const chartConfig = {
   labelColor: (opacity = 1) => `rgba(0, 0, 0, ${opacity})`,
 };
 
-const SampleChartPie = () => {
+type Props = {
+  absolute: boolean;
+};
+
+const SampleChartPie = (props: Props) => {
+  const {absolute} = props;
   const sumProtein = useRecoilValue(mealsProteinState);
   const sumFat = useRecoilValue(mealsFatState);
   const sumCHOCDF = useRecoilValue(mealsCHOCDFState);
@@ -46,7 +51,7 @@ const SampleChartPie = () => {
       <PieChart
         data={[
           {
-            name: 'たんぱく質',
+            name: 'g  たんぱく質',
             nutrinet: sumProtein,
             color: '#5eee7d',
             legendFontColor: 'black',
@@ -81,7 +86,7 @@ const SampleChartPie = () => {
         accessor="nutrinet"
         backgroundColor="transparent"
         avoidFalseZero
-        // absolute
+        absolute={absolute}
       />
     </View>
   );

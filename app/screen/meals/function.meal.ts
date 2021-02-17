@@ -16,15 +16,16 @@ export const nutrientRecalculation = (
           // ex. 100
           return result.toFixed(0);
         } else {
-          // ex. 0.1, 0.1000000001
-          const smallNumberPart = String(result).split('.')[1];
-          if (smallNumberPart === undefined) return result;
-          if (smallNumberPart.length > 5) {
-            // ex. 0.1000000001
-            return result.toFixed(2);
-          }
-          // ex. 0.1
-          return result;
+          return result.toFixed(1);
+          // // ex. 0.1, 0.1000000001
+          // const smallNumberPart = String(result).split('.')[1];
+          // if (smallNumberPart === undefined) return result;
+          // if (smallNumberPart.length > 1) {
+          //   // ex. 0.1000000001
+          //   return result.toFixed(1);
+          // }
+          // // ex. 0.1
+          // return result;
         }
       }
     } else {
@@ -66,22 +67,24 @@ export const replaceFoodName = (name: string) => {
   return replaceName;
 };
 
+export const excludeKeyGroup = [
+  'foodGroup',
+  'foodNumber',
+  'indexNumber',
+  'foodName',
+  'remarks',
+  'addedAt',
+  'updatedAt',
+  'timePeriod',
+  'id',
+  'author',
+  'intake',
+];
+
 export const calNutrient = (meal: MargeMeal, v: string) => {
   const temp = {} as MargeMeal;
   Object.keys(meal).forEach((key) => {
-    if (
-      [
-        'foodGroup',
-        'foodNumber',
-        'indexNumber',
-        'foodName',
-        'remarks',
-        'addedAt',
-        'updatedAt',
-        'timePeriod',
-        'id',
-      ].includes(key)
-    ) {
+    if (excludeKeyGroup.includes(key)) {
       temp[key] = meal[key];
     } else {
       temp[key] = nutrientRecalculation(meal[key], v, meal.intake);
@@ -94,13 +97,16 @@ export const generateMeal = (
   nutrient: Nutrients,
   intake: number,
   timePeriod: TimePeriodKey,
-): LocalMeal => {
+  userId: string,
+): Meal => {
   return {
     ...nutrient,
     intake: intake,
     addedAt: new Date(),
     updatedAt: new Date(),
     timePeriod: timePeriod,
+    id: Math.floor(new Date().getTime() / 1000),
+    author: userId,
   };
 };
 

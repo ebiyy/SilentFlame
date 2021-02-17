@@ -55,7 +55,7 @@ const CardEditIcons = (props: Props) => {
             color="white"
             onPress={onPress}
             // onPress={() =>
-            //   navigation.navigate('NutrientsList', {
+            //   navigation.navigate('NutrientsScreen', {
             //     selectNutrient: selectItem,
             //     index: index,
             //     parentScreen: 'MealsScreen',

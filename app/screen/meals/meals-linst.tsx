@@ -6,7 +6,8 @@ import {
   TouchableOpacity,
 } from 'react-native-gesture-handler';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import {useRecoilState} from 'recoil';
+import {useRecoilState, useRecoilValue} from 'recoil';
+import {userIdState} from '../../recoil/user';
 import {generateMeal, replaceFoodName} from './function.meal';
 import {actionMealState} from './recoil.meal';
 
@@ -18,6 +19,7 @@ type Props = {
 const MealsLsit = (props: Props) => {
   const navigation = useNavigation();
   const {meals, timePeriod} = props;
+  const userId = useRecoilValue(userIdState);
   const [actionMeal, setActionMeal] = useRecoilState(actionMealState);
 
   return (
@@ -39,8 +41,8 @@ const MealsLsit = (props: Props) => {
               underlayColor="while"
               activeOpacity={0.6}
               onPress={() => {
-                navigation.navigate('NutrientsList', {
-                  selectMeal: generateMeal(obj, 100, timePeriod),
+                navigation.navigate('NutrientsScreen', {
+                  selectMeal: generateMeal(obj, 100, timePeriod, userId),
                   parentScreen: 'SearchMeals',
                   timePeriod: timePeriod,
                 });
@@ -81,8 +83,8 @@ const MealsLsit = (props: Props) => {
               <TouchableOpacity
                 onPress={() => {
                   setActionMeal({
-                    item: generateMeal(obj, 100, timePeriod),
-                    action: 'set',
+                    item: generateMeal(obj, 100, timePeriod, userId),
+                    action: 'add',
                   });
                   navigation.goBack();
                 }}>

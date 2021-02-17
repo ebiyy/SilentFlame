@@ -1,42 +1,23 @@
-import React, {Fragment, useEffect, useState} from 'react';
-import {Button, LogBox, StyleSheet, Text, View} from 'react-native';
+import React, {Fragment, useState} from 'react';
+import {LogBox, StyleSheet, Text, View} from 'react-native';
 import Collapsible from 'react-native-collapsible';
-import {
-  ScrollView,
-  TextInput,
-  TouchableHighlight,
-} from 'react-native-gesture-handler';
+import {ScrollView, TouchableHighlight} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {useRecoilState} from 'recoil';
-import Divider from '../../components/divider';
-import {actionMealState, mealsState} from './recoil.meal';
 import {NUTRIENTS_LABEL} from './constant.meal';
-import {
-  calNutrient,
-  generateMeal,
-  nutrientRecalculation,
-} from './function.meal';
+import {nutrientRecalculation} from './function.meal';
 
-type Params = {
-  selectMeal: LocalMeal;
-  parentScreen: string;
-  timePeriod: TimePeriodKey;
+type Props = {
+  selectMeal: Meal;
+  intake: number;
 };
 
 LogBox.ignoreLogs([
   'Non-serializable values were found in the navigation state',
 ]);
 
-const NutrientsList = ({navigation, route}) => {
-  const {selectMeal, parentScreen, timePeriod} = route.params as Params;
+const NutrientsList = (props: Props) => {
+  const {selectMeal, intake} = props;
   const [isCollapsed, setIsCollapsed] = useState({});
-  const [intake, setIntake] = useState(selectMeal.intake || 100);
-  const [actionMeal, setActionMeal] = useRecoilState(actionMealState);
-  useEffect(() => {
-    navigation.setOptions({
-      title: '栄養素',
-    });
-  }, []);
 
   const setNutrientValue = (value: string, unit: string) => {
     if (value === '-' || value === 'Tr') {
@@ -107,12 +88,6 @@ const NutrientsList = ({navigation, route}) => {
           <Text>{setNutrientValue(selectMeal[objKey], nutrientObj.unit)}</Text>
         </View>
       </View>
-      {/* {generateItemList(
-        1,
-        nutrientObj.label,
-        selectMeal[objKey],
-        nutrientObj.unit,
-      )} */}
     </TouchableHighlight>
   );
 
@@ -140,76 +115,16 @@ const NutrientsList = ({navigation, route}) => {
   };
 
   return (
-    <>
-      <View
-        style={{
-          flexDirection: 'row',
-          justifyContent: 'space-around',
-          margin: 20,
-        }}>
-        <View style={{flexDirection: 'row'}}>
-          <TextInput
-            keyboardType="numeric"
-            style={{
-              borderWidth: 1,
-              borderColor: 'black',
-              borderRadius: 10,
-              padding: 10,
-              minWidth: 130,
-            }}
-            onChangeText={(v) => {
-              setIntake(String(v));
-            }}
-            maxLength={10}
-            value={String(intake)}
-            placeholder="摂取量(g)"
-            clearButtonMode="always"
-            defaultValue={String(intake)}
-          />
-          <Text style={{marginVertical: 8, marginHorizontal: 5, fontSize: 18}}>
-            g
-          </Text>
-        </View>
-        <View style={{paddingTop: 4}}>
-          <Button
-            title="この量で登録"
-            onPress={() => {
-              setActionMeal({
-                item: generateMeal(
-                  calNutrient(selectMeal, String(intake)),
-                  Number(intake),
-                  timePeriod,
-                ),
-                action: 'set',
-              });
-              if (parentScreen === 'SearchMeals') {
-                navigation.goBack();
-                navigation.goBack();
-              }
-              if (parentScreen === 'MealsScreen') {
-                navigation.goBack();
-              }
-            }}
-          />
+    <ScrollView>
+      <View style={{margin: 10}}>
+        {Object.keys(NUTRIENTS_LABEL).map((key: string, i) =>
+          generateItems(key, i, NUTRIENTS_LABEL),
+        )}
+        <View style={{alignSelf: 'flex-end', marginBottom: 10}}>
+          <Text>※データ元: 日本食品標準成分表2020年版（八訂）</Text>
         </View>
       </View>
-
-      <View style={{alignItems: 'flex-end', marginTop: 10, marginRight: 20}}>
-        {/* <Text style={{fontSize: 11.5, color: 'gray'}}>※100gあたりの栄養素</Text> */}
-      </View>
-
-      <Divider>{`${Number(intake)}g あたりの栄養素`}</Divider>
-      <ScrollView>
-        <View style={{margin: 10}}>
-          {Object.keys(NUTRIENTS_LABEL).map((key: string, i) =>
-            generateItems(key, i, NUTRIENTS_LABEL),
-          )}
-          <View style={{alignSelf: 'flex-end', marginBottom: 10}}>
-            <Text>※データ元: 日本食品標準成分表2020年版（八訂）</Text>
-          </View>
-        </View>
-      </ScrollView>
-    </>
+    </ScrollView>
   );
 };
 

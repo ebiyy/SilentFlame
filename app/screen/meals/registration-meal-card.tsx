@@ -3,19 +3,14 @@ import React, {useEffect, useState} from 'react';
 import {Button, Dimensions, StyleSheet, Text, View} from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
-import {
-  calNutrient,
-  nutrientRecalculation,
-  replaceFoodName,
-} from './function.meal';
+import {calNutrient, replaceFoodName} from './function.meal';
 import DeleteConfirmationModal from '../../components/delete-confirmation-modal';
 import {useRecoilState} from 'recoil';
-import {actionMealState, mealsState} from './recoil.meal';
+import {actionMealState} from './recoil.meal';
 import {NUTRIENTS_LABEL} from './constant.meal';
-import {useMargeMealState} from './hook.meal';
 
 type Props = {
-  meal: MargeMeal;
+  meal: Meal;
 };
 
 const RegistrationMealCard = (props: Props) => {
@@ -29,7 +24,7 @@ const RegistrationMealCard = (props: Props) => {
 
   useEffect(() => {
     cancelBtnPress();
-    console.log(props);
+    // console.log(props);
   }, [props]);
 
   const intakeOnChange = (v: string) => {
@@ -41,7 +36,7 @@ const RegistrationMealCard = (props: Props) => {
   };
 
   const submitBtnPress = () => {
-    setActionMeal({item: tempMeal, action: 'set'});
+    setActionMeal({item: tempMeal, action: 'update'});
     setShowChangeBtn(false);
   };
 
@@ -49,6 +44,25 @@ const RegistrationMealCard = (props: Props) => {
     setIntake(String(meal.intake));
     setTempMeal(meal);
     setShowChangeBtn(false);
+  };
+
+  const CHOAVL = tempMeal.CHOAVLM ? tempMeal.CHOAVLM : tempMeal.CHOAVLDF;
+
+  const CHOCDF = () => {
+    if (!['-', 'Tr'].includes(CHOAVL)) {
+      const isEstimatedValue =
+        String(CHOAVL).indexOf('(') > -1 ||
+        String(tempMeal.CHOCDF).indexOf('(') > -1;
+      const sub = Number(tempMeal.CHOCDF) - Number(CHOAVL);
+      const CHOCDFValue = sub > 0 ? sub.toFixed(1) : 0;
+      if (isEstimatedValue) {
+        return `(${CHOCDFValue})`;
+      } else {
+        return CHOCDFValue;
+      }
+    } else {
+      return tempMeal.CHOCDF;
+    }
   };
 
   return (
@@ -70,7 +84,7 @@ const RegistrationMealCard = (props: Props) => {
             <TouchableOpacity
               style={[Styles.icon, Styles.infoIcon]}
               onPress={() =>
-                navigation.navigate('NutrientsList', {
+                navigation.navigate('NutrientsScreen', {
                   selectMeal: meal,
                   timePeriod: meal.timePeriod,
                   parentScreen: 'MealsScreen',
@@ -129,12 +143,11 @@ const RegistrationMealCard = (props: Props) => {
                 {tempMeal.FAT} {NUTRIENTS_LABEL.FAT.unit}
               </Text>
               <Text style={Styles.nutrientLable}>
-                {tempMeal.CHOCDF} {NUTRIENTS_LABEL.CHOCDF.unit}
+                {CHOCDF()} {NUTRIENTS_LABEL.CHOCDF.unit}
               </Text>
               <Text style={Styles.nutrientLable}>
-                {tempMeal.CHOAVLM
-                  ? `${tempMeal.CHOAVLM} ${NUTRIENTS_LABEL.CHOCDF.detail.CHOAV.detail.CHOAVLM.unit}`
-                  : `${tempMeal.CHOAVLDF} ${NUTRIENTS_LABEL.CHOCDF.detail.CHOAV.detail.CHOAVLDF.unit}`}
+                {CHOAVL}{' '}
+                {NUTRIENTS_LABEL.CHOCDF.detail.CHOAV.detail.CHOAVLDF.unit}
               </Text>
             </View>
           </View>

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {View, StyleSheet, Text, Dimensions} from 'react-native';
 import * as Progress from 'react-native-progress';
 import {RecoilValueReadOnly, useRecoilValue} from 'recoil';
@@ -17,6 +17,10 @@ type Props = {
 const RateProgressBar = (props: Props) => {
   const {title, rimit, unit, color, recoilSelector} = props;
   const sumValue = useRecoilValue(recoilSelector);
+
+  useEffect(() => {
+    console.log('RateProgressBar', sumValue);
+  }, [sumValue]);
 
   return (
     <View style={styles.barContainer}>

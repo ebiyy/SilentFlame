@@ -20,6 +20,7 @@ import SampleChartPie from '../../sample/sample-chart-pie';
 import RegistrationMealCard from './registration-meal-card';
 import FadeInView from '../../components/fade-in-view';
 import {useMargeMealState} from './hook.meal';
+import PfcPieChart from './components/pfc-pie-chart';
 
 const timePeriod: TimePeriod = {
   breakfast: '朝食',
@@ -31,6 +32,10 @@ const timePeriod: TimePeriod = {
 const MealsScreen = () => {
   const navigation = useNavigation();
   const meals = useMargeMealState();
+
+  // useEffect(() => {
+  //   console.log('MealsScreen', meals);
+  // }, [meals]);
 
   const generateWideBtn = (key: string, i: number) => (
     <TouchableOpacity
@@ -68,10 +73,7 @@ const MealsScreen = () => {
 
           {meals && meals.length > 0 && (
             <FadeInView>
-              <TitleText title="PFCバランス" />
-              <View style={[Styles.chartContainer, ComStyles.greenBoxShadow]}>
-                <SampleChartPie />
-              </View>
+              <PfcPieChart meals={meals} boxShadow="lightgreen" />
             </FadeInView>
           )}
 
