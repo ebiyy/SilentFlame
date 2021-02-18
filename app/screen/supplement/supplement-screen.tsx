@@ -1,8 +1,10 @@
-import {useNavigation} from '@react-navigation/native';
-import React from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import React, {useState} from 'react';
+import {StyleSheet, View} from 'react-native';
 import CountSupplement from '../../components/count-supplement';
-import {ComStyles} from '../../global-style';
+import WideBtn from '../../components/wide-btn';
+import {ComStyles, screenThemeColor, winWidth} from '../../global-style';
+import Feather from 'react-native-vector-icons/Feather';
+import {ScrollView, TouchableHighlight} from 'react-native-gesture-handler';
 
 const MOCK = [
   {supplementName: 'Mega D-3 & MK-7'},
@@ -16,20 +18,41 @@ const MOCK = [
 ];
 
 const SupplementScreen = () => {
-  const navigation = useNavigation();
+  const [switchCount, setSwitchCount] = useState(true);
   return (
-    <View style={Styles.screenContainer}>
-      <View style={[ComStyles.centeringContainer, Styles.addButtonContainer]}>
-        <TouchableOpacity
-          style={[Styles.addButton, ComStyles.centeringContainer]}
-          onPress={() => navigation.navigate('SupplementForm')}>
-          <Text style={Styles.addButtonText}>サプリを登録する</Text>
-        </TouchableOpacity>
+    <ScrollView>
+      <View style={Styles.screenContainer}>
+        <View style={[ComStyles.centeringContainer, Styles.addButtonContainer]}>
+          <WideBtn
+            btnText="サプリを登録する"
+            toNavigate="SupplementForm"
+            color={screenThemeColor.suppl}
+          />
+          <View style={Styles.minusIconContainer}>
+            <View style={Styles.minusIcon}>
+              <TouchableHighlight
+                underlayColor="white"
+                onPress={() => {
+                  setSwitchCount((state) => !state);
+                }}>
+                <Feather
+                  name={switchCount ? 'minus-circle' : 'plus-circle'}
+                  size={40}
+                  color="gray"
+                />
+              </TouchableHighlight>
+            </View>
+          </View>
+        </View>
+        {MOCK.map((obj, index) => (
+          <CountSupplement
+            key={index}
+            supplementName={obj.supplementName}
+            switchCount={switchCount}
+          />
+        ))}
       </View>
-      {MOCK.map((obj, index) => (
-        <CountSupplement key={index} supplementName={obj.supplementName} />
-      ))}
-    </View>
+    </ScrollView>
   );
 };
 
@@ -39,7 +62,12 @@ const Styles = StyleSheet.create({
     flexDirection: 'column',
     marginTop: 20,
   },
-  addButtonContainer: {maxHeight: 60, marginBottom: 10},
+  addButtonContainer: {
+    maxHeight: 60,
+    marginBottom: 40,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
   addButton: {
     width: 300,
     backgroundColor: '#007AFF',
@@ -50,6 +78,24 @@ const Styles = StyleSheet.create({
   addButtonText: {
     color: '#fff',
     fontSize: 22,
+  },
+  minusIconContainer: {
+    position: 'absolute',
+    right: 0,
+    bottom: -10,
+    marginHorizontal: winWidth * 0.08,
+  },
+  minusIcon: {
+    padding: 0,
+    borderRadius: 20,
+    shadowColor: screenThemeColor.suppl,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    backgroundColor: 'white',
   },
 });
 

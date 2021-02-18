@@ -8,6 +8,7 @@ import DeleteConfirmationModal from '../../components/delete-confirmation-modal'
 import {useRecoilState} from 'recoil';
 import {actionMealState} from './recoil.meal';
 import {NUTRIENTS_LABEL} from './constant.meal';
+import {screenThemeColor} from '../../global-style';
 
 type Props = {
   meal: Meal;
@@ -213,7 +214,7 @@ const Styles = StyleSheet.create({
     borderColor: '#ddd',
   },
   infoIcon: {
-    backgroundColor: 'lightgreen',
+    backgroundColor: screenThemeColor.meals,
   },
   closeIcon: {
     backgroundColor: '#ddd',

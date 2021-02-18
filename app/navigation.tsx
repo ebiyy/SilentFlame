@@ -1,6 +1,12 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {NavigationContainer, DefaultTheme} from '@react-navigation/native';
+import {
+  NavigationContainer,
+  DefaultTheme,
+  useNavigation,
+  useRoute,
+  getFocusedRouteNameFromRoute,
+} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import FontAwesome5Icons from 'react-native-vector-icons/FontAwesome5';
@@ -15,7 +21,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import WaterScreen from './screen/water/water-screen';
 import FirebaseCustomEvent from './sample/sample-firebase-event';
-import {winHeight} from './global-style';
+import {screenThemeColor, winHeight} from './global-style';
 import AnimateHeader from './screen/animate-header';
 import CustomCalendar from './sample/calender';
 import HeaderRightDate from './components/header-right-date';
@@ -93,13 +99,26 @@ const TabScreen = (
 
 const Tab = createBottomTabNavigator();
 
+const activeColor = {
+  weeky: screenThemeColor.weeky,
+  suppl: screenThemeColor.suppl,
+  meals: screenThemeColor.meals,
+  water: screenThemeColor.water,
+  setting: screenThemeColor.setting,
+};
+
 const MyTabs = () => {
+  const route = useRoute();
+  const routeName = getFocusedRouteNameFromRoute(route);
+  console.log(routeName);
   return (
     <>
       <Tab.Navigator
         initialRouteName="weeky"
         tabBarOptions={{
-          activeTintColor: 'lightgreen',
+          activeTintColor: routeName
+            ? activeColor[routeName]
+            : activeColor.weeky,
           style: {
             height: 80,
             shadowColor: '#ddd',
@@ -116,14 +135,14 @@ const MyTabs = () => {
           },
         }}>
         {TabScreen('weeky', HomeScreen, IconTypes.MCi, 'home')}
-        {TabScreen('Suppl.', SupplementScreen, IconTypes.Fa5i, 'tablets')}
+        {TabScreen('suppl', SupplementScreen, IconTypes.Fa5i, 'tablets')}
         {TabScreen(
-          'Meals',
+          'meals',
           MealsScreen,
           IconTypes.MCi,
           'silverware-fork-knife',
         )}
-        {TabScreen('Water', WaterScreen, IconTypes.MCi, 'cup-water')}
+        {TabScreen('water', WaterScreen, IconTypes.MCi, 'cup-water')}
         {TabScreen('setting', SettingScreen, IconTypes.Ioni, 'settings')}
       </Tab.Navigator>
     </>
@@ -163,13 +182,13 @@ const NavigationScreen = () => {
           cardStyle: {marginTop: winHeight * 0.08},
           headerBackground: () => <AnimateHeader />,
           headerBackTitleStyle: {
-            color: 'indigo',
+            color: 'black',
           },
           headerRight: () => <HeaderRightDate />,
         })}>
         <Stack.Screen
           name="weeky"
-          component={MyTabs}
+          // component={() => <MyTabs />}
           options={({navigation}) => ({
             // headerTitle: getHeaderTitle(route),
             // headerTitle: '',
@@ -187,8 +206,9 @@ const NavigationScreen = () => {
             //     />
             //   </View>
             // ),
-          })}
-        />
+          })}>
+          {() => <MyTabs />}
+        </Stack.Screen>
         <Stack.Screen name="Settings" component={FirebaseCustomEvent} />
         <Stack.Screen name="SupplementForm" component={SupplementForm} />
         <Stack.Screen

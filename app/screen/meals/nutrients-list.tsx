@@ -56,7 +56,7 @@ const NutrientsList = (props: Props) => {
           <Text>{label}</Text>
         </View>
         <View>
-          <Text>{setNutrientValue(value, unit)}</Text>
+          <Text style={{lineHeight: 14}}>{setNutrientValue(value, unit)}</Text>
         </View>
       </View>
     );
@@ -85,7 +85,9 @@ const NutrientsList = (props: Props) => {
           </Text>
         </View>
         <View>
-          <Text>{setNutrientValue(selectMeal[objKey], nutrientObj.unit)}</Text>
+          <Text style={{lineHeight: 25}}>
+            {setNutrientValue(selectMeal[objKey], nutrientObj.unit)}
+          </Text>
         </View>
       </View>
     </TouchableHighlight>
@@ -133,12 +135,18 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     margin: 10,
+    paddingBottom: 5,
+    borderBottomWidth: 0.4,
+    borderColor: '#ddd',
   },
   categoryItemView: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     marginVertical: 10,
     marginRight: 10,
+    paddingBottom: 5,
+    borderBottomWidth: 0.4,
+    borderColor: '#ddd',
   },
   labelItemView: {
     // paddingLeft: 20,

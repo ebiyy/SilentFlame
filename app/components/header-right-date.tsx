@@ -23,8 +23,8 @@ const HeaderRightDate = () => {
 
   return (
     <TouchableOpacity onPress={() => setDate(new Date())}>
-      <View style={{margin: 10}}>
-        <Text style={{fontSize: 16}}>
+      <View style={{margin: 10, marginRight: 15}}>
+        <Text style={{fontSize: 16, fontWeight: '500'}}>
           {formatDate(date) === formatDate(new Date())
             ? '今日'
             : formatDate(date)}

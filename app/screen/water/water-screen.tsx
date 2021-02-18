@@ -1,39 +1,13 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useEffect, useState} from 'react';
-import {
-  Dimensions,
-  Image,
-  ImageBackground,
-  StyleSheet,
-  Text,
-  TouchableOpacity,
-  View,
-} from 'react-native';
-import CountSupplement from '../../components/count-supplement';
+import React, {useState} from 'react';
+import {Dimensions, Image, StyleSheet, Text, View} from 'react-native';
 import WideBtn from '../../components/wide-button';
-import {ComStyles, shadowStyles} from '../../global-style';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {TouchableHighlight} from 'react-native-gesture-handler';
+import {screenThemeColor, shadowStyles} from '../../global-style';
 import RateProgressBar from '../../components/rate-progress-bar';
 import {mealsWATERState, waterIntakeState} from '../meals/recoil.meal';
-import Ioniconsfrom from 'react-native-vector-icons/Ionicons';
-import {useRecoilState} from 'recoil';
 import TitleText from '../../components/title-text';
 import CardEditIcons from './card-edit-icons';
 import WaterCardBodyBtn from './water-card-body-btn';
-import {WaterIntak} from '../../helpers/interface';
-import TestAdmod from '../../admob';
-
-const MOCK = [
-  {supplementName: 'Mega D-3 & MK-7'},
-  {supplementName: 'Vitamin A'},
-  {supplementName: 'AMINO COMPLETE'},
-  {supplementName: 'Ultra Omega-3'},
-  {supplementName: 'E-400'},
-  {supplementName: 'B-50'},
-  {supplementName: 'Magnesium Citrate'},
-  {supplementName: 'NO-FlUSH NAIACIN 500MG'},
-];
 
 const inputWaterPatten = [
   {name: 'cup', label: 120, iconElm: 'SimpleLineIcons'},
@@ -57,7 +31,7 @@ const WaterScreen = () => {
           title=""
           rimit={2}
           unit="L"
-          color="#86C5DA"
+          color={screenThemeColor.water}
           recoilSelector={mealsWATERState}
         />
       </View>

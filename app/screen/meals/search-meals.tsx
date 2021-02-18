@@ -22,6 +22,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {useRecoilState, useRecoilValue} from 'recoil';
 import NavigationButton from '../../components/navigation-button';
 import {firestoreState, toDay} from '../../firebase/meal';
+import {screenThemeColor} from '../../global-style';
 import {NUTRIENTS} from '../../helpers/csvtojson/nutrients';
 import {userIdState} from '../../recoil/user';
 import {generateMeal, replaceFoodName} from './function.meal';
@@ -229,7 +230,7 @@ const styles = StyleSheet.create({
     elevation: 1,
     backgroundColor: 'white',
     borderWidth: 1,
-    borderColor: 'lightgreen',
+    borderColor: screenThemeColor.meals,
   },
 });
 

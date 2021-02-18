@@ -13,7 +13,7 @@ import {
   getWeight,
 } from '../../helpers/apple-heath-kit';
 import SampleChart from '../../sample/sample-chart';
-import {ComStyles, shadowStyles} from '../../global-style';
+import {ComStyles, screenThemeColor, shadowStyles} from '../../global-style';
 import {
   mealsCHOAVState,
   mealsCHOCDFState,
@@ -180,7 +180,7 @@ const HomeScreen = () => {
               title="今週の水分"
               rimit={2}
               unit="L"
-              color="#86C5DA"
+              color={screenThemeColor.water}
               recoilSelector={mealsWATERState}
             />
           </View>
@@ -201,7 +201,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     marginBottom: 10,
     borderWidth: 1,
-    borderColor: 'lightgreen',
+    borderColor: screenThemeColor.meals,
     borderRadius: 10,
   },
   btnContainer: {

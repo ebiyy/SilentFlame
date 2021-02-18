@@ -1,5 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {Fragment, useEffect} from 'react';
+import React, {Fragment} from 'react';
 import {
   Dimensions,
   Keyboard,
@@ -14,13 +14,13 @@ import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import Divider from '../../components/divider';
 import RateProgressBar from '../../components/rate-progress-bar';
 import TitleText from '../../components/title-text';
-import {ComStyles} from '../../global-style';
 import {mealsENERC_KCALState} from './recoil.meal';
-import SampleChartPie from '../../sample/sample-chart-pie';
 import RegistrationMealCard from './registration-meal-card';
 import FadeInView from '../../components/fade-in-view';
 import {useMargeMealState} from './hook.meal';
 import PfcPieChart from './components/pfc-pie-chart';
+import WideBtn, {generateWideBtn} from '../../components/wide-btn';
+import {screenThemeColor} from '../../global-style';
 
 const timePeriod: TimePeriod = {
   breakfast: '朝食',
@@ -36,23 +36,6 @@ const MealsScreen = () => {
   // useEffect(() => {
   //   console.log('MealsScreen', meals);
   // }, [meals]);
-
-  const generateWideBtn = (key: string, i: number) => (
-    <TouchableOpacity
-      key={i}
-      style={{width: Dimensions.get('window').width / 4}}
-      onPress={() =>
-        navigation.navigate('SearchMeals', {
-          timePeriod: key,
-        })
-      }>
-      <View style={Styles.registrationTimePeriodItems}>
-        <Text style={{fontSize: 18, fontFamily: 'Hiragino Sans'}}>
-          {timePeriod[key]}
-        </Text>
-      </View>
-    </TouchableOpacity>
-  );
 
   return (
     <KeyboardAvoidingView
@@ -73,7 +56,7 @@ const MealsScreen = () => {
 
           {meals && meals.length > 0 && (
             <FadeInView>
-              <PfcPieChart meals={meals} boxShadow="lightgreen" />
+              <PfcPieChart meals={meals} boxShadow={screenThemeColor.meals} />
             </FadeInView>
           )}
 
@@ -84,13 +67,23 @@ const MealsScreen = () => {
               justifyContent: 'space-between',
               marginBottom: 10,
             }}>
-            {Object.keys(timePeriod).map((key, i) => generateWideBtn(key, i))}
+            {Object.keys(timePeriod).map((key, i) => (
+              <WideBtn
+                key={i}
+                btnText={timePeriod[key]}
+                toNavigate="SearchMeals"
+                navigatePrames={{
+                  timePeriod: key,
+                }}
+                wideRate={4}
+              />
+            ))}
           </View>
 
           <TitleText title="今日の食品" />
           {Object.keys(timePeriod).map((key, i) => (
             <Fragment key={i}>
-              <Divider borderColor="lightgreen" index={i}>
+              <Divider borderColor={screenThemeColor.meals} index={i}>
                 {timePeriod[key]}
               </Divider>
               {meals && meals.length > 0 && (
@@ -111,36 +104,6 @@ const MealsScreen = () => {
   );
 };
 
-const Styles = StyleSheet.create({
-  registrationTimePeriodItems: {
-    margin: 3,
-    padding: 10,
-    alignItems: 'center',
-    justifyContent: 'center',
-    // width: 150,
-    height: 80,
-    borderRadius: 10,
-    // backgroundColor: '#ddd',
-    shadowColor: '#ddd',
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 1,
-    shadowRadius: 4,
-    elevation: 1,
-    backgroundColor: 'white',
-    borderWidth: 1,
-    borderColor: 'lightgreen',
-  },
-  chartContainer: {
-    marginTop: 2,
-    marginHorizontal: 10,
-    marginBottom: 15,
-    borderWidth: 1,
-    borderColor: 'lightgreen',
-    borderRadius: 10,
-  },
-});
+const Styles = StyleSheet.create({});
 
 export default MealsScreen;

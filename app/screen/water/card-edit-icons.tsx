@@ -4,6 +4,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {RecoilState, useRecoilState} from 'recoil';
 import DeleteConfirmationModal from '../../components/delete-confirmation-modal';
+import {screenThemeColor} from '../../global-style';
 
 type Props = {
   selectItem: any;
@@ -104,7 +105,7 @@ const Styles = StyleSheet.create({
     borderColor: '#ddd',
   },
   infoIcon: {
-    backgroundColor: 'lightgreen',
+    backgroundColor: screenThemeColor.meals,
   },
   closeIcon: {
     backgroundColor: '#ddd',

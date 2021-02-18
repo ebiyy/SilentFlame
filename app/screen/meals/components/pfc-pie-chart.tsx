@@ -11,7 +11,7 @@ import {PieChart} from 'react-native-chart-kit';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useRecoilValue} from 'recoil';
 import TitleText from '../../../components/title-text';
-import {shadowStyles} from '../../../global-style';
+import {screenThemeColor, shadowStyles} from '../../../global-style';
 import {excludeKeyGroup} from '../function.meal';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -180,7 +180,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 10,
     marginBottom: 10,
     borderWidth: 1,
-    borderColor: 'lightgreen',
+    borderColor: screenThemeColor.meals,
     borderRadius: 10,
   },
   activeBtn: {

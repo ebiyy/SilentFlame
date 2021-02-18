@@ -4,6 +4,14 @@ import {Dimensions, StyleSheet} from 'react-native';
 const {width, height} = Dimensions.get('window');
 export const [winWidth, winHeight] = [width, height];
 
+export const screenThemeColor = {
+  weeky: 'black',
+  suppl: '#ffba3b',
+  meals: 'lightgreen',
+  water: '#86C5DA',
+  setting: 'black',
+};
+
 export const ComStyles = StyleSheet.create({
   centeringContainer: {
     flex: 1,
