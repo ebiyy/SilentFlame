@@ -4,53 +4,72 @@ import CountSupplement from '../../components/count-supplement';
 import WideBtn from '../../components/wide-btn';
 import {ComStyles, screenThemeColor, winWidth} from '../../global-style';
 import Feather from 'react-native-vector-icons/Feather';
+import Fontisto from 'react-native-vector-icons/Fontisto';
 import {ScrollView, TouchableHighlight} from 'react-native-gesture-handler';
-
-const MOCK = [
-  {supplementName: 'Mega D-3 & MK-7'},
-  {supplementName: 'Vitamin A'},
-  {supplementName: 'AMINO COMPLETE'},
-  {supplementName: 'Ultra Omega-3'},
-  {supplementName: 'E-400'},
-  {supplementName: 'B-50'},
-  {supplementName: 'Magnesium Citrate'},
-  {supplementName: 'NO-FlUSH NAIACIN 500MG'},
-];
+import {useRecoilValue} from 'recoil';
+import {supplsState} from './suppl.hook';
+import FadeInView from '../../components/fade-in-view';
 
 const SupplementScreen = () => {
   const [switchCount, setSwitchCount] = useState(true);
+  const [isDelete, setIsDelete] = useState(false);
+  const suppls = useRecoilValue(supplsState);
   return (
     <ScrollView>
       <View style={Styles.screenContainer}>
         <View style={[ComStyles.centeringContainer, Styles.addButtonContainer]}>
-          <WideBtn
-            btnText="サプリを登録する"
-            toNavigate="SupplementForm"
-            color={screenThemeColor.suppl}
-          />
-          <View style={Styles.minusIconContainer}>
+          <View style={{alignSelf: 'flex-end'}}>
             <View style={Styles.minusIcon}>
               <TouchableHighlight
                 underlayColor="white"
                 onPress={() => {
-                  setSwitchCount((state) => !state);
+                  setIsDelete((state) => !state);
                 }}>
-                <Feather
-                  name={switchCount ? 'minus-circle' : 'plus-circle'}
-                  size={40}
-                  color="gray"
-                />
+                {isDelete ? (
+                  <Feather name="check-circle" size={50} color="black" />
+                ) : (
+                  <Fontisto name="close" size={35} color="lightpink" />
+                )}
               </TouchableHighlight>
             </View>
           </View>
+          {!isDelete && (
+            <>
+              <WideBtn
+                btnText="サプリを登録する"
+                toNavigate="SupplementForm"
+                color={screenThemeColor.suppl}
+              />
+              <View style={{alignSelf: 'flex-end'}}>
+                <View style={Styles.minusIcon}>
+                  <TouchableHighlight
+                    underlayColor="white"
+                    onPress={() => {
+                      setSwitchCount((state) => !state);
+                    }}>
+                    <Feather
+                      name={switchCount ? 'minus-circle' : 'plus-circle'}
+                      size={40}
+                      color="gray"
+                    />
+                  </TouchableHighlight>
+                </View>
+              </View>
+            </>
+          )}
         </View>
-        {MOCK.map((obj, index) => (
-          <CountSupplement
-            key={index}
-            supplementName={obj.supplementName}
-            switchCount={switchCount}
-          />
-        ))}
+        <FadeInView>
+          {suppls
+            .filter((suppl) => !suppl.delete)
+            .map((obj, index) => (
+              <CountSupplement
+                key={index}
+                supplementName={obj.supplementName}
+                switchCount={switchCount}
+                isDelete={isDelete}
+              />
+            ))}
+        </FadeInView>
       </View>
     </ScrollView>
   );
@@ -93,7 +112,7 @@ const Styles = StyleSheet.create({
       width: 0,
       height: 2,
     },
-    shadowOpacity: 0.2,
+    shadowOpacity: 0.5,
     shadowRadius: 4,
     backgroundColor: 'white',
   },
