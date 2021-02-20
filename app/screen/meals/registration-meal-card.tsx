@@ -49,12 +49,15 @@ const RegistrationMealCard = (props: Props) => {
 
   const CHOAVL = tempMeal.CHOAVLM ? tempMeal.CHOAVLM : tempMeal.CHOAVLDF;
 
+  const toNum = (strNum: string) =>
+    Number(strNum.replace('(', '').replace(')', ''));
+
   const CHOCDF = () => {
     if (!['-', 'Tr'].includes(CHOAVL)) {
       const isEstimatedValue =
         String(CHOAVL).indexOf('(') > -1 ||
         String(tempMeal.CHOCDF).indexOf('(') > -1;
-      const sub = Number(tempMeal.CHOCDF) - Number(CHOAVL);
+      const sub = toNum(tempMeal.CHOCDF) - toNum(CHOAVL);
       const CHOCDFValue = sub > 0 ? sub.toFixed(1) : 0;
       if (isEstimatedValue) {
         return `(${CHOCDFValue})`;
@@ -108,6 +111,7 @@ const RegistrationMealCard = (props: Props) => {
                 onChangeText={intakeOnChange}
                 value={intake}
                 placeholder="摂取量"
+                placeholderTextColor="lightgray"
                 clearButtonMode="always"
                 keyboardType="numeric"
                 defaultValue={String(meal.intake)}

@@ -43,7 +43,7 @@ const MealsLsit = (props: Props) => {
               onPress={() => {
                 navigation.navigate('NutrientsScreen', {
                   selectMeal: generateMeal(obj, 100, timePeriod, userId),
-                  parentScreen: 'SearchMeals',
+                  parentScreen: 'MealsSearchScreen',
                   timePeriod: timePeriod,
                 });
               }}>

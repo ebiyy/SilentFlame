@@ -2,7 +2,7 @@ import {useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {useCollection} from 'react-firebase-hooks/firestore';
 import {Controller, useForm} from 'react-hook-form';
-import {VirtualizedList} from 'react-native';
+import {SafeAreaView, StatusBar, VirtualizedList} from 'react-native';
 import {
   View,
   KeyboardAvoidingView,
@@ -13,18 +13,17 @@ import {
   TouchableWithoutFeedback,
   Keyboard,
   Dimensions,
-  FlatList,
 } from 'react-native';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import {useRecoilState, useRecoilValue} from 'recoil';
 import VirtualizedView from '../../components/virutalized-list-view';
 import {firestoreState} from '../../firebase/meal';
-import {screenThemeColor} from '../../global-style';
+import {screenThemeColor, shadowStyles} from '../../global-style';
 import {NUTRIENTS} from '../../helpers/csvtojson/nutrients';
 import {userIdState} from '../../recoil/user';
+import FirebaseCustomEvent from '../../sample/sample-firebase-event';
 import LogMeals from './log-meals';
 import MealLsit from './meal-list';
-import MealsLsit from './meals-linst';
 import {actionMealState} from './recoil.meal';
 
 const generateHitObj = (inputText: string) => {
@@ -68,13 +67,11 @@ type Params = {
   timePeriod: TimePeriodKey;
 };
 
-const SearchMeals = ({route}) => {
+const MealsSearchScreen = ({route}) => {
   const navigation = useNavigation();
   const {timePeriod} = route.params as Params;
-  const {control, handleSubmit, errors} = useForm();
   const [inputText, setInputText] = useState('');
   const [submitEditing, setSubmitEditing] = useState(false);
-  const [actionMeal, setActionMeal] = useRecoilState(actionMealState);
   const [isSerach, setIsSerach] = useState(true);
   const [serachResult, setSerachResult] = useState<Nutrients[]>([]);
   const userId = useRecoilValue(userIdState);
@@ -107,27 +104,43 @@ const SearchMeals = ({route}) => {
       .then((result) => console.log('result.data()', result.data()));
   }, []);
 
-  const Item = ({meal}) => (
-    <MealLsit
-      meal={meal}
-      timePeriod={timePeriod}
-      // isLast={isLast}
-    />
+  const Item = ({meal, isLast}) => (
+    <MealLsit meal={meal} timePeriod={timePeriod} isLast={isLast} />
   );
 
   const renderItem = ({item}) => {
+    const isLast = serachResult.indexOf(item) + 1 === serachResult.length - 1;
     if (item) {
-      return <Item meal={item} />;
+      return <Item meal={item} isLast={isLast} />;
     }
     return <Text>結果なし</Text>;
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.container}>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <ScrollView>
+    <View>
+      <VirtualizedList
+        data={[]}
+        initialNumToRender={4}
+        renderItem={renderItem}
+        keyExtractor={(item, i) => String(i)}
+        getItemCount={() =>
+          serachResult.length > 0 ? serachResult.length - 1 : 0
+        }
+        getItem={(date, i) => serachResult[i]}
+        ListEmptyComponent={
+          inputText ? (
+            <View style={{margin: 20}}>
+              <Text
+                style={{
+                  textDecorationLine: 'underline',
+                  textDecorationColor: screenThemeColor.meals,
+                }}>
+                検索結果なし
+              </Text>
+            </View>
+          ) : null
+        }
+        ListHeaderComponent={
           <View style={styles.inner}>
             <View style={{alignItems: 'center', marginBottom: 8}}>
               <TouchableOpacity
@@ -145,38 +158,27 @@ const SearchMeals = ({route}) => {
 
             {isSerach ? (
               <View>
-                <Controller
-                  control={control}
-                  render={({onChange, onBlur, value}) => (
-                    <TextInput
-                      style={styles.textInput}
-                      onBlur={onBlur}
-                      onChangeText={(value) => {
-                        onChange(value);
-                        setInputText(value);
-                        setSerachResult(generateHitObj(value));
-                      }}
-                      value={value}
-                      placeholder="食品名"
-                      placeholderTextColor="lightgray"
-                      onSubmitEditing={() => {
-                        setSubmitEditing(!submitEditing);
-                        // Keyboard.dismiss;
-                      }}
-                      onFocus={() => setSubmitEditing(false)}
-                      clearButtonMode="always"
-                    />
-                  )}
-                  name="supplementName"
-                  rules={{required: true}}
-                  defaultValue=""
+                <TextInput
+                  style={styles.textInput}
+                  onChangeText={(v) => {
+                    setInputText(v);
+                    setSerachResult(generateHitObj(v));
+                  }}
+                  value={inputText}
+                  placeholder="食品名"
+                  placeholderTextColor="lightgray"
+                  onSubmitEditing={() => {
+                    setSubmitEditing(!submitEditing);
+                  }}
+                  onFocus={() => setSubmitEditing(false)}
+                  clearButtonMode="always"
                 />
                 {(inputText.length > 1 || submitEditing) && (
                   <View>
                     <View
                       style={{
                         flexDirection: 'row',
-                        marginBottom: 10,
+                        marginBottom: 5,
                         justifyContent: 'space-between',
                       }}>
                       <Text>「{inputText}」の検索結果</Text>
@@ -184,15 +186,6 @@ const SearchMeals = ({route}) => {
                         （100gあたりのカロリー）
                       </Text>
                     </View>
-                    <VirtualizedView>
-                      <VirtualizedList
-                        data={[]}
-                        renderItem={renderItem}
-                        keyExtractor={(item, i) => String(i)}
-                        getItemCount={(data) => serachResult.length - 1}
-                        getItem={(date, i) => serachResult[i]}
-                      />
-                    </VirtualizedView>
                   </View>
                 )}
               </View>
@@ -200,9 +193,10 @@ const SearchMeals = ({route}) => {
               <LogMeals timePeriod={timePeriod} />
             )}
           </View>
-        </ScrollView>
-      </TouchableWithoutFeedback>
-    </KeyboardAvoidingView>
+        }
+        stickyHeaderIndices={[0]}
+      />
+    </View>
   );
 };
 
@@ -214,6 +208,14 @@ const styles = StyleSheet.create({
     padding: 12,
     flex: 1,
     justifyContent: 'space-around',
+    backgroundColor: 'white',
+    shadowColor: '#ddd',
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 1,
+    shadowRadius: 4,
   },
   header: {
     fontSize: 36,
@@ -253,4 +255,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SearchMeals;
+export default MealsSearchScreen;

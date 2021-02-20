@@ -71,7 +71,7 @@ const MealsScreen = () => {
               <WideBtn
                 key={i}
                 btnText={timePeriod[key]}
-                toNavigate="SearchMeals"
+                toNavigate="MealsSearchScreen"
                 navigatePrames={{
                   timePeriod: key,
                 }}

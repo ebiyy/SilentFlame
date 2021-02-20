@@ -1,6 +1,7 @@
 import React from 'react';
 import {Controller, Control, DeepMap, FieldError} from 'react-hook-form';
 import {Picker} from '@react-native-picker/picker';
+import {Text, View} from 'react-native';
 
 type Props = {
   control: Control<Record<string, any>>;
@@ -12,24 +13,25 @@ type Props = {
 };
 
 const PickerController = (props: Props) => {
+  const {control, controlName, items, defaultValue, errors, marginTop} = props;
   return (
     <Controller
-      control={props.control}
+      control={control}
       render={({onChange, onBlur, value}) => (
         <Picker
           selectedValue={value}
           onValueChange={(v) => onChange(v)}
           style={{
-            marginTop: props.marginTop,
+            marginTop: marginTop,
           }}>
-          {props.items.map((str, i) => (
+          {items.map((str, i) => (
             <Picker.Item key={i} label={str} value={str} />
           ))}
         </Picker>
       )}
-      name={props.controlName}
+      name={controlName}
       rules={{required: true}}
-      defaultValue={props.defaultValue}
+      defaultValue={defaultValue}
     />
   );
 };

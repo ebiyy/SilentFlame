@@ -1,75 +1,45 @@
 import React, {useState} from 'react';
 import {StyleSheet, View} from 'react-native';
-import CountSupplement from '../../components/count-supplement';
-import WideBtn from '../../components/wide-btn';
-import {ComStyles, screenThemeColor, winWidth} from '../../global-style';
-import Feather from 'react-native-vector-icons/Feather';
-import Fontisto from 'react-native-vector-icons/Fontisto';
-import {ScrollView, TouchableHighlight} from 'react-native-gesture-handler';
+import CountSupplement from './count-supplement';
+import {ComStyles} from '../../global-style';
+import {ScrollView} from 'react-native-gesture-handler';
 import {useRecoilValue} from 'recoil';
-import {supplsState} from './suppl.hook';
+import {supplisState} from './suppli.hook';
 import FadeInView from '../../components/fade-in-view';
+import RecycleBtn from './components/recycle-btn';
+import ItemActions from './components/item-actions';
 
 const SupplementScreen = () => {
   const [switchCount, setSwitchCount] = useState(true);
   const [isDelete, setIsDelete] = useState(false);
-  const suppls = useRecoilValue(supplsState);
+  const supplis = useRecoilValue(supplisState);
+
   return (
     <ScrollView>
       <View style={Styles.screenContainer}>
         <View style={[ComStyles.centeringContainer, Styles.addButtonContainer]}>
-          <View style={{alignSelf: 'flex-end'}}>
-            <View style={Styles.minusIcon}>
-              <TouchableHighlight
-                underlayColor="white"
-                onPress={() => {
-                  setIsDelete((state) => !state);
-                }}>
-                {isDelete ? (
-                  <Feather name="check-circle" size={50} color="black" />
-                ) : (
-                  <Fontisto name="close" size={35} color="lightpink" />
-                )}
-              </TouchableHighlight>
-            </View>
-          </View>
-          {!isDelete && (
-            <>
-              <WideBtn
-                btnText="サプリを登録する"
-                toNavigate="SupplementForm"
-                color={screenThemeColor.suppl}
-              />
-              <View style={{alignSelf: 'flex-end'}}>
-                <View style={Styles.minusIcon}>
-                  <TouchableHighlight
-                    underlayColor="white"
-                    onPress={() => {
-                      setSwitchCount((state) => !state);
-                    }}>
-                    <Feather
-                      name={switchCount ? 'minus-circle' : 'plus-circle'}
-                      size={40}
-                      color="gray"
-                    />
-                  </TouchableHighlight>
-                </View>
-              </View>
-            </>
-          )}
+          <ItemActions
+            switchCount={switchCount}
+            setSwitchCount={setSwitchCount}
+            isDelete={isDelete}
+            setIsDelete={setIsDelete}
+          />
         </View>
         <FadeInView>
-          {suppls
-            .filter((suppl) => !suppl.delete)
-            .map((obj, index) => (
+          {supplis
+            .filter((suppli) => !suppli.delete)
+            .map((suppli, i) => (
               <CountSupplement
-                key={index}
-                supplementName={obj.supplementName}
+                key={i}
+                suppli={suppli}
                 switchCount={switchCount}
                 isDelete={isDelete}
               />
             ))}
         </FadeInView>
+        <View style={Styles.recycleBtnContainer}>
+          <RecycleBtn />
+        </View>
       </View>
     </ScrollView>
   );
@@ -87,34 +57,9 @@ const Styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
   },
-  addButton: {
-    width: 300,
-    backgroundColor: '#007AFF',
-    borderRadius: 5,
-    borderWidth: 1,
-    borderColor: '#fff',
-  },
-  addButtonText: {
-    color: '#fff',
-    fontSize: 22,
-  },
-  minusIconContainer: {
-    position: 'absolute',
-    right: 0,
-    bottom: -10,
-    marginHorizontal: winWidth * 0.08,
-  },
-  minusIcon: {
-    padding: 0,
-    borderRadius: 20,
-    shadowColor: screenThemeColor.suppl,
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.5,
-    shadowRadius: 4,
-    backgroundColor: 'white',
+  recycleBtnContainer: {
+    alignItems: 'center',
+    marginTop: 50,
   },
 });
 

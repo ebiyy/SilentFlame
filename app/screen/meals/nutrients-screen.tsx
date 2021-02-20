@@ -51,6 +51,7 @@ const NutrientsScreen = ({navigation, route}) => {
                 maxLength={10}
                 value={String(intake)}
                 placeholder="摂取量(g)"
+                placeholderTextColor="lightgray"
                 clearButtonMode="always"
                 defaultValue={String(intake)}
               />
@@ -64,7 +65,7 @@ const NutrientsScreen = ({navigation, route}) => {
                 title="この量で登録"
                 onPress={() => {
                   setActionMeal(
-                    parentScreen === 'SearchMeals'
+                    parentScreen === 'MealsSearchScreen'
                       ? {
                           item: generateMeal(
                             calNutrient(selectMeal, String(intake)),
@@ -83,7 +84,7 @@ const NutrientsScreen = ({navigation, route}) => {
                           action: 'update',
                         },
                   );
-                  if (parentScreen === 'SearchMeals') {
+                  if (parentScreen === 'MealsSearchScreen') {
                     navigation.goBack();
                     navigation.goBack();
                   }

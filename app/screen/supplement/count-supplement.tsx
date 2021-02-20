@@ -10,23 +10,25 @@ import {
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import {useRecoilState} from 'recoil';
-import {ComStyles, screenThemeColor, shadowStyles} from '../global-style';
-import {supplsState} from '../screen/supplement/suppl.hook';
-import DeleteConfirmationModal from './delete-confirmation-modal';
-import FadeInView from './fade-in-view';
+import {ComStyles, screenThemeColor, shadowStyles} from '../../global-style';
+import DeleteConfirmationModal from '../../components/delete-confirmation-modal';
+import {imageResState, supplisState} from './suppli.hook';
+import {Suppli} from './suppli';
 
 type Props = {
-  supplementName: string;
+  suppli: Suppli;
   switchCount: boolean;
   isDelete: boolean;
 };
 
 const CountSupplement = (props: Props) => {
-  const {supplementName, switchCount, isDelete} = props;
+  const {suppli, switchCount, isDelete} = props;
   const [count, setCount] = useState(0);
   const navigation = useNavigation();
-  const [suppls, setSuppls] = useRecoilState(supplsState);
+  const [supplis, setSuppls] = useRecoilState(supplisState);
   const [modalVisible, setModalVisible] = useState(false);
+  const [imageRes, setImageRes] = useRecoilState(imageResState);
+
   return (
     <>
       <View style={Styles.countSupplContainer}>
@@ -52,14 +54,15 @@ const CountSupplement = (props: Props) => {
           ]}>
           <TouchableOpacity
             style={[ComStyles.centeringContainer]}
-            onPress={() =>
-              navigation.navigate('NutrientFormController', {
-                mySppliId: 1,
-                isEditable: false,
-              })
-            }>
+            onPress={() => {
+              setImageRes(suppli.imageRes);
+              navigation.navigate('SupplFormScreen', {
+                mode: 'view',
+                suppli: suppli,
+              });
+            }}>
             <View>
-              <Text style={Styles.nameText}>{supplementName}</Text>
+              <Text style={Styles.nameText}>{suppli.suppliName}</Text>
             </View>
           </TouchableOpacity>
         </View>
@@ -89,9 +92,7 @@ const CountSupplement = (props: Props) => {
         deleteFunc={() =>
           setSuppls((preState) =>
             preState.map((suppl) =>
-              suppl.supplementName !== supplementName
-                ? suppl
-                : {...suppl, delete: true},
+              suppl.id !== suppli.id ? suppl : {...suppl, delete: true},
             ),
           )
         }

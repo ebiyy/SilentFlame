@@ -1,6 +1,9 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {Controller, Control, DeepMap, FieldError} from 'react-hook-form';
 import {StyleSheet, TextInput} from 'react-native';
+import {useRecoilState} from 'recoil';
+import {shadowStyles} from '../global-style';
+import {isScrollState} from '../screen/supplement/suppli.hook';
 
 type Props = {
   control: Control<Record<string, any>>;
@@ -8,31 +11,51 @@ type Props = {
   placeholder: string;
   defaultValue: string;
   errors: DeepMap<Record<string, any>, FieldError>;
+  isNum?: boolean;
+  editable: boolean;
+  borderColor?: string;
+  required?: boolean;
 };
 
 const TextInputController = (props: Props) => {
-  const [isError, setIsError] = useState(props.errors[props.controlName]);
-
-  useEffect(() => {
-    setIsError(props.errors[props.controlName]);
-  }, [props.errors]);
+  const {
+    control,
+    controlName,
+    placeholder,
+    defaultValue,
+    errors,
+    isNum = false,
+    editable,
+    borderColor = 'black',
+    required = true,
+  } = props;
+  const [isScroll, setIsScroll] = useRecoilState(isScrollState);
 
   return (
     <Controller
-      control={props.control}
+      control={control}
       render={({onChange, onBlur, value}) => (
         <TextInput
-          style={[styles.input, isError ? styles.invalid : styles.valid]}
+          style={[
+            styles.input,
+            shadowStyles(borderColor).boxShadow,
+            errors[controlName] ? styles.invalid : styles.valid,
+          ]}
           onBlur={onBlur}
-          onChangeText={(value) => onChange(value)}
+          onChangeText={(v) => onChange(v)}
           value={value}
-          placeholder={props.placeholder}
+          placeholder={placeholder}
           placeholderTextColor="lightgray"
+          keyboardType={isNum ? 'numeric' : 'default'}
+          editable={editable}
+          onFocus={() => {
+            setIsScroll(true);
+          }}
         />
       )}
-      name={props.controlName}
-      rules={{required: true}}
-      defaultValue={props.defaultValue}
+      name={controlName}
+      rules={{required: required}}
+      defaultValue={defaultValue}
     />
   );
 };
@@ -42,16 +65,16 @@ const styles = StyleSheet.create({
     height: 50,
     borderWidth: 2,
     borderRadius: 10,
-    marginVertical: 5,
+    marginVertical: 4,
     padding: 10,
     zIndex: 999,
   },
   valid: {
-    borderColor: 'gray',
+    // borderColor: 'gray',
     color: 'black',
   },
   invalid: {
-    borderColor: 'red',
+    borderColor: '#fa98b1',
     color: 'red',
   },
 });

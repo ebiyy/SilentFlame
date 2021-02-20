@@ -25,7 +25,7 @@ const WideBtn = (props: Props) => {
     toNavigate,
     navigatePrames = {},
     wideRate = 2,
-    color = screenThemeColor.meals,
+    color = screenThemeColor.meals, // shadowColorへ
     height = 75,
   } = props;
   return (
@@ -66,7 +66,10 @@ const Styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: screenThemeColor.meals,
   },
-  btnText: {fontSize: 18, fontFamily: 'Hiragino Sans'},
+  btnText: {
+    fontSize: 18,
+    fontFamily: 'Hiragino Sans',
+  },
 });
 
 export default WideBtn;

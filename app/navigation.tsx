@@ -27,6 +27,9 @@ import CustomCalendar from './sample/calender';
 import HeaderRightDate from './components/header-right-date';
 import SettingScreen from './screen/setting/setting-screen';
 import NutrientsScreen from './screen/meals/nutrients-screen';
+import NutrientForm from './screen/supplement/nutrient-from';
+import SupplFormScreen from './screen/supplement/suppl-form-screen';
+import MealsSearchScreen from './screen/meals/meals-search-screen';
 
 // const getHeaderTitle = (route: Route<string, object | undefined>) => {
 //   // If the focused route is not found, we need to assume it's the initial screen
@@ -110,7 +113,6 @@ const activeColor = {
 const MyTabs = () => {
   const route = useRoute();
   const routeName = getFocusedRouteNameFromRoute(route);
-  console.log(routeName);
   return (
     <>
       <Tab.Navigator
@@ -188,7 +190,7 @@ const NavigationScreen = () => {
         })}>
         <Stack.Screen
           name="weeky"
-          // component={() => <MyTabs />}
+          component={MyTabs}
           options={({navigation}) => ({
             // headerTitle: getHeaderTitle(route),
             // headerTitle: '',
@@ -206,18 +208,18 @@ const NavigationScreen = () => {
             //     />
             //   </View>
             // ),
-          })}>
-          {() => <MyTabs />}
-        </Stack.Screen>
+          })}
+        />
         <Stack.Screen name="Settings" component={FirebaseCustomEvent} />
-        <Stack.Screen name="SupplementForm" component={SupplementForm} />
+        <Stack.Screen name="SupplFormScreen" component={SupplFormScreen} />
         <Stack.Screen
           name="NutrientFormController"
           component={NutrientFormController}
         />
         <Stack.Screen name="NutrientsScreen" component={NutrientsScreen} />
-        <Stack.Screen name="SearchMeals" component={SearchMeals} />
+        <Stack.Screen name="MealsSearchScreen" component={MealsSearchScreen} />
         <Stack.Screen name="CustomCalendar" component={CustomCalendar} />
+        <Stack.Screen name="NutrientForm" component={NutrientForm} />
       </Stack.Navigator>
     </NavigationContainer>
   );

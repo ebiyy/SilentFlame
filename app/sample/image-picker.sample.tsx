@@ -6,7 +6,6 @@ import {
   View,
   Image,
   ScrollView,
-  Platform,
   SafeAreaView,
   Button,
 } from 'react-native';

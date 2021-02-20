@@ -44,6 +44,7 @@ const KeyboardAvoidingComponent = () => {
                   }}
                   value={value}
                   placeholder="サプリ名"
+                  placeholderTextColor="lightgray"
                 />
               )}
               name="supplementName"
