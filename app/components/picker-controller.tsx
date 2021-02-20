@@ -1,7 +1,6 @@
 import React from 'react';
 import {Controller, Control, DeepMap, FieldError} from 'react-hook-form';
 import {Picker} from '@react-native-picker/picker';
-import {Text, View} from 'react-native';
 
 type Props = {
   control: Control<Record<string, any>>;

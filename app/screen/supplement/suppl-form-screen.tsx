@@ -14,11 +14,11 @@ import TitleText from '../../components/title-text';
 import {screenThemeColor, shadowStyles, winWidth} from '../../global-style';
 import NutrientFormController from './nutrient-from-controller';
 import SupplementForm from './supplement-form';
-import {MOCK_BASE_INFO, MOCK_NUTRIENTS} from './constant';
 import {useRecoilState, useRecoilValue} from 'recoil';
 import {imageResState, isScrollState, supplisState} from './suppli.hook';
 import {Suppli, SuppliBaseInfo, SuppliNutrient} from './suppli';
 import {userIdState} from '../../recoil/user';
+import PickerController from '../../components/picker-controller';
 
 type Params = {
   mode: 'add' | 'view';

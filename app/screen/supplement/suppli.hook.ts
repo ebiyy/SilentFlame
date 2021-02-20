@@ -1,12 +1,24 @@
 import {ImagePickerResponse} from 'react-native-image-picker';
 import {atom} from 'recoil';
-import {MOCK_BASE_INFO, MOCK_NUTRIENTS} from './constant';
+import {
+  MOCK_BASE_INFO,
+  MOCK_BASE_INFO2,
+  MOCK_NUTRIENTS,
+  MOCK_NUTRIENTS2,
+} from './constant';
 import {Suppli} from './suppli';
 
 const MOCK = [
   {
     ...MOCK_BASE_INFO,
     ...MOCK_NUTRIENTS,
+    createdAt: new Date(),
+    updateAt: new Date(),
+    author: 'mock',
+  },
+  {
+    ...MOCK_BASE_INFO2,
+    ...MOCK_NUTRIENTS2,
     createdAt: new Date(),
     updateAt: new Date(),
     author: 'mock',

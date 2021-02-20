@@ -14,6 +14,7 @@ import {ComStyles, screenThemeColor, shadowStyles} from '../../global-style';
 import DeleteConfirmationModal from '../../components/delete-confirmation-modal';
 import {imageResState, supplisState} from './suppli.hook';
 import {Suppli} from './suppli';
+import InputValueModal from './components/input-value-modal';
 
 type Props = {
   suppli: Suppli;
@@ -26,7 +27,8 @@ const CountSupplement = (props: Props) => {
   const [count, setCount] = useState(0);
   const navigation = useNavigation();
   const [supplis, setSuppls] = useRecoilState(supplisState);
-  const [modalVisible, setModalVisible] = useState(false);
+  const [deleteModal, setDeleteModal] = useState(false);
+  const [inputModal, setInputModal] = useState(false);
   const [imageRes, setImageRes] = useRecoilState(imageResState);
 
   return (
@@ -37,7 +39,7 @@ const CountSupplement = (props: Props) => {
             style={{alignSelf: 'center'}}
             underlayColor="white"
             onPress={() => {
-              setModalVisible((state) => !state);
+              setDeleteModal((state) => !state);
             }}>
             <Fontisto name="close" size={35} color="lightpink" />
           </TouchableHighlight>
@@ -69,7 +71,12 @@ const CountSupplement = (props: Props) => {
         {!isDelete && (
           <View style={[Styles.counterContainer]}>
             {switchCount ? (
-              <TouchableOpacity onPress={() => setCount(count + 1)}>
+              <TouchableOpacity
+                onPress={() =>
+                  suppli.contentSizeUnit === '個'
+                    ? setCount(count + 1)
+                    : setInputModal(true)
+                }>
                 <View style={Styles.counterIcon}>
                   <FontAwesome5 name="plus-circle" size={40} />
                 </View>
@@ -77,7 +84,11 @@ const CountSupplement = (props: Props) => {
             ) : (
               <TouchableOpacity
                 style={Styles.counterIcon}
-                onPress={() => setCount(count - 1 >= 0 ? count - 1 : 0)}>
+                onPress={() =>
+                  suppli.contentSizeUnit === '個'
+                    ? setCount(count - 1 >= 0 ? count - 1 : 0)
+                    : setInputModal(true)
+                }>
                 <View style={Styles.counterIcon}>
                   <FontAwesome5 name="minus-circle" size={40} />
                 </View>
@@ -87,8 +98,8 @@ const CountSupplement = (props: Props) => {
         )}
       </View>
       <DeleteConfirmationModal
-        modalVisible={modalVisible}
-        setModalVisible={setModalVisible}
+        modalVisible={deleteModal}
+        setModalVisible={setDeleteModal}
         deleteFunc={() =>
           setSuppls((preState) =>
             preState.map((suppl) =>
@@ -96,6 +107,13 @@ const CountSupplement = (props: Props) => {
             ),
           )
         }
+      />
+      <InputValueModal
+        modalVisible={inputModal}
+        setModalVisible={setInputModal}
+        setCount={setCount}
+        contentSizeUnit={suppli.contentSizeUnit}
+        switchCount={switchCount}
       />
     </>
   );

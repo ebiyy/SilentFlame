@@ -129,14 +129,13 @@ const SupplementForm = (props: Props) => {
           <TextInputController
             control={control}
             controlName="servingSize"
-            placeholder="1日分の値"
+            placeholder="1日分の量"
             defaultValue={
               suppliBaseInfo ? String(suppliBaseInfo.servingSize) : ''
             }
             errors={errors}
             isNum={true}
             editable={editable}
-            required={false}
           />
         </View>
       </View>
