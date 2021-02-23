@@ -151,8 +151,7 @@ const RegistrationMealCard = (props: Props) => {
                 {CHOCDF()} {NUTRIENTS_LABEL.CHOCDF.unit}
               </Text>
               <Text style={Styles.nutrientLable}>
-                {CHOAVL}{' '}
-                {NUTRIENTS_LABEL.CHOCDF.detail.CHOAVLM.unit}
+                {CHOAVL} {NUTRIENTS_LABEL.CHOCDF.detail.CHOAVLM.unit}
               </Text>
             </View>
           </View>

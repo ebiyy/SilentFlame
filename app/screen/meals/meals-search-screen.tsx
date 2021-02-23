@@ -135,7 +135,7 @@ const MealsSearchScreen = ({route}) => {
   const renderItem = ({item}) => {
     const isLast = serachResult.indexOf(item) + 1 === serachResult.length;
     if (item) {
-      return <Item meal={item} isLast={isLast} />;
+      return <Item meal={{...item}} isLast={isLast} />;
     }
     return <Text>結果なし</Text>;
   };

@@ -53,7 +53,6 @@ export const nutrientRecalculation = (
 };
 
 export const replaceFoodName = (name: string) => {
-  console.log('replaceFoodName', name);
   const replaceStr = (str: string, str1: string, str2: string) => {
     const i1 = str.indexOf(str1);
     const i2 = str.indexOf(str2);
@@ -70,11 +69,11 @@ export const replaceFoodName = (name: string) => {
     .replace(replaceStr(name, '<', '>'), '')
     .replace(replaceStr(name, '[', '類]'), '') // ex. <畜肉類> ぶた [ひき肉] 焼き
     .replace(replaceStr(name, '(', '類)'), '')
+    .replace(replaceStr(name, '(', '類)'), '') // ↑とは文字コードが違う
     .replace('[その他]', '')
     .replace('(その他)', '')
     .replace('<その他>', '')
     .replace(' その他 ', ' ');
-  console.log('replaceFoodName', replaceName);
   return replaceName;
 };
 

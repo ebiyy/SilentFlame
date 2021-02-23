@@ -203,7 +203,7 @@ export const vitaminNutrientKeys = {
     unit: 'μg',
   },
   VITA_RAE: {
-    label: 'レチノール活性当量',
+    label: 'ビタミンA（レチノール活性当量）',
     unit: 'μg',
   },
   VITD: {
@@ -290,11 +290,11 @@ export const fatNutrientKeys = {
     unit: 'g',
   },
   FAPUN3: {
-    label: 'オメガ３不飽和脂肪酸',
+    label: 'オメガ3 不飽和脂肪酸',
     unit: 'g',
   },
   FAPUN6: {
-    label: 'オメガ６不飽和脂肪酸',
+    label: 'オメガ6 不飽和脂肪酸',
     unit: 'g',
   },
   F4D0: {
@@ -520,6 +520,10 @@ export const NUTRIENT_KEY = {
   },
   NACL_EQ: {
     label: '食塩相当量',
+    unit: 'g',
+  },
+  remarks: {
+    label: '備考',
     unit: 'g',
   },
 };

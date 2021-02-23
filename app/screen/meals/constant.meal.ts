@@ -1,15 +1,9 @@
 import {
-  carbohydrateNutrientKeys,
-  fatNutrientKeys,
+  mineralNutrientKeys,
   NUTRIENT_KEY,
   organicAcidNutrientKeys,
-  proteinNutrientKeys,
 } from '../supplement/constant';
-import {
-  generateLabels,
-  generateNutrientsLabel,
-  nutrientLabels,
-} from './function.meal';
+import {generateLabels, nutrientLabels} from './function.meal';
 
 export const NUTRIENTS_LABEL = {
   foodName: {
@@ -197,14 +191,15 @@ export const NUTRIENTS_LABEL = {
             },
           },
           // option end
-          ...generateLabels(['SORTL', 'MANTL']),
         },
       },
       POLYL: {
         ...nutrientLabels('POLYL')['POLYL'],
+        // option start
         detail: {
           ...generateLabels(['SORTL', 'MANTL']),
         },
+        // option end
       },
     },
   },
@@ -216,184 +211,150 @@ export const NUTRIENTS_LABEL = {
     },
     // option end
   },
-  ASH: {
-    label: NUTRIENT_KEY.ASH.label,
-    unit: NUTRIENT_KEY.ASH.unit,
-  },
+  ...nutrientLabels('ASH'),
   mineral: {
     label: 'ミネラル',
     detail: {
-      NA: {
-        label: NUTRIENT_KEY.NA.label,
-        unit: NUTRIENT_KEY.NA.unit,
-      },
-      K: {
-        label: NUTRIENT_KEY.K.label,
-        unit: NUTRIENT_KEY.K.unit,
-      },
-      CA: {
-        label: NUTRIENT_KEY.CA.label,
-        unit: NUTRIENT_KEY.CA.unit,
-      },
-      MG: {
-        label: NUTRIENT_KEY.MG.label,
-        unit: NUTRIENT_KEY.MG.unit,
-      },
-      P: {
-        label: NUTRIENT_KEY.P.label,
-        unit: NUTRIENT_KEY.P.unit,
-      },
-      FE: {
-        label: NUTRIENT_KEY.FE.label,
-        unit: NUTRIENT_KEY.FE.unit,
-      },
-      ZN: {
-        label: NUTRIENT_KEY.ZN.label,
-        unit: NUTRIENT_KEY.ZN.unit,
-      },
-      CU: {
-        label: NUTRIENT_KEY.CU.label,
-        unit: NUTRIENT_KEY.CU.unit,
-      },
-      MN: {
-        label: NUTRIENT_KEY.MN.label,
-        unit: NUTRIENT_KEY.MN.unit,
-      },
-      ID: {
-        label: NUTRIENT_KEY.ID.label,
-        unit: NUTRIENT_KEY.ID.unit,
-      },
-      SE: {
-        label: NUTRIENT_KEY.SE.label,
-        unit: NUTRIENT_KEY.SE.unit,
-      },
-      CR: {
-        label: NUTRIENT_KEY.CR.label,
-        unit: NUTRIENT_KEY.CR.unit,
-      },
-      MO: {
-        label: NUTRIENT_KEY.MO.label,
-        unit: NUTRIENT_KEY.MO.unit,
-      },
+      ...generateLabels(Object.keys(mineralNutrientKeys)),
     },
   },
   vitamin: {
     label: 'ビタミン',
     detail: {
-      VITA: {
-        label: 'ビタミンA',
+      VITA_RAE: {
+        ...nutrientLabels('VITA_RAE')['VITA_RAE'],
         detail: {
-          RETOL: {
-            label: NUTRIENT_KEY.RETOL.label,
-            unit: NUTRIENT_KEY.RETOL.unit,
-          },
-          CARTA: {
-            label: NUTRIENT_KEY.CARTA.label,
-            unit: NUTRIENT_KEY.CARTA.unit,
-          },
-          CARTB: {
-            label: NUTRIENT_KEY.CARTB.label,
-            unit: NUTRIENT_KEY.CARTB.unit,
-          },
-          CRYPXB: {
-            label: NUTRIENT_KEY.CRYPXB.label,
-            unit: NUTRIENT_KEY.CRYPXB.unit,
-          },
-          CARTBEQ: {
-            label: NUTRIENT_KEY.CARTBEQ.label,
-            unit: NUTRIENT_KEY.CARTBEQ.unit,
-          },
-          VITA_RAE: {
-            label: NUTRIENT_KEY.VITA_RAE.label,
-            unit: NUTRIENT_KEY.VITA_RAE.unit,
-          },
+          ...generateLabels(['RETOL', 'CARTA', 'CARTB', 'CRYPXB', 'CARTBEQ']),
         },
       },
-      VITD: {
-        label: NUTRIENT_KEY.VITD.label,
-        unit: NUTRIENT_KEY.VITD.unit,
-      },
+      ...nutrientLabels('VITD'),
       VITE: {
         label: 'ビタミンE',
         detail: {
-          TOCPHA: {
-            label: NUTRIENT_KEY.TOCPHA.label,
-            unit: NUTRIENT_KEY.TOCPHA.unit,
-          },
-          TOCPHB: {
-            label: NUTRIENT_KEY.TOCPHB.label,
-            unit: NUTRIENT_KEY.TOCPHB.unit,
-          },
-          TOCPHG: {
-            label: NUTRIENT_KEY.TOCPHG.label,
-            unit: NUTRIENT_KEY.TOCPHG.unit,
-          },
-          TOCPHD: {
-            label: NUTRIENT_KEY.TOCPHD.label,
-            unit: NUTRIENT_KEY.TOCPHD.unit,
-          },
+          ...generateLabels(['TOCPHA', 'TOCPHB', 'TOCPHG', 'TOCPHD']),
         },
       },
-      VITK: {
-        label: NUTRIENT_KEY.VITK.label,
-        unit: NUTRIENT_KEY.VITK.unit,
-      },
+      ...nutrientLabels('VITK'),
       VITB: {
         label: 'ビタミンB群',
         detail: {
-          THIA: {
-            label: NUTRIENT_KEY.THIA.label,
-            unit: NUTRIENT_KEY.THIA.unit,
-          },
-          RIBF: {
-            label: NUTRIENT_KEY.RIBF.label,
-            unit: NUTRIENT_KEY.RIBF.unit,
-          },
-          NIA: {
-            label: NUTRIENT_KEY.NIA.label,
-            unit: NUTRIENT_KEY.NIA.unit,
-          },
-          NE: {
-            label: NUTRIENT_KEY.NE.label,
-            unit: NUTRIENT_KEY.NE.unit,
-          },
-          VITB6A: {
-            label: NUTRIENT_KEY.VITB6A.label,
-            unit: NUTRIENT_KEY.VITB6A.unit,
-          },
-          VITB12: {
-            label: NUTRIENT_KEY.VITB12.label,
-            unit: NUTRIENT_KEY.VITB12.unit,
-          },
-          FOL: {
-            label: NUTRIENT_KEY.FOL.label,
-            unit: NUTRIENT_KEY.FOL.unit,
-          },
-          PANTAC: {
-            label: NUTRIENT_KEY.PANTAC.label,
-            unit: NUTRIENT_KEY.PANTAC.unit,
-          },
-          BIOT: {
-            label: NUTRIENT_KEY.BIOT.label,
-            unit: NUTRIENT_KEY.BIOT.unit,
-          },
+          ...generateLabels([
+            'THIA',
+            'RIBF',
+            'NIA',
+            'NE',
+            'VITB6A',
+            'VITB12',
+            'FOL',
+            'PANTAC',
+            'BIOT',
+          ]),
         },
       },
-      VITC: {
-        label: NUTRIENT_KEY.VITC.label,
-        unit: NUTRIENT_KEY.VITC.unit,
+      ...nutrientLabels('VITC'),
+    },
+  },
+  ...generateLabels(['ALC', 'NACL_EQ']),
+  remarks: {
+    label: '備考',
+    detail: {
+      ...nutrientLabels('remarks'),
+    },
+  },
+};
+
+export const BASIC_NUTRIENTS_LABEL = {
+  foodName: {
+    label: '食品名',
+  },
+  ...generateLabels(['REFUSE', 'ENERC_KCAL', 'WATER']),
+  PROT: {
+    ...nutrientLabels('PROT')['PROT'],
+    detail: {
+      ...nutrientLabels('PROTCAA'),
+    },
+  },
+  FAT: {
+    label: NUTRIENT_KEY.FAT.label,
+    unit: NUTRIENT_KEY.FAT.unit,
+    detail: {
+      FATNLEA: {
+        label: NUTRIENT_KEY.FATNLEA.label,
+        unit: NUTRIENT_KEY.FATNLEA.unit,
+      },
+      CHOLE: {
+        label: NUTRIENT_KEY.CHOLE.label,
+        unit: NUTRIENT_KEY.CHOLE.unit,
       },
     },
   },
-  ALC: {
-    label: NUTRIENT_KEY.ALC.label,
-    unit: NUTRIENT_KEY.ALC.unit,
+  CHOCDF: {
+    ...nutrientLabels('CHOCDF')['CHOCDF'],
+    detail: {
+      ...nutrientLabels('CHOAVLM'),
+      CHOAVL: {
+        ...nutrientLabels('CHOAVL')['CHOAVL'],
+      },
+      ...nutrientLabels('CHOAVLDF'),
+      FIB: {
+        ...nutrientLabels('FIB')['FIB'],
+      },
+      POLYL: {
+        ...nutrientLabels('POLYL')['POLYL'],
+      },
+    },
   },
-  NACL_EQ: {
-    label: NUTRIENT_KEY.NACL_EQ.label,
-    unit: NUTRIENT_KEY.NACL_EQ.unit,
+  OA: {
+    ...nutrientLabels('OA')['OA'],
   },
+  ...nutrientLabels('ASH'),
+  mineral: {
+    label: 'ミネラル',
+    detail: {
+      ...generateLabels(Object.keys(mineralNutrientKeys)),
+    },
+  },
+  vitamin: {
+    label: 'ビタミン',
+    detail: {
+      VITA_RAE: {
+        ...nutrientLabels('VITA_RAE')['VITA_RAE'],
+        detail: {
+          ...generateLabels(['RETOL', 'CARTA', 'CARTB', 'CRYPXB', 'CARTBEQ']),
+        },
+      },
+      ...nutrientLabels('VITD'),
+      VITE: {
+        label: 'ビタミンE',
+        detail: {
+          ...generateLabels(['TOCPHA', 'TOCPHB', 'TOCPHG', 'TOCPHD']),
+        },
+      },
+      ...nutrientLabels('VITK'),
+      VITB: {
+        label: 'ビタミンB群',
+        detail: {
+          ...generateLabels([
+            'THIA',
+            'RIBF',
+            'NIA',
+            'NE',
+            'VITB6A',
+            'VITB12',
+            'FOL',
+            'PANTAC',
+            'BIOT',
+          ]),
+        },
+      },
+      ...nutrientLabels('VITC'),
+    },
+  },
+  ...generateLabels(['ALC', 'NACL_EQ']),
   remarks: {
     label: '備考',
+    detail: {
+      ...nutrientLabels('remarks'),
+    },
   },
 };

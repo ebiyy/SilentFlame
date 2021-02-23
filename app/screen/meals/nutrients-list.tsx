@@ -7,12 +7,12 @@ import {
   TouchableOpacity,
 } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import {NUTRIENTS_LABEL} from './constant.meal';
 import {nutrientRecalculation} from './function.meal';
 
 type Props = {
   selectMeal: Meal;
   intake: number;
+  listRules: any;
 };
 
 LogBox.ignoreLogs([
@@ -20,7 +20,7 @@ LogBox.ignoreLogs([
 ]);
 
 const NutrientsList = (props: Props) => {
-  const {selectMeal, intake} = props;
+  const {selectMeal, intake, listRules} = props;
   const [isCollapsed, setIsCollapsed] = useState({});
 
   const setNutrientValue = (value: string, unit: string) => {
@@ -42,10 +42,10 @@ const NutrientsList = (props: Props) => {
     value: string,
     unit: string,
   ) => {
-    if (label === NUTRIENTS_LABEL.remarks.label) {
+    if (label === listRules.remarks.label) {
       return (
         <View key={i} style={{margin: 10}}>
-          <Text style={{marginBottom: 10}}>{label}</Text>
+          {/* <Text style={{marginBottom: 10}}>{label}</Text> */}
           <Text>{value}</Text>
           {value !== '' && value.match(/\d/) && (
             <Text style={{marginTop: 10}}>
@@ -60,7 +60,7 @@ const NutrientsList = (props: Props) => {
         <View style={styles.labelItemView}>
           <Text>{label}</Text>
         </View>
-        <View>
+        <View style={{maxWidth: '60%', alignItems: 'flex-end'}}>
           <Text style={{lineHeight: 14}}>{setNutrientValue(value, unit)}</Text>
         </View>
       </View>
@@ -91,8 +91,10 @@ const NutrientsList = (props: Props) => {
         </View>
         <View>
           <Text style={{lineHeight: 25}}>
-            {selectMeal[objKey]
-              ? setNutrientValue(selectMeal[objKey], nutrientObj.unit)
+            {objKey !== 'remarks'
+              ? selectMeal[objKey]
+                ? setNutrientValue(selectMeal[objKey], nutrientObj.unit)
+                : ''
               : ''}
           </Text>
         </View>
@@ -126,10 +128,10 @@ const NutrientsList = (props: Props) => {
   return (
     <ScrollView>
       <View style={{margin: 10}}>
-        {Object.keys(NUTRIENTS_LABEL).map((key: string, i) =>
-          generateItems(key, i, NUTRIENTS_LABEL),
+        {Object.keys(listRules).map((key: string, i) =>
+          generateItems(key, i, listRules),
         )}
-        <View style={{alignSelf: 'flex-end', marginBottom: 10}}>
+        <View style={{alignSelf: 'flex-end', marginVertical: 10}}>
           <Text>※データ元: 日本食品標準成分表2020年版（八訂）</Text>
         </View>
       </View>

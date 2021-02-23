@@ -31,32 +31,56 @@ const MealLsit = (props: Props) => {
   const [actionMeal, setActionMeal] = useRecoilState(actionMealState);
 
   const setPFC = () => {
+    const selectMeal = {...meal};
     const getObj = (
       array: (Protein | Fats | Carbohydrate | DietaryFiber | OrganicAcid)[],
     ) => array.filter((obj) => obj.indexNumber === meal.indexNumber)[0];
-    const protein = getObj(PROTEINS) as Protein;
-    const fat = getObj(FATS) as Fats;
-    const corbo = getObj(CARBOHYDRATES) as Carbohydrate;
-    const dietaryFiber = getObj(DIETARY_FIBER) as DietaryFiber;
-    const organicAcid = getObj(ORGANIC_ACID) as OrganicAcid;
+    const protein = {...(getObj(PROTEINS) as Protein)};
+    const fat = {...(getObj(FATS) as Fats)};
+    const corbo = {...(getObj(CARBOHYDRATES) as Carbohydrate)};
+    const dietaryFiber = {...(getObj(DIETARY_FIBER) as DietaryFiber)};
+    const organicAcid = {...(getObj(ORGANIC_ACID) as OrganicAcid)};
 
-    const cutRemark = (str: string) => str.replace(meal.remarks, '');
+    selectMeal.remarks = selectMeal.remarks
+      ? `【共通】\n${selectMeal.remarks}`
+      : '';
+    const infoText = [
+      '【たんぱく質】',
+      '【脂質】',
+      '【炭水化物】',
+      '【有機酸】',
+    ];
     [protein, fat, corbo, organicAcid]
-      .filter((obj) => obj && obj.remarks) // 対象データがない可能性がある
-      .map((obj) => cutRemark(obj.remarks))
+      .map((obj, i) =>
+        obj.remarks !== undefined
+          ? obj.remarks
+            ? `\n\n${infoText[i]}\n ${obj.remarks}`
+            : ''
+          : '',
+      )
       .forEach((str) => {
         if (str) {
-          meal.remarks = str;
+          selectMeal.remarks += str;
         }
       });
+    if (selectMeal.remarks.indexOf('推計') > 0) {
+      let remarks = `${selectMeal.remarks}`;
+      const num = remarks.replace(/[^0-9]/g, '');
+      if (num.length === 5) {
+        selectMeal.remarks = remarks.replace(num, '');
+      }
+    }
     [protein, fat, corbo, organicAcid].forEach((obj) => {
       obj && delete obj.remarks;
     });
-    // protein && delete protein.remarks;
-    // fat && delete fat.remarks;
-    // corbo && delete corbo.remarks;
-    // organicAcid && delete organicAcid.remarks;
-    return Object.assign(meal, protein, fat, corbo, dietaryFiber, organicAcid);
+    return Object.assign(
+      selectMeal,
+      protein,
+      fat,
+      corbo,
+      dietaryFiber,
+      organicAcid,
+    );
   };
 
   return (
