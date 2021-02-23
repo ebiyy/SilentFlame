@@ -1,88 +1,48 @@
 import React, {useState} from 'react';
-import {Alert, Modal, StyleSheet, Text, View} from 'react-native';
+import {Alert, StyleSheet, Text, View} from 'react-native';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import {screenThemeColor, shadowStyles, winHeight} from '../../global-style';
+import {
+  carbohydrateNutrientKeys,
+  fatNutrientKeys,
+  mineralNutrientKeys,
+  proteinNutrientKeys,
+  vitaminNutrientKeys,
+} from './constant';
+import Modal from 'react-native-modal';
 
 // プロテインはペプチドブレンドの詳細とかにもっと色々ある。。
 const NUREIENT = {
-  main: [
-    'タンパク質',
-    'アミノ酸',
-    '総脂質',
-    '総炭水化物',
-    '食物繊維',
-    // 'イヌリン',
-    '飽和脂肪',
-    '多価不飽和脂肪',
-    '一価不飽和脂肪',
-    '天然フィッシュオイル濃縮物',
-    'EPA',
-    'DHA',
-  ],
+  main: ['カロリー', 'タンパク質', '脂質', '炭水化物', '食物繊維'],
   protein: [
-    'BCAA',
-    'グルタミン酸',
-    'アラニン',
-    'アルギニン',
-    'アスパラギン酸',
-    'オルニチン',
-    'シスチン',
-    'グルタミン酸',
-    'グリシン',
-    'ヒスチジン',
-    'イソロイシン',
-    'ロイシン',
-    'リジン',
-    'メチオニン',
-    'フェニルアラニン',
-    'プロリン',
-    'セリン',
-    'トレオニン',
-    'トリプトファン',
-    'チロシン',
-    'バリン',
+    ...Object.keys(proteinNutrientKeys).map(
+      (key) => proteinNutrientKeys[key].label,
+    ),
+    'オルニチン', // not
   ],
+  // fat: Object.keys(fatNutrientKeys).map(key=>{name: fatNutrientKeys[key].label, key: key}),
+  fat: Object.keys(fatNutrientKeys).map((key) => fatNutrientKeys[key].label),
+  carbohydrate: Object.keys(carbohydrateNutrientKeys).map(
+    (key) => carbohydrateNutrientKeys[key].label,
+  ),
   vitamin: [
-    'ビタミンA',
-    'ビタミンD',
-    'ビタミンD3',
-    'ビタミンE',
-    'ビタミンK',
-    'ビタミンK2',
-    'ビタミンC',
-    'ビタミンB1',
-    'ビタミンB2',
-    'ビタミンB6',
-    'ビタミンB12',
-    'ナイアシン',
-    '葉酸',
-    'パントテン酸',
-    'ビオチン',
-    'コリン',
-    'ニアシン',
+    ...Object.keys(vitaminNutrientKeys).map(
+      (key) => vitaminNutrientKeys[key].label,
+    ),
+    // 'コリン',
     'イノシトール',
     'PABA',
   ],
-  mineral: [
-    'ナトリウム',
-    'カリウム',
-    'カルシウム',
-    'マグネシウム',
-    'リン',
-    '鉄',
-    '亜鉛',
-    '銅',
-    'マンガン',
-    'ヨウ素',
-    'セレン',
-    'クロム',
-    'モリブデン',
-  ],
+  mineral: Object.keys(mineralNutrientKeys).map(
+    (key) => mineralNutrientKeys[key].label,
+  ),
 };
 
 const TAB = [
   {dispName: '主な要素', key: 'main'},
   {dispName: 'たんぱく質', key: 'protein'},
+  {dispName: '脂質', key: 'fat'},
+  {dispName: '炭水化物', key: 'carbohydrate'},
   {dispName: 'ビタミン', key: 'vitamin'},
   {dispName: 'ミネラル', key: 'mineral'},
 ];
@@ -108,17 +68,20 @@ const NutrientNameModal = (props: Props) => {
       {modalVisible && (
         <View style={styles.container}>
           <Modal
-            animationType="fade"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => {
-              Alert.alert('Modal has been closed.');
-            }}>
+            animationIn="zoomIn"
+            animationOut="zoomOut"
+            // transparent={true}
+            isVisible={modalVisible}
+            onBackdropPress={() => setModalVisible(false)}
+            // onRequestClose={() => {
+            //   Alert.alert('Modal has been closed.');
+            // }}
+          >
             <View style={[styles.container]}>
               <View style={styles.modalContainer}>
                 <Text style={styles.modalTitleText}>栄養素を選択</Text>
                 <View>
-                  <View style={{flexDirection: 'row'}}>
+                  <View style={styles.modalHeader}>
                     {TAB.map((obj, i) => (
                       <TouchableOpacity key={i} onPress={() => setTab(obj.key)}>
                         <View style={styles.tabs}>
@@ -157,13 +120,16 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
-    ...shadowStyles(screenThemeColor.suppl).boxShadow,
-    backgroundColor: 'rgba(221, 221, 221, 0.8)',
+    borderRadius: 20,
+    marginHorizontal: 15,
+    marginVertical: 130,
+    // backgroundColor: 'rgba(221, 221, 221, 0.8)',
   },
   modalContainer: {
     overflow: 'hidden',
-    marginHorizontal: 15,
-    marginVertical: 130,
+    // marginHorizontal: 15,
+    // marginVertical: 130,
+    ...shadowStyles(screenThemeColor.suppl).boxShadow,
     backgroundColor: 'white',
     borderRadius: 20,
     paddingVertical: 20,
@@ -176,6 +142,11 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
     elevation: 5,
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginBottom: 18,
   },
   modalBody: {
     flexDirection: 'row',
@@ -216,7 +187,6 @@ const styles = StyleSheet.create({
     backgroundColor: screenThemeColor.suppl,
     borderColor: 'white',
     borderWidth: 1,
-    marginBottom: 18,
   },
   tabText: {
     color: 'black',

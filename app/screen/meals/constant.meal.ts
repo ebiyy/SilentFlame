@@ -1,140 +1,279 @@
+import {
+  carbohydrateNutrientKeys,
+  fatNutrientKeys,
+  NUTRIENT_KEY,
+  organicAcidNutrientKeys,
+  proteinNutrientKeys,
+} from '../supplement/constant';
+import {
+  generateLabels,
+  generateNutrientsLabel,
+  nutrientLabels,
+} from './function.meal';
+
 export const NUTRIENTS_LABEL = {
   foodName: {
     label: '食品名',
   },
-  REFUSE: {
-    label: '破棄率',
-    unit: '%',
-  },
-  // ENERC: {
-  //   label: 'エネルギー',
-  //   unit: 'kJ',
+  // generate
+  // REFUSE: {
+  //   label: NUTRIENT_KEY.REFUSE.label,
+  //   unit: NUTRIENT_KEY.REFUSE.unit,
   // },
-  ENERC_KCAL: {
-    label: 'エネルギー',
-    unit: 'kcal',
-  },
-  WATER: {
-    label: '水分',
-    unit: 'g',
-  },
+  ...generateLabels(['REFUSE', 'ENERC_KCAL', 'WATER']),
+  // ...nutrientLabels('ENERC'),
   PROT: {
-    label: 'たんぱく質',
-    unit: 'g',
+    ...nutrientLabels('PROT')['PROT'],
     detail: {
-      PROTCAA: {
-        label: 'アミノ酸組成によるたんぱく質',
-        unit: 'g',
+      ...nutrientLabels('PROTCAA'),
+      // option start
+      AAT: {
+        ...nutrientLabels('AAT')['AAT'],
+        detail: {
+          ...generateLabels(['ILE', 'LEU', 'LYS']),
+          AAS: {
+            ...nutrientLabels('AAS')['AAS'],
+            detail: {
+              ...generateLabels(['MET', 'CYS']),
+            },
+          },
+          AAA: {
+            ...nutrientLabels('AAA')['AAA'],
+            detail: {
+              ...generateLabels(['PHE', 'TYR']),
+            },
+          },
+          ...generateLabels([
+            'THR',
+            'TRP',
+            'VAL',
+            'HIS',
+            'ARG',
+            'ALA',
+            'ASP',
+            'GLU',
+            'GLY',
+            'PRO',
+            'SER',
+            'HYP',
+          ]),
+        },
       },
+      ...generateLabels(['AMMON', 'AMMONE']),
+      // option end
     },
   },
   FAT: {
-    label: '脂質',
-    unit: 'g',
+    label: NUTRIENT_KEY.FAT.label,
+    unit: NUTRIENT_KEY.FAT.unit,
     detail: {
       FATNLEA: {
-        label: '脂肪酸のトリアシルグリセロール当量',
-        unit: 'g',
+        label: NUTRIENT_KEY.FATNLEA.label,
+        unit: NUTRIENT_KEY.FATNLEA.unit,
       },
+      // option start
+      FACID: {
+        ...nutrientLabels('FACID')['FACID'],
+        detail: {
+          FASAT: {
+            ...nutrientLabels('FASAT')['FASAT'],
+            detail: {
+              ...generateLabels([
+                'F4D0',
+                'F6D0',
+                'F7D0',
+                'F8D0',
+                'F10D0',
+                'F12D0',
+                'F13D0',
+                'F14D0',
+                'F15D0',
+                'F15D0AI',
+                'F16D0',
+                'F16D0I',
+                'F17D0',
+                'F17D0AI',
+                'F18D0',
+                'F20D0',
+                'F22D0',
+                'F24D0',
+              ]),
+            },
+          },
+          FAMS: {
+            ...nutrientLabels('FAMS')['FAMS'],
+            detail: {
+              ...generateLabels(['F10D1', 'F14D1', 'F15D1', 'F16D1', 'F17D1']),
+              F18D1: {
+                ...nutrientLabels('F18D1')['F18D1'],
+                detail: {
+                  ...generateLabels(['F18D1CN9', 'F18D1CN7']),
+                },
+              },
+              ...generateLabels(['F20D1', 'F22D1', 'F24D1']),
+            },
+          },
+          FAPU: {
+            ...nutrientLabels('FAPU')['FAPU'],
+            detail: {
+              FAPUN3: {
+                ...nutrientLabels('FAPUN3')['FAPUN3'],
+                detail: {
+                  ...generateLabels([
+                    'F18D3N3',
+                    'F18D4N3',
+                    'F20D3N3',
+                    'F20D4N3',
+                    'F20D5N3',
+                    'F21D5N3',
+                    'F22D5N3',
+                    'F22D6N3',
+                  ]),
+                },
+              },
+              FAPUN6: {
+                ...nutrientLabels('FAPUN6')['FAPUN6'],
+                detail: {
+                  ...generateLabels([
+                    'F18D2N6',
+                    'F18D3N6',
+                    'F20D2N6',
+                    'F20D3N6',
+                    'F20D4N6',
+                    'F22D4N6',
+                    'F22D5N6',
+                  ]),
+                },
+              },
+              ...generateLabels(['F16D2', 'F16D3', 'F16D4', 'F22D2']),
+            },
+          },
+          ...nutrientLabels('FAUN'),
+        },
+      },
+      // option end
       CHOLE: {
-        label: 'コレステロール',
-        unit: 'mg',
+        label: NUTRIENT_KEY.CHOLE.label,
+        unit: NUTRIENT_KEY.CHOLE.unit,
       },
     },
   },
   CHOCDF: {
-    label: '炭水化物',
-    unit: 'g',
+    ...nutrientLabels('CHOCDF')['CHOCDF'],
     detail: {
-      CHOAV: {
-        label: '利用可能炭水化物（糖質）',
+      ...nutrientLabels('CHOAVLM'),
+      CHOAVL: {
+        ...nutrientLabels('CHOAVL')['CHOAVL'],
+        // option start
         detail: {
-          CHOAVLM: {
-            label: '利用可能炭水化物（単糖当量）',
-            unit: 'g',
+          ...generateLabels([
+            'STARCH',
+            'GLUS',
+            'FRUS',
+            'GALS',
+            'SUCS',
+            'MALS',
+            'LACS',
+            'TRES',
+          ]),
+        },
+        // option end
+      },
+      ...nutrientLabels('CHOAVLDF'),
+      FIB: {
+        ...nutrientLabels('FIB')['FIB'],
+        // option start
+        detail: {
+          FIBTG: {
+            ...nutrientLabels('FIBTG')['FIBTG'],
+            detail: {
+              ...generateLabels(['FIBSOL', 'FIBINS']),
+            },
           },
-          CHOAVL: {
-            label: '利用可能炭水化物（質量計）',
-            unit: 'g',
+          FIBTDF: {
+            ...nutrientLabels('FIBTDF')['FIBTDF'],
+            detail: {
+              ...generateLabels(['FIBSDFS', 'FIBSDFP', 'FIBIDF', 'STARES']),
+            },
           },
-          CHOAVLDF: {
-            label: '差引き法による利用可能炭水化物',
-            unit: 'g',
-          },
+          // option end
+          ...generateLabels(['SORTL', 'MANTL']),
         },
       },
-      FIB: {
-        label: '食物繊維総量',
-        unit: 'g',
-      },
       POLYL: {
-        label: '糖アルコール',
-        unit: 'g',
+        ...nutrientLabels('POLYL')['POLYL'],
+        detail: {
+          ...generateLabels(['SORTL', 'MANTL']),
+        },
       },
     },
   },
   OA: {
-    label: '有機酸',
-    unit: 'g',
+    ...nutrientLabels('OA')['OA'],
+    // option start
+    detail: {
+      ...generateLabels(Object.keys(organicAcidNutrientKeys)),
+    },
+    // option end
   },
   ASH: {
-    label: '灰分',
-    unit: 'g',
+    label: NUTRIENT_KEY.ASH.label,
+    unit: NUTRIENT_KEY.ASH.unit,
   },
   mineral: {
     label: 'ミネラル',
     detail: {
       NA: {
-        label: 'ナトリウム',
-        unit: 'mg',
+        label: NUTRIENT_KEY.NA.label,
+        unit: NUTRIENT_KEY.NA.unit,
       },
       K: {
-        label: 'カリウム',
-        unit: 'mg',
+        label: NUTRIENT_KEY.K.label,
+        unit: NUTRIENT_KEY.K.unit,
       },
       CA: {
-        label: 'カルシウム',
-        unit: 'mg',
+        label: NUTRIENT_KEY.CA.label,
+        unit: NUTRIENT_KEY.CA.unit,
       },
       MG: {
-        label: 'マグネシウム',
-        unit: 'mg',
+        label: NUTRIENT_KEY.MG.label,
+        unit: NUTRIENT_KEY.MG.unit,
       },
       P: {
-        label: 'リン',
-        unit: 'mg',
+        label: NUTRIENT_KEY.P.label,
+        unit: NUTRIENT_KEY.P.unit,
       },
       FE: {
-        label: '鉄分',
-        unit: 'mg',
+        label: NUTRIENT_KEY.FE.label,
+        unit: NUTRIENT_KEY.FE.unit,
       },
       ZN: {
-        label: '亜鉛',
-        unit: 'mg',
+        label: NUTRIENT_KEY.ZN.label,
+        unit: NUTRIENT_KEY.ZN.unit,
       },
       CU: {
-        label: '銅',
-        unit: 'mg',
+        label: NUTRIENT_KEY.CU.label,
+        unit: NUTRIENT_KEY.CU.unit,
       },
       MN: {
-        label: 'マンガン',
-        unit: 'mg',
+        label: NUTRIENT_KEY.MN.label,
+        unit: NUTRIENT_KEY.MN.unit,
       },
       ID: {
-        label: 'ヨウ素',
-        unit: 'μg',
+        label: NUTRIENT_KEY.ID.label,
+        unit: NUTRIENT_KEY.ID.unit,
       },
       SE: {
-        label: 'セレン',
-        unit: 'μg',
+        label: NUTRIENT_KEY.SE.label,
+        unit: NUTRIENT_KEY.SE.unit,
       },
       CR: {
-        label: 'クロム',
-        unit: 'μg',
+        label: NUTRIENT_KEY.CR.label,
+        unit: NUTRIENT_KEY.CR.unit,
       },
       MO: {
-        label: 'モリブデン',
-        unit: 'μg',
+        label: NUTRIENT_KEY.MO.label,
+        unit: NUTRIENT_KEY.MO.unit,
       },
     },
   },
@@ -145,114 +284,114 @@ export const NUTRIENTS_LABEL = {
         label: 'ビタミンA',
         detail: {
           RETOL: {
-            label: 'レチノール',
-            unit: 'μg',
+            label: NUTRIENT_KEY.RETOL.label,
+            unit: NUTRIENT_KEY.RETOL.unit,
           },
           CARTA: {
-            label: 'αカロテン',
-            unit: 'μg',
+            label: NUTRIENT_KEY.CARTA.label,
+            unit: NUTRIENT_KEY.CARTA.unit,
           },
           CARTB: {
-            label: 'βカロテン',
-            unit: 'μg',
+            label: NUTRIENT_KEY.CARTB.label,
+            unit: NUTRIENT_KEY.CARTB.unit,
           },
           CRYPXB: {
-            label: 'βクリプトキサンチン',
-            unit: 'μg',
+            label: NUTRIENT_KEY.CRYPXB.label,
+            unit: NUTRIENT_KEY.CRYPXB.unit,
           },
           CARTBEQ: {
-            label: 'βカロテン当量',
-            unit: 'μg',
+            label: NUTRIENT_KEY.CARTBEQ.label,
+            unit: NUTRIENT_KEY.CARTBEQ.unit,
           },
           VITA_RAE: {
-            label: 'レチノール活性当量',
-            unit: 'μg',
+            label: NUTRIENT_KEY.VITA_RAE.label,
+            unit: NUTRIENT_KEY.VITA_RAE.unit,
           },
         },
       },
       VITD: {
-        label: 'ビタミンD',
-        unit: 'μg',
+        label: NUTRIENT_KEY.VITD.label,
+        unit: NUTRIENT_KEY.VITD.unit,
       },
       VITE: {
         label: 'ビタミンE',
         detail: {
           TOCPHA: {
-            label: 'αトコフェロール',
-            unit: 'mg',
+            label: NUTRIENT_KEY.TOCPHA.label,
+            unit: NUTRIENT_KEY.TOCPHA.unit,
           },
           TOCPHB: {
-            label: 'βトコフェロール',
-            unit: 'mg',
+            label: NUTRIENT_KEY.TOCPHB.label,
+            unit: NUTRIENT_KEY.TOCPHB.unit,
           },
           TOCPHG: {
-            label: 'γトコフェロール',
-            unit: 'mg',
+            label: NUTRIENT_KEY.TOCPHG.label,
+            unit: NUTRIENT_KEY.TOCPHG.unit,
           },
           TOCPHD: {
-            label: 'δトコフェロール',
-            unit: 'mg',
+            label: NUTRIENT_KEY.TOCPHD.label,
+            unit: NUTRIENT_KEY.TOCPHD.unit,
           },
         },
       },
       VITK: {
-        label: 'ビタミンK',
-        unit: 'μg',
+        label: NUTRIENT_KEY.VITK.label,
+        unit: NUTRIENT_KEY.VITK.unit,
       },
       VITB: {
         label: 'ビタミンB群',
         detail: {
           THIA: {
-            label: 'ビタミンB1',
-            unit: 'mg',
+            label: NUTRIENT_KEY.THIA.label,
+            unit: NUTRIENT_KEY.THIA.unit,
           },
           RIBF: {
-            label: 'ビタミンB2',
-            unit: 'mg',
+            label: NUTRIENT_KEY.RIBF.label,
+            unit: NUTRIENT_KEY.RIBF.unit,
           },
           NIA: {
-            label: 'ナイアシン',
-            unit: 'mg',
+            label: NUTRIENT_KEY.NIA.label,
+            unit: NUTRIENT_KEY.NIA.unit,
           },
           NE: {
-            label: 'ナイアシン当量',
-            unit: 'mg',
+            label: NUTRIENT_KEY.NE.label,
+            unit: NUTRIENT_KEY.NE.unit,
           },
           VITB6A: {
-            label: 'ビタミンB6',
-            unit: 'mg',
+            label: NUTRIENT_KEY.VITB6A.label,
+            unit: NUTRIENT_KEY.VITB6A.unit,
           },
           VITB12: {
-            label: 'ビタミンB12',
-            unit: 'μg',
+            label: NUTRIENT_KEY.VITB12.label,
+            unit: NUTRIENT_KEY.VITB12.unit,
           },
           FOL: {
-            label: '葉酸',
-            unit: 'μg',
+            label: NUTRIENT_KEY.FOL.label,
+            unit: NUTRIENT_KEY.FOL.unit,
           },
           PANTAC: {
-            label: 'パントテン酸',
-            unit: 'mg',
+            label: NUTRIENT_KEY.PANTAC.label,
+            unit: NUTRIENT_KEY.PANTAC.unit,
           },
           BIOT: {
-            label: 'ビオチン',
-            unit: 'μg',
+            label: NUTRIENT_KEY.BIOT.label,
+            unit: NUTRIENT_KEY.BIOT.unit,
           },
         },
       },
       VITC: {
-        label: 'ビタミンC',
-        unit: 'mg',
+        label: NUTRIENT_KEY.VITC.label,
+        unit: NUTRIENT_KEY.VITC.unit,
       },
     },
   },
   ALC: {
-    label: 'アルコール',
-    unit: 'g',
+    label: NUTRIENT_KEY.ALC.label,
+    unit: NUTRIENT_KEY.ALC.unit,
   },
   NACL_EQ: {
-    label: '食塩相当量',
-    unit: 'g',
+    label: NUTRIENT_KEY.NACL_EQ.label,
+    unit: NUTRIENT_KEY.NACL_EQ.unit,
   },
   remarks: {
     label: '備考',

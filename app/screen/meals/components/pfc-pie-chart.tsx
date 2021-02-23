@@ -23,9 +23,13 @@ import {
 } from '../recoil.meal';
 
 const sumMeal = (meals: Meal[]) => {
-  const nurientKeys = Object.keys(meals[0]).filter(
+  // 特定の栄養素群を持っていないobjectが存在するため要素の大きいものを確認
+  const countEntries = meals.map((meal) => Object.keys(meal).length);
+  const biggestEnries = countEntries.indexOf(Math.max.apply(0, countEntries));
+  const nurientKeys = Object.keys(meals[biggestEnries]).filter(
     (key) => !excludeKeyGroup.includes(key),
   );
+  console.log('sumMeal', nurientKeys);
   let sumMeal = {};
   nurientKeys.forEach((key) => {
     sumMeal[key] = meals.map((meal) => meal[key]).reduce(mealsReducer);
@@ -35,15 +39,21 @@ const sumMeal = (meals: Meal[]) => {
   return sumMeal;
 };
 
-const isparenthesis = (str: string) =>
-  str.indexOf('(') > -1 ? str.replace('(', '').replace(')', '') : str;
+const isparenthesis = (str: string | number) => {
+  const temp = String(str);
+  return temp.indexOf('(') > -1
+    ? temp.replace('(', '').replace(')', '')
+    : String(temp);
+};
+
+const invalidValues = ['-', 'Tr', '(Tr)', undefined];
 
 const mealsReducer = (acc: string, cur: string) => {
-  if (['-', 'Tr'].includes(acc) && !['-', 'Tr'].includes(cur)) {
+  if (invalidValues.includes(acc) && !invalidValues.includes(cur)) {
     return isparenthesis(cur);
-  } else if (!['-', 'Tr'].includes(acc) && ['-', 'Tr'].includes(cur)) {
+  } else if (!invalidValues.includes(acc) && invalidValues.includes(cur)) {
     return isparenthesis(acc);
-  } else if (['-', 'Tr'].includes(acc) && ['-', 'Tr'].includes(cur)) {
+  } else if (invalidValues.includes(acc) && invalidValues.includes(cur)) {
     return '0';
   } else {
     return String(Number(isparenthesis(cur)) + Number(isparenthesis(acc)));

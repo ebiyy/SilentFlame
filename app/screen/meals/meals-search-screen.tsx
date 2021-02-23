@@ -49,14 +49,30 @@ const generateHitObj = (inputText: string) => {
     .filter((str) => str !== space.none && str !== space.halfidth);
   // ex. "卵 鶏卵　い" -> ["卵", "鶏卵", "い"]
   // think: 一括処理できそう
+  console.log('searchTextArr', searchTextArr);
   if (searchTextArr.length > 1) {
     searchTextArr.forEach((text, i) => {
       if (i === 0) {
         hitArr = fullSerach(text);
+        console.log(
+          'i===0::hitArr',
+          hitArr.map((v) => v.foodName),
+          text,
+        );
       } else {
         hitArr = hitArr.filter((obj) => obj.foodName.includes(text));
+        console.log(
+          'i===0::hitArr',
+          hitArr.map((v) => v.foodName),
+          text,
+        );
       }
     });
+    console.log(
+      'hitArr::return',
+      hitArr.map((v) => v.foodName),
+    );
+    return hitArr;
   } else {
     hitArr = fullSerach(searchTextArr[0]);
   }
@@ -89,6 +105,14 @@ const MealsSearchScreen = ({route}) => {
   );
 
   useEffect(() => {
+    console.log(
+      'serachResult',
+      serachResult.map((v) => v.foodName),
+      serachResult.length,
+    );
+  }, [serachResult]);
+
+  useEffect(() => {
     navigation.setOptions({
       title: '食事を登録',
     });
@@ -109,7 +133,7 @@ const MealsSearchScreen = ({route}) => {
   );
 
   const renderItem = ({item}) => {
-    const isLast = serachResult.indexOf(item) + 1 === serachResult.length - 1;
+    const isLast = serachResult.indexOf(item) + 1 === serachResult.length;
     if (item) {
       return <Item meal={item} isLast={isLast} />;
     }
@@ -120,12 +144,9 @@ const MealsSearchScreen = ({route}) => {
     <View>
       <VirtualizedList
         data={[]}
-        initialNumToRender={4}
         renderItem={renderItem}
         keyExtractor={(item, i) => String(i)}
-        getItemCount={() =>
-          serachResult.length > 0 ? serachResult.length - 1 : 0
-        }
+        getItemCount={() => (serachResult.length > 0 ? serachResult.length : 0)}
         getItem={(date, i) => serachResult[i]}
         ListEmptyComponent={
           inputText ? (

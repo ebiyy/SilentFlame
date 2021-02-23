@@ -57,7 +57,7 @@ const RegistrationMealCard = (props: Props) => {
       const isEstimatedValue =
         String(CHOAVL).indexOf('(') > -1 ||
         String(tempMeal.CHOCDF).indexOf('(') > -1;
-      const sub = toNum(tempMeal.CHOCDF) - toNum(CHOAVL);
+      const sub = toNum(String(tempMeal.CHOCDF)) - toNum(String(CHOAVL));
       const CHOCDFValue = sub > 0 ? sub.toFixed(1) : 0;
       if (isEstimatedValue) {
         return `(${CHOCDFValue})`;
@@ -152,7 +152,7 @@ const RegistrationMealCard = (props: Props) => {
               </Text>
               <Text style={Styles.nutrientLable}>
                 {CHOAVL}{' '}
-                {NUTRIENTS_LABEL.CHOCDF.detail.CHOAV.detail.CHOAVLDF.unit}
+                {NUTRIENTS_LABEL.CHOCDF.detail.CHOAVLM.unit}
               </Text>
             </View>
           </View>

@@ -1,3 +1,5 @@
+import {NUTRIENT_KEY} from '../supplement/constant';
+
 export const nutrientRecalculation = (
   nutrientValue: string,
   intake: string,
@@ -51,19 +53,28 @@ export const nutrientRecalculation = (
 };
 
 export const replaceFoodName = (name: string) => {
+  console.log('replaceFoodName', name);
   const replaceStr = (str: string, str1: string, str2: string) => {
-    return str.substring(
-      str.indexOf(str1),
-      str.indexOf(str2) > 0 ? str.indexOf(str2) + str2.length + 1 : -1,
-    );
+    const i1 = str.indexOf(str1);
+    const i2 = str.indexOf(str2);
+    if (i1 >= 0 && i2 > 0) {
+      return str.substring(i1, i2 + str2.length + 1);
+    } else {
+      return '';
+    }
   };
   // console.log(name, name.toString()); // =>  <牛乳及び乳製品> (チーズ ) ナチュラルチーズ エダム
   // console.log('name.indexOf(str2)', name.indexOf('類)')); // => 14
   // console.log('name.indexOf(str2)', name.indexOf('類)')); // => -1
   const replaceName = name
     .replace(replaceStr(name, '<', '>'), '')
-    .replace(replaceStr(name, '[', ']'), '')
-    .replace(replaceStr(name, '(', '類)'), '');
+    .replace(replaceStr(name, '[', '類]'), '') // ex. <畜肉類> ぶた [ひき肉] 焼き
+    .replace(replaceStr(name, '(', '類)'), '')
+    .replace('[その他]', '')
+    .replace('(その他)', '')
+    .replace('<その他>', '')
+    .replace(' その他 ', ' ');
+  console.log('replaceFoodName', replaceName);
   return replaceName;
 };
 
@@ -119,3 +130,39 @@ export const useFirestoreCollection = (
     boolean,
     Error | undefined,
   ];
+
+export const generateNutrientsLabel = (object: Object) => {
+  return Object.keys(object)
+    .map((key) => {
+      return {
+        [key]: {
+          label: NUTRIENT_KEY[key].label,
+          unit: NUTRIENT_KEY[key].unit,
+        },
+      };
+    })
+    .reduce((result, item) => {
+      const key = Object.keys(item)[0];
+      result[key] = item[key];
+      return result;
+    }, {});
+};
+
+export const nutrientLabels = (key: string) => {
+  return {
+    [key]: {
+      label: NUTRIENT_KEY[key].label,
+      unit: NUTRIENT_KEY[key].unit,
+    },
+  };
+};
+
+export const generateLabels = (arr: string[]) => {
+  return arr
+    .map((key) => nutrientLabels(key))
+    .reduce((result, item) => {
+      const key = Object.keys(item)[0];
+      result[key] = item[key];
+      return result;
+    }, {});
+};

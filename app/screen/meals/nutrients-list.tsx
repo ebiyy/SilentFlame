@@ -1,7 +1,11 @@
 import React, {Fragment, useState} from 'react';
 import {LogBox, StyleSheet, Text, View} from 'react-native';
 import Collapsible from 'react-native-collapsible';
-import {ScrollView, TouchableHighlight} from 'react-native-gesture-handler';
+import {
+  ScrollView,
+  TouchableHighlight,
+  TouchableOpacity,
+} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import {NUTRIENTS_LABEL} from './constant.meal';
 import {nutrientRecalculation} from './function.meal';
@@ -20,6 +24,7 @@ const NutrientsList = (props: Props) => {
   const [isCollapsed, setIsCollapsed] = useState({});
 
   const setNutrientValue = (value: string, unit: string) => {
+    if (value === undefined) return '-';
     if (value === '-' || value === 'Tr') {
       return value;
     }
@@ -63,8 +68,8 @@ const NutrientsList = (props: Props) => {
   };
 
   const generateCategory = (nutrientObj: object, objKey: string) => (
-    <TouchableHighlight
-      underlayColor="#CBEDCB"
+    <TouchableOpacity
+      // underlayColor="#CBEDCB"
       onPress={() =>
         setIsCollapsed({
           ...isCollapsed,
@@ -75,7 +80,7 @@ const NutrientsList = (props: Props) => {
         <View style={styles.labelItemView}>
           <Text>
             <View style={{maxHeight: 18, height: 18}}>
-              {isCollapsed[objKey] ? (
+              {!isCollapsed[objKey] ? (
                 <Icon name="arrow-right" size={25} />
               ) : (
                 <Icon name="arrow-drop-down" size={25} />
@@ -86,11 +91,13 @@ const NutrientsList = (props: Props) => {
         </View>
         <View>
           <Text style={{lineHeight: 25}}>
-            {setNutrientValue(selectMeal[objKey], nutrientObj.unit)}
+            {selectMeal[objKey]
+              ? setNutrientValue(selectMeal[objKey], nutrientObj.unit)
+              : ''}
           </Text>
         </View>
       </View>
-    </TouchableHighlight>
+    </TouchableOpacity>
   );
 
   const generateItems = (key: string, i: number, mapObj: {}) => {
@@ -98,7 +105,7 @@ const NutrientsList = (props: Props) => {
       return (
         <Fragment key={i}>
           {generateCategory(mapObj[key], key)}
-          <Collapsible collapsed={!!isCollapsed[key]}>
+          <Collapsible collapsed={!isCollapsed[key]}>
             <View style={styles.categoryList}>
               {Object.keys(mapObj[key].detail).map((detailKey: string, ii) =>
                 generateItems(detailKey, ii, mapObj[key].detail),

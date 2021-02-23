@@ -9,6 +9,11 @@ import {
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {useRecoilState, useRecoilValue} from 'recoil';
 import {winWidth} from '../../global-style';
+import {CARBOHYDRATES} from '../../helpers/csvtojson/carbohydrate';
+import {DIETARY_FIBER} from '../../helpers/csvtojson/dietary-fiber';
+import {FATS} from '../../helpers/csvtojson/fat';
+import {ORGANIC_ACID} from '../../helpers/csvtojson/organic-acid';
+import {PROTEINS} from '../../helpers/csvtojson/protein';
 import {userIdState} from '../../recoil/user';
 import {generateMeal, replaceFoodName} from './function.meal';
 import {actionMealState} from './recoil.meal';
@@ -25,6 +30,35 @@ const MealLsit = (props: Props) => {
   const userId = useRecoilValue(userIdState);
   const [actionMeal, setActionMeal] = useRecoilState(actionMealState);
 
+  const setPFC = () => {
+    const getObj = (
+      array: (Protein | Fats | Carbohydrate | DietaryFiber | OrganicAcid)[],
+    ) => array.filter((obj) => obj.indexNumber === meal.indexNumber)[0];
+    const protein = getObj(PROTEINS) as Protein;
+    const fat = getObj(FATS) as Fats;
+    const corbo = getObj(CARBOHYDRATES) as Carbohydrate;
+    const dietaryFiber = getObj(DIETARY_FIBER) as DietaryFiber;
+    const organicAcid = getObj(ORGANIC_ACID) as OrganicAcid;
+
+    const cutRemark = (str: string) => str.replace(meal.remarks, '');
+    [protein, fat, corbo, organicAcid]
+      .filter((obj) => obj && obj.remarks) // 対象データがない可能性がある
+      .map((obj) => cutRemark(obj.remarks))
+      .forEach((str) => {
+        if (str) {
+          meal.remarks = str;
+        }
+      });
+    [protein, fat, corbo, organicAcid].forEach((obj) => {
+      obj && delete obj.remarks;
+    });
+    // protein && delete protein.remarks;
+    // fat && delete fat.remarks;
+    // corbo && delete corbo.remarks;
+    // organicAcid && delete organicAcid.remarks;
+    return Object.assign(meal, protein, fat, corbo, dietaryFiber, organicAcid);
+  };
+
   return (
     <View style={[styles.container, {borderBottomWidth: isLast ? 1 : 0}]}>
       <TouchableHighlight
@@ -32,7 +66,7 @@ const MealLsit = (props: Props) => {
         activeOpacity={0.6}
         onPress={() => {
           navigation.navigate('NutrientsScreen', {
-            selectMeal: generateMeal(meal, 100, timePeriod, userId),
+            selectMeal: generateMeal(setPFC(), 100, timePeriod, userId),
             parentScreen: 'MealsSearchScreen',
             timePeriod: timePeriod,
           });
@@ -52,7 +86,7 @@ const MealLsit = (props: Props) => {
         <TouchableOpacity
           onPress={() => {
             setActionMeal({
-              item: generateMeal(meal, 100, timePeriod, userId),
+              item: generateMeal(setPFC(), 100, timePeriod, userId),
               action: 'add',
             });
             navigation.goBack();
