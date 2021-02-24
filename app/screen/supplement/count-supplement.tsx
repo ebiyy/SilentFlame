@@ -1,5 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Text,
   View,
@@ -15,6 +15,8 @@ import DeleteConfirmationModal from '../../components/delete-confirmation-modal'
 import {imageResState, supplisState} from './suppli.hook';
 import {Suppli} from './suppli';
 import InputValueModal from './components/input-value-modal';
+import storage from '../../helpers/custom-async-storage';
+import {NUTRIENT_KEY} from './constant';
 
 type Props = {
   suppli: Suppli;
@@ -30,6 +32,44 @@ const CountSupplement = (props: Props) => {
   const [deleteModal, setDeleteModal] = useState(false);
   const [inputModal, setInputModal] = useState(false);
   const [imageRes, setImageRes] = useRecoilState(imageResState);
+
+  useEffect(() => {
+    console.log(suppli.nutrients);
+    const sum = suppli.nutrients.map((o) => {
+      return {
+        sum: o.amountPerServingValue * count,
+        nutrientName: o.nutrientName,
+        amountPerServingUnit: o.amountPerServingUnit,
+        nutrientKey: o.nutrientKey,
+      };
+    });
+    let t = {};
+    sum.forEach((s) => {
+      const defaultUnit = NUTRIENT_KEY[s.nutrientKey].unit;
+      const suppliUnit = s.amountPerServingUnit;
+      if (
+        defaultUnit === suppliUnit ||
+        (['mcg', 'μg'].includes(defaultUnit) &&
+          ['mcg', 'μg'].includes(defaultUnit))
+      ) {
+        t[s.nutrientKey] = s.sum;
+      } else if (['mcg', 'μg'].includes(defaultUnit) && suppliUnit === 'mg') {
+        t[s.nutrientKey] = s.sum / (10 ^ 6);
+      } else if (['mcg', 'μg'].includes(defaultUnit) && suppliUnit === 'g') {
+        t[s.nutrientKey] = s.sum / (10 ^ 9);
+      } else if (defaultUnit === 'g' && ['mcg', 'μg'].includes(suppliUnit)) {
+        t[s.nutrientKey] = s.sum * (10 ^ 9);
+      } else if (defaultUnit === 'mg' && ['mcg', 'μg'].includes(suppliUnit)) {
+        t[s.nutrientKey] = s.sum * (10 ^ 6);
+      }
+    });
+    console.log('t', t);
+    console.log(count);
+    // storage.save({
+    //   key: 'suppliCount',
+    //   data: supplis,
+    // });
+  }, [count]);
 
   return (
     <>

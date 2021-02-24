@@ -1,5 +1,6 @@
 import {ImagePickerResponse} from 'react-native-image-picker';
-import {atom} from 'recoil';
+import {atom, selector} from 'recoil';
+import storage from '../../helpers/custom-async-storage';
 import {
   MOCK_BASE_INFO,
   MOCK_BASE_INFO2,
@@ -36,7 +37,7 @@ const MOCK = [
 
 export const supplisState = atom<Suppli[]>({
   key: 'supplsState',
-  default: MOCK,
+  default: [],
 });
 
 export const isScrollState = atom<boolean>({
@@ -47,4 +48,20 @@ export const isScrollState = atom<boolean>({
 export const imageResState = atom<ImagePickerResponse | {}>({
   key: 'imageResState',
   default: {},
+});
+
+export const isSupplisStorageState = selector({
+  key: 'isSupplisStorageState',
+  get: ({get}) => {
+    const supplis = get(supplisState);
+    if (supplis.length > 0) {
+      console.log('Run isSupplisStorageState');
+      storage.save({
+        key: 'mySuppli',
+        data: supplis,
+      });
+      return true;
+    }
+    return false;
+  },
 });

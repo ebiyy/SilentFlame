@@ -19,6 +19,7 @@ import {imageResState, isScrollState, supplisState} from './suppli.hook';
 import {Suppli, SuppliBaseInfo, SuppliNutrient} from './suppli';
 import {userIdState} from '../../recoil/user';
 import PickerController from '../../components/picker-controller';
+import {NUTRIENT_KEY} from './constant';
 
 type Params = {
   mode: 'add' | 'view';
@@ -39,8 +40,9 @@ const SupplFormScreen = ({navigation, route}) => {
     console.log('SupplementForm', formValus, errors);
     if (Object.entries(errors).length === 0) {
       const nutrients: SuppliNutrient[] = [];
+      // 栄養素のformNameを`${index}amountPerServingUnit`
+      // に設定しているので、indexを元に配列化
       Object.keys(formValus).forEach((key) => {
-        // ex. `${index}amountPerServingUnit`
         const firstNum = Number(key.slice(0, 1));
         if (!isNaN(firstNum)) {
           const addObj = {
@@ -51,10 +53,18 @@ const SupplFormScreen = ({navigation, route}) => {
             : addObj;
           delete formValus[key];
         } else if (
+          // 文字列で持っている数値を数値化
           ['priceValue', 'contentSizeValue', 'servingSize'].includes(key)
         ) {
           formValus[key] = Number(formValus[key]);
         }
+      });
+      nutrients.map((nutrient) => {
+        Object.entries(NUTRIENT_KEY).forEach(([key, value]) => {
+          if (value.label === nutrient.nutrientName) {
+            nutrient['nutrientKey'] = key;
+          }
+        });
       });
       formValus['nutrients'] = nutrients;
       formValus['updateAt'] = new Date();
@@ -62,8 +72,9 @@ const SupplFormScreen = ({navigation, route}) => {
         {...formValus},
         {imageRes: imageRes},
       );
+      // edit modeのみ
       if (suppli) {
-        const updateSuppli = Object.assign(suppli, margeFormValus);
+        const updateSuppli = Object.assign({...suppli}, margeFormValus);
         console.log('SupplFormScreen::updateSuppli', updateSuppli);
         setSupplis((preState) =>
           preState.map((obj) => (obj.id === suppli.id ? updateSuppli : obj)),

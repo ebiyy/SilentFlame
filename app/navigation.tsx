@@ -30,6 +30,7 @@ import NutrientsScreen from './screen/meals/nutrients-screen';
 import NutrientForm from './screen/supplement/nutrient-from';
 import SupplFormScreen from './screen/supplement/suppl-form-screen';
 import MealsSearchScreen from './screen/meals/meals-search-screen';
+import SuppliArchiveScreen from './screen/supplement/suppli-archive-screen';
 
 // const getHeaderTitle = (route: Route<string, object | undefined>) => {
 //   // If the focused route is not found, we need to assume it's the initial screen
@@ -220,6 +221,10 @@ const NavigationScreen = () => {
         <Stack.Screen name="MealsSearchScreen" component={MealsSearchScreen} />
         <Stack.Screen name="CustomCalendar" component={CustomCalendar} />
         <Stack.Screen name="NutrientForm" component={NutrientForm} />
+        <Stack.Screen
+          name="SuppliArchiveScreen"
+          component={SuppliArchiveScreen}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

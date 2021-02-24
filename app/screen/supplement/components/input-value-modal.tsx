@@ -42,7 +42,7 @@ const InputValueModal = (props: Props) => {
                       setInputText(v);
                     }}
                     value={inputText}
-                    placeholder="食品名"
+                    placeholder="数値を入力"
                     placeholderTextColor="lightgray"
                     clearButtonMode="always"
                     keyboardType="numeric"

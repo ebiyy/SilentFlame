@@ -1,18 +1,60 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import CountSupplement from './count-supplement';
 import {ComStyles} from '../../global-style';
-import {ScrollView} from 'react-native-gesture-handler';
-import {useRecoilValue} from 'recoil';
-import {supplisState} from './suppli.hook';
+import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
+import {useRecoilState, useRecoilValue} from 'recoil';
+import {isSupplisStorageState, supplisState} from './suppli.hook';
 import FadeInView from '../../components/fade-in-view';
 import RecycleBtn from './components/recycle-btn';
 import ItemActions from './components/item-actions';
+import storage from '../../helpers/custom-async-storage';
+import {useNavigation} from '@react-navigation/native';
 
 const SupplementScreen = () => {
+  const navigation = useNavigation();
   const [switchCount, setSwitchCount] = useState(true);
   const [isDelete, setIsDelete] = useState(false);
-  const supplis = useRecoilValue(supplisState);
+  const [supplis, setSupplis] = useRecoilState(supplisState);
+  const supplisStorage = useRecoilValue(isSupplisStorageState);
+
+  useEffect(() => {
+    // storage.save({
+    //   key: 'mySuppli',
+    //   data: supplis,
+    //   expires: 1000 * 3600,
+    // });
+    console.log('supplisStorage', supplisStorage);
+    storage
+      .load({
+        key: 'mySuppli',
+        autoSync: true,
+        syncInBackground: true,
+        syncParams: {
+          extraFetchOptions: {},
+          someFlag: true,
+        },
+      })
+      .then((res) => {
+        console.log(
+          'get supplis data',
+          res.map((o) => o.suppliName),
+        );
+        setSupplis(res);
+      })
+      .catch((err) => {
+        switch (err.name) {
+          case 'NotFoundError':
+            // TODO;
+            break;
+          case 'ExpiredError':
+            storage.remove({
+              key: 'mySuppli',
+            });
+            break;
+        }
+      });
+  }, []);
 
   return (
     <ScrollView>
@@ -37,9 +79,14 @@ const SupplementScreen = () => {
               />
             ))}
         </FadeInView>
-        <View style={Styles.recycleBtnContainer}>
-          <RecycleBtn />
-        </View>
+        {supplis.filter((suppli) => suppli.delete).length > 0 && !isDelete && (
+          <TouchableOpacity
+            onPress={() => navigation.navigate('SuppliArchiveScreen')}>
+            <View style={Styles.recycleBtnContainer}>
+              <RecycleBtn />
+            </View>
+          </TouchableOpacity>
+        )}
       </View>
     </ScrollView>
   );

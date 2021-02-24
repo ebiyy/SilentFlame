@@ -4,6 +4,7 @@ import NutrientForm from './nutrient-from';
 import {screenThemeColor, shadowStyles, winWidth} from '../../global-style';
 import {Control, DeepMap, FieldError} from 'react-hook-form';
 import {SuppliNutrient} from './suppli';
+import {Text} from 'react-native-svg';
 
 type Props = {
   control: Control<Record<string, any>>;
@@ -16,6 +17,35 @@ const NutrientFormController = (props: Props) => {
   const {control, errors, editable, suppliNutrients} = props;
   const [nutrientArrLen, setNutrientArrLen] = useState(
     suppliNutrients ? suppliNutrients.length : 1,
+  );
+
+  const isDeleteBtn = () => {
+    console.log('suppliNutrients', suppliNutrients);
+    if (suppliNutrients) {
+      if (suppliNutrients.length < nutrientArrLen) {
+        return true;
+      }
+    } else {
+      if (nutrientArrLen > 1) {
+        return true;
+      }
+    }
+    return false;
+  };
+
+  type Props = {
+    title: string;
+    action: () => void;
+  };
+
+  const Btn = ({title, action}: Props) => (
+    <View
+      style={[
+        shadowStyles(screenThemeColor.suppl).boxShadow,
+        styles.buttonContainer,
+      ]}>
+      <Button color="black" title={title} onPress={action} />
+    </View>
   );
 
   return (
@@ -33,14 +63,20 @@ const NutrientFormController = (props: Props) => {
       {editable && (
         <View
           style={[
-            shadowStyles(screenThemeColor.suppl).boxShadow,
-            styles.buttonContainer,
+            isDeleteBtn()
+              ? {flexDirection: 'row', justifyContent: 'center'}
+              : {},
           ]}>
-          <Button
-            color="black"
+          <Btn
             title="栄養素を追加"
-            onPress={() => setNutrientArrLen((preState) => ++preState)}
+            action={() => setNutrientArrLen((preState) => ++preState)}
           />
+          {isDeleteBtn() && (
+            <Btn
+              title="栄養素を削除"
+              action={() => setNutrientArrLen((preState) => --preState)}
+            />
+          )}
         </View>
       )}
     </>
@@ -49,15 +85,15 @@ const NutrientFormController = (props: Props) => {
 
 const styles = StyleSheet.create({
   buttonContainer: {
-    height: 75,
+    height: 65,
     margin: 3,
     marginBottom: 20,
     padding: 10,
     alignItems: 'center',
     justifyContent: 'center',
-    alignSelf: 'center',
     borderRadius: 10,
-    width: winWidth / 2,
+    width: winWidth / 2.5,
+    alignSelf: 'center',
   },
 });
 

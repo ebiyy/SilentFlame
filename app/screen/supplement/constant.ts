@@ -11,6 +11,7 @@ export const CONTENT_SIZE_UNIT: {[x: string]: ContentSizeUnit} = {
   mg: 'mg',
   g: 'g',
   μg: 'μg',
+  kcal: 'kcal',
 };
 
 export const MOCK_BASE_INFO = {

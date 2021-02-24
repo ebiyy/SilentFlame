@@ -2,7 +2,7 @@ import {ImagePickerResponse} from 'react-native-image-picker';
 
 type PriceUnit = '¥' | '$';
 
-type ContentSizeUnit = '個' | 'mcg' | 'mg' | 'g' | 'μg';
+type ContentSizeUnit = '個' | 'mcg' | 'mg' | 'g' | 'μg' | 'kcal';
 
 interface Suppli extends SuppliBaseInfo, SuppliNutrients {
   delete?: boolean;
@@ -32,5 +32,6 @@ interface SuppliNutrient {
   nutrientName: string;
   amountPerServingValue: number;
   amountPerServingUnit: string;
-  perDailyValue: number | undefined;
+  perDailyValue?: number | undefined;
+  nutrientKey: string;
 }
