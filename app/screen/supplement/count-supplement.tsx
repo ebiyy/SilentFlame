@@ -12,63 +12,93 @@ import Fontisto from 'react-native-vector-icons/Fontisto';
 import {useRecoilState} from 'recoil';
 import {ComStyles, screenThemeColor, shadowStyles} from '../../global-style';
 import DeleteConfirmationModal from '../../components/delete-confirmation-modal';
-import {imageResState, supplisState} from './suppli.hook';
+import {imageResState, supplisState, suppliToMealState} from './suppli.hook';
 import {Suppli} from './suppli';
 import InputValueModal from './components/input-value-modal';
+import {CONTENT_SIZE_UNIT, NUTRIENT_KEY} from './constant';
 import storage from '../../helpers/custom-async-storage';
-import {NUTRIENT_KEY} from './constant';
 
 type Props = {
   suppli: Suppli;
   switchCount: boolean;
   isDelete: boolean;
+  holdCount: Object;
+  setHoldCount: React.Dispatch<React.SetStateAction<Object>>;
 };
 
 const CountSupplement = (props: Props) => {
-  const {suppli, switchCount, isDelete} = props;
+  const {suppli, switchCount, isDelete, holdCount, setHoldCount} = props;
   const [count, setCount] = useState(0);
   const navigation = useNavigation();
   const [supplis, setSuppls] = useRecoilState(supplisState);
   const [deleteModal, setDeleteModal] = useState(false);
   const [inputModal, setInputModal] = useState(false);
   const [imageRes, setImageRes] = useRecoilState(imageResState);
+  const [suppliToMeal, setSuppliToMeal] = useRecoilState(suppliToMealState);
 
   useEffect(() => {
-    console.log(suppli.nutrients);
-    const sum = suppli.nutrients.map((o) => {
+    console.log('CountSupplement::holdCount', holdCount);
+    if (holdCount[suppli.id] >= 0 && count === 0) {
+      setCount(holdCount[suppli.id]);
+    }
+  }, [holdCount]);
+
+  useEffect(() => {
+    const countSumNutrients = suppli.nutrients.map((nutrient) => {
+      const numAPSV = Number(nutrient.amountPerServingValue);
       return {
-        sum: o.amountPerServingValue * count,
-        nutrientName: o.nutrientName,
-        amountPerServingUnit: o.amountPerServingUnit,
-        nutrientKey: o.nutrientKey,
+        sum:
+          suppli.contentSizeUnit !== CONTENT_SIZE_UNIT.piece
+            ? Number(((numAPSV / suppli.servingSize) * count).toFixed(1))
+            : numAPSV * count,
+        nutrientName: nutrient.nutrientName,
+        amountPerServingUnit: nutrient.amountPerServingUnit,
+        nutrientKey: nutrient.nutrientKey,
       };
     });
-    let t = {};
-    sum.forEach((s) => {
-      const defaultUnit = NUTRIENT_KEY[s.nutrientKey].unit;
-      const suppliUnit = s.amountPerServingUnit;
-      if (
-        defaultUnit === suppliUnit ||
-        (['mcg', 'μg'].includes(defaultUnit) &&
-          ['mcg', 'μg'].includes(defaultUnit))
-      ) {
-        t[s.nutrientKey] = s.sum;
-      } else if (['mcg', 'μg'].includes(defaultUnit) && suppliUnit === 'mg') {
-        t[s.nutrientKey] = s.sum / (10 ^ 6);
-      } else if (['mcg', 'μg'].includes(defaultUnit) && suppliUnit === 'g') {
-        t[s.nutrientKey] = s.sum / (10 ^ 9);
-      } else if (defaultUnit === 'g' && ['mcg', 'μg'].includes(suppliUnit)) {
-        t[s.nutrientKey] = s.sum * (10 ^ 9);
-      } else if (defaultUnit === 'mg' && ['mcg', 'μg'].includes(suppliUnit)) {
-        t[s.nutrientKey] = s.sum * (10 ^ 6);
+    const isMcg = (str: string) => ['mcg', 'μg'].includes(str);
+    let toMeals = {};
+    countSumNutrients.forEach((sumNutrient) => {
+      const nutrientKey = sumNutrient.nutrientKey;
+      const mealUnit = NUTRIENT_KEY[nutrientKey].unit;
+      const suppliUnit = sumNutrient.amountPerServingUnit;
+
+      const format = (toMeal: Object) => {
+        if (mealUnit === suppliUnit || (isMcg(mealUnit) && isMcg(suppliUnit))) {
+          toMeal[nutrientKey] = sumNutrient.sum;
+        } else if (isMcg(mealUnit) && suppliUnit === 'mg') {
+          toMeal[nutrientKey] = sumNutrient.sum * Math.pow(10, 3);
+        } else if (isMcg(mealUnit) && suppliUnit === 'g') {
+          toMeal[nutrientKey] = sumNutrient.sum * Math.pow(10, 6);
+        } else if (mealUnit === 'g' && isMcg(suppliUnit)) {
+          toMeal[nutrientKey] = sumNutrient.sum / Math.pow(10, 6);
+        } else if (mealUnit === 'mg' && isMcg(suppliUnit)) {
+          toMeal[nutrientKey] = sumNutrient.sum / Math.pow(10, 3);
+        }
+        toMeal['foodName'] = suppli.suppliName;
+        return toMeal;
+      };
+      toMeals = format(toMeals);
+    });
+
+    if (
+      Object.values(toMeals).filter((num) => typeof num === 'number' && num)
+        .length > 0 ||
+      Object.entries(suppliToMeal).length > 0
+    ) {
+      setSuppliToMeal((preState) => {
+        return {...preState, ...{[suppli.id]: toMeals}};
+      });
+    }
+
+    setHoldCount((preState) => {
+      // storageからのデータ取得より前に走るのでその前での書き込み禁止
+      if (Object.entries(holdCount).length > 0 || count > 0) {
+        return {...preState, ...{[suppli.id]: count}};
+      } else {
+        return preState;
       }
     });
-    console.log('t', t);
-    console.log(count);
-    // storage.save({
-    //   key: 'suppliCount',
-    //   data: supplis,
-    // });
   }, [count]);
 
   return (

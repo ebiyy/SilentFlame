@@ -1,5 +1,6 @@
 import {atom, selector} from 'recoil';
 import {WaterIntak} from '../../helpers/interface';
+import {suppliToMealState} from '../supplement/suppli.hook';
 
 export const mealsState = atom<Meal[]>({
   key: 'mealsState',
@@ -61,52 +62,66 @@ const formatArr = (arr: number[] | string[]): any[] =>
 export const mealsProteinState = selector({
   key: 'mealsProteinState',
   get: ({get}) => {
+    const nutrientKey = 'PROT';
     const meals = get(mealsState);
-    // return 0;
-    return sumValues(meals, 'PROT');
+    const suppliToMeals = Object.values(get(suppliToMealState)).filter(
+      (suppliToMeal) => suppliToMeal[nutrientKey],
+    );
+    return sumValues([...meals, ...suppliToMeals], nutrientKey);
   },
 });
 
 export const mealsFatState = selector({
   key: 'mealsFatState',
   get: ({get}) => {
+    const nutrientKey = 'FAT';
     const meals = get(mealsState);
-    // return 0;
-    return sumValues(meals, 'FAT');
+    const suppliToMeals = Object.values(get(suppliToMealState)).filter(
+      (suppliToMeal) => suppliToMeal[nutrientKey],
+    );
+    return sumValues([...meals, ...suppliToMeals], nutrientKey);
   },
 });
 
 export const mealsCHOCDFState = selector({
   key: 'mealsCHOCDFState',
   get: ({get}) => {
+    const nutrientKey = 'CHOCDF';
     const meals = get(mealsState);
-    // return 0;
-    return sumValues(meals, 'CHOCDF');
+    const suppliToMeals = Object.values(get(suppliToMealState)).filter(
+      (suppliToMeal) => suppliToMeal[nutrientKey],
+    );
+    return sumValues([...meals, ...suppliToMeals], nutrientKey);
   },
 });
 
 export const mealsCHOAVState = selector({
   key: 'mealsCHOAVState',
   get: ({get}) => {
+    const nutrientKey = 'CHOAVLM';
     const meals = get(mealsState);
-    // return 0;
-    return sumValues(meals, 'CHOAVLM');
+    const suppliToMeals = Object.values(get(suppliToMealState)).filter(
+      (suppliToMeal) => suppliToMeal[nutrientKey],
+    );
+    return sumValues([...meals, ...suppliToMeals], nutrientKey);
   },
 });
 
 export const mealsENERC_KCALState = selector({
   key: 'mealsENERC_KCALState',
   get: ({get}) => {
+    const nutrientKey = 'ENERC_KCAL';
     const meals = get(mealsState);
-    // return 0;
-    return sumValues(meals, 'ENERC_KCAL');
+    const suppliToMeals = Object.values(get(suppliToMealState)).filter(
+      (suppliToMeal) => suppliToMeal[nutrientKey],
+    );
+    return sumValues([...meals, ...suppliToMeals], nutrientKey);
   },
 });
 
 export const mealsWATERState = selector({
   key: 'mealsWATERState',
   get: ({get}) => {
-    // return 0;
     const meals = get(mealsState);
     const waterIntake = get(waterIntakeState);
     const waterIntakeNumArr = waterIntake.map((obj) => obj.intake);

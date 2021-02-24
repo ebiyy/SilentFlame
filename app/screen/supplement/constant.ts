@@ -452,10 +452,10 @@ export const NUTRIENT_KEY = {
     label: '破棄率',
     unit: '%',
   },
-  ENERC: {
-    label: 'エネルギー',
-    unit: 'kJ',
-  },
+  // ENERC: {
+  //   label: 'エネルギー',
+  //   unit: 'kJ',
+  // },
   ENERC_KCAL: {
     label: 'エネルギー',
     unit: 'kcal',

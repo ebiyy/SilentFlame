@@ -50,6 +50,16 @@ export const imageResState = atom<ImagePickerResponse | {}>({
   default: {},
 });
 
+export const suppliToMealState = atom({
+  key: 'suppliToMealState',
+  default: {},
+});
+
+export const suppliCountState = atom({
+  key: 'suppliCountState',
+  default: {},
+});
+
 export const isSupplisStorageState = selector({
   key: 'isSupplisStorageState',
   get: ({get}) => {
@@ -59,6 +69,39 @@ export const isSupplisStorageState = selector({
       storage.save({
         key: 'mySuppli',
         data: supplis,
+      });
+      return true;
+    }
+    return false;
+  },
+});
+
+export const isSuppliToMealState = selector({
+  key: 'isSuppliToMealState',
+  get: ({get}) => {
+    const suppliToMeal = get(suppliToMealState);
+    if (Object.entries(suppliToMeal).length > 0) {
+      console.log('Run isSuppliToMealState');
+      storage.save({
+        key: 'suppliToMeal',
+        data: suppliToMeal,
+      });
+      return true;
+    }
+    return false;
+  },
+});
+
+export const isSupplisCountState = selector({
+  key: 'isSupplisStorageState',
+  get: ({get}) => {
+    const suppliCount = get(suppliCountState);
+    console.log('suppliCount', suppliCount);
+    if (Object.entries(suppliCount).length > 0) {
+      console.log('Run isSupplisCountState');
+      storage.save({
+        key: 'suppliCount',
+        data: suppliCount,
       });
       return true;
     }

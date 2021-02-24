@@ -1,5 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {Fragment} from 'react';
+import React, {Fragment, useEffect} from 'react';
 import {
   Dimensions,
   Keyboard,
@@ -21,6 +21,8 @@ import {useMargeMealState} from './hook.meal';
 import PfcPieChart from './components/pfc-pie-chart';
 import WideBtn, {generateWideBtn} from '../../components/wide-btn';
 import {screenThemeColor} from '../../global-style';
+import {useRecoilValue} from 'recoil';
+import {suppliToMealState} from '../supplement/suppli.hook';
 
 const timePeriod: TimePeriod = {
   breakfast: '朝食',
@@ -32,10 +34,11 @@ const timePeriod: TimePeriod = {
 const MealsScreen = () => {
   const navigation = useNavigation();
   const meals = useMargeMealState();
+  const suppliToMeal = useRecoilValue(suppliToMealState);
 
   // useEffect(() => {
-  //   console.log('MealsScreen', meals);
-  // }, [meals]);
+  //   console.log('MealsScreen::suppliToMeal', suppliToMeal);
+  // }, [suppliToMeal]);
 
   return (
     <KeyboardAvoidingView
@@ -54,7 +57,8 @@ const MealsScreen = () => {
             />
           </View>
 
-          {meals && meals.length > 0 && (
+          {((meals && meals.length > 0) ||
+            Object.entries(suppliToMeal).length > 0) && (
             <FadeInView>
               <PfcPieChart meals={meals} boxShadow={screenThemeColor.meals} />
             </FadeInView>

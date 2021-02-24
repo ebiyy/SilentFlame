@@ -13,7 +13,7 @@ import Modal from 'react-native-modal';
 
 // プロテインはペプチドブレンドの詳細とかにもっと色々ある。。
 const NUREIENT = {
-  main: ['カロリー', 'タンパク質', '脂質', '炭水化物', '食物繊維'],
+  main: ['エネルギー', 'たんぱく質', '脂質', '炭水化物', '食物繊維'],
   protein: [
     ...Object.keys(proteinNutrientKeys).map(
       (key) => proteinNutrientKeys[key].label,
