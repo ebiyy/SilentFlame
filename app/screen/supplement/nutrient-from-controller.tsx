@@ -3,24 +3,23 @@ import {View, Button, StyleSheet} from 'react-native';
 import NutrientForm from './nutrient-from';
 import {screenThemeColor, shadowStyles, winWidth} from '../../global-style';
 import {Control, DeepMap, FieldError} from 'react-hook-form';
-import {SuppliNutrient} from './suppli';
-import {Text} from 'react-native-svg';
+import {FormType, SuppliNutrient} from './suppli';
 
 type Props = {
   control: Control<Record<string, any>>;
   errors: DeepMap<Record<string, any>, FieldError>;
   editable: boolean;
   suppliNutrients: SuppliNutrient[] | undefined;
+  formType: FormType;
 };
 
 const NutrientFormController = (props: Props) => {
-  const {control, errors, editable, suppliNutrients} = props;
+  const {control, errors, editable, suppliNutrients, formType} = props;
   const [nutrientArrLen, setNutrientArrLen] = useState(
     suppliNutrients ? suppliNutrients.length : 1,
   );
 
   const isDeleteBtn = () => {
-    console.log('suppliNutrients', suppliNutrients);
     if (suppliNutrients) {
       if (suppliNutrients.length < nutrientArrLen) {
         return true;
@@ -41,7 +40,7 @@ const NutrientFormController = (props: Props) => {
   const Btn = ({title, action}: Props) => (
     <View
       style={[
-        shadowStyles(screenThemeColor.suppl).boxShadow,
+        shadowStyles(screenThemeColor[formType]).boxShadow,
         styles.buttonContainer,
       ]}>
       <Button color="black" title={title} onPress={action} />
@@ -58,6 +57,7 @@ const NutrientFormController = (props: Props) => {
           errors={errors}
           nutrient={suppliNutrients ? suppliNutrients[i] : undefined}
           editable={editable}
+          formType={formType}
         />
       ))}
       {editable && (

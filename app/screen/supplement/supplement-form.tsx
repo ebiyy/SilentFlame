@@ -3,26 +3,27 @@ import {View, StyleSheet} from 'react-native';
 import {Control, DeepMap, FieldError} from 'react-hook-form';
 import PickerController from '../../components/picker-controller';
 import TextInputController from '../../components/text-input-controller';
-import {CONTENT_SIZE_UNIT} from './constant';
+import {CONTENT_SIZE_UNIT, FORM_TYPE_CONTENT} from './constant';
 import CameraFormController from '../../components/camera-form-controller';
-import {SuppliBaseInfo} from './suppli';
+import {FormType, SuppliBaseInfo} from './suppli';
 
 type Props = {
   control: Control<Record<string, any>>;
   errors: DeepMap<Record<string, any>, FieldError>;
   editable: boolean;
   suppliBaseInfo: SuppliBaseInfo | undefined;
+  formType: FormType;
 };
 
 const SupplementForm = (props: Props) => {
-  const {control, errors, editable, suppliBaseInfo} = props;
+  const {control, errors, editable, suppliBaseInfo, formType} = props;
 
   return (
     <>
       <TextInputController
         control={control}
-        controlName="suppliName"
-        placeholder="サプリ名"
+        controlName={FORM_TYPE_CONTENT[formType].controlName.name}
+        placeholder={FORM_TYPE_CONTENT[formType].placeholder.name}
         defaultValue={suppliBaseInfo ? suppliBaseInfo.suppliName : ''}
         errors={errors}
         editable={editable}
@@ -89,12 +90,15 @@ const SupplementForm = (props: Props) => {
         </View>
       </View>
 
-      <View style={[styles.splitForm, {marginTop: 30}]}>
+      <View
+        style={[styles.splitForm, {marginTop: formType === 'suppli' ? 30 : 0}]}>
         <View style={{width: '66%'}}>
           <TextInputController
             control={control}
             controlName="contentSizeValue"
-            placeholder="内容量"
+            placeholder={
+              FORM_TYPE_CONTENT[formType].placeholder.contentSizeValue
+            }
             defaultValue={
               suppliBaseInfo ? String(suppliBaseInfo.contentSizeValue) : ''
             }
@@ -104,41 +108,45 @@ const SupplementForm = (props: Props) => {
             required={false}
           />
         </View>
-        <View style={styles.pickerView}>
-          <PickerController
-            control={control}
-            controlName="contentSizeUnit"
-            items={
-              editable
-                ? Object.values(CONTENT_SIZE_UNIT)
-                : suppliBaseInfo
-                ? [suppliBaseInfo.contentSizeUnit]
-                : ['個']
-            }
-            defaultValue={
-              suppliBaseInfo ? suppliBaseInfo.contentSizeUnit : '個'
-            }
-            errors={errors}
-            marginTop={-40}
-          />
-        </View>
+        {formType === 'suppli' && (
+          <View style={styles.pickerView}>
+            <PickerController
+              control={control}
+              controlName="contentSizeUnit"
+              items={
+                editable
+                  ? Object.values(CONTENT_SIZE_UNIT)
+                  : suppliBaseInfo
+                  ? [suppliBaseInfo.contentSizeUnit]
+                  : ['個']
+              }
+              defaultValue={
+                suppliBaseInfo ? suppliBaseInfo.contentSizeUnit : '個'
+              }
+              errors={errors}
+              marginTop={-40}
+            />
+          </View>
+        )}
       </View>
 
-      <View style={styles.splitForm}>
-        <View style={{width: '66%'}}>
-          <TextInputController
-            control={control}
-            controlName="servingSize"
-            placeholder="1日分の量"
-            defaultValue={
-              suppliBaseInfo ? String(suppliBaseInfo.servingSize) : ''
-            }
-            errors={errors}
-            isNum={true}
-            editable={editable}
-          />
+      {formType === 'suppli' && (
+        <View style={styles.splitForm}>
+          <View style={{width: '66%'}}>
+            <TextInputController
+              control={control}
+              controlName="servingSize"
+              placeholder="1日分の量"
+              defaultValue={
+                suppliBaseInfo ? String(suppliBaseInfo.servingSize) : ''
+              }
+              errors={errors}
+              isNum={true}
+              editable={editable}
+            />
+          </View>
         </View>
-      </View>
+      )}
     </>
   );
 };

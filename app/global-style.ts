@@ -6,7 +6,7 @@ export const [winWidth, winHeight] = [width, height];
 
 export const screenThemeColor = {
   weeky: 'black',
-  suppl: '#ffba3b',
+  suppli: '#ffba3b',
   meals: 'lightgreen',
   water: '#86C5DA',
   setting: 'black',

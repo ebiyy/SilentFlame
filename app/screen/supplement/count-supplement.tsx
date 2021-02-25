@@ -30,7 +30,7 @@ const CountSupplement = (props: Props) => {
   const {suppli, switchCount, isDelete, holdCount, setHoldCount} = props;
   const [count, setCount] = useState(0);
   const navigation = useNavigation();
-  const [supplis, setSuppls] = useRecoilState(supplisState);
+  const [supplis, setSupplis] = useRecoilState(supplisState);
   const [deleteModal, setDeleteModal] = useState(false);
   const [inputModal, setInputModal] = useState(false);
   const [imageRes, setImageRes] = useRecoilState(imageResState);
@@ -122,15 +122,17 @@ const CountSupplement = (props: Props) => {
         <View
           style={[
             Styles.supplNameContainer,
-            shadowStyles(screenThemeColor.suppl).boxShadow,
+            shadowStyles(screenThemeColor.suppli).boxShadow,
           ]}>
           <TouchableOpacity
             style={[ComStyles.centeringContainer]}
             onPress={() => {
               setImageRes(suppli.imageRes);
               navigation.navigate('SupplFormScreen', {
-                mode: 'view',
-                suppli: suppli,
+                mode: 'edit',
+                viewTarget: suppli,
+                setMarge: setSupplis,
+                btnColor: screenThemeColor.suppli,
               });
             }}>
             <View>
@@ -171,7 +173,7 @@ const CountSupplement = (props: Props) => {
         modalVisible={deleteModal}
         setModalVisible={setDeleteModal}
         deleteFunc={() =>
-          setSuppls((preState) =>
+          setSupplis((preState) =>
             preState.map((suppl) =>
               suppl.id !== suppli.id ? suppl : {...suppl, delete: true},
             ),
@@ -221,9 +223,9 @@ const Styles = StyleSheet.create({
     alignSelf: 'center',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: screenThemeColor.suppl,
+    backgroundColor: screenThemeColor.suppli,
     borderRadius: 20,
-    shadowColor: screenThemeColor.suppl,
+    shadowColor: screenThemeColor.suppli,
     shadowOffset: {
       width: 0,
       height: 2,
@@ -239,7 +241,7 @@ const Styles = StyleSheet.create({
   counterIcon: {
     padding: 0,
     borderRadius: 20,
-    shadowColor: screenThemeColor.suppl,
+    shadowColor: screenThemeColor.suppli,
     shadowOffset: {
       width: 0,
       height: 2,
@@ -250,7 +252,7 @@ const Styles = StyleSheet.create({
   },
   nameText: {
     textDecorationLine: 'underline',
-    textDecorationColor: screenThemeColor.suppl,
+    textDecorationColor: screenThemeColor.suppli,
   },
 });
 

@@ -1,13 +1,28 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Dimensions, Image, StyleSheet, Text, View} from 'react-native';
 import WideBtn from '../../components/wide-button';
 import {screenThemeColor, shadowStyles} from '../../global-style';
 import RateProgressBar from '../../components/rate-progress-bar';
-import {mealsWATERState, waterIntakeState} from '../meals/recoil.meal';
+import {mealsWATERState} from '../meals/recoil.meal';
 import TitleText from '../../components/title-text';
 import CardEditIcons from './card-edit-icons';
 import WaterCardBodyBtn from './water-card-body-btn';
+import {ScrollView} from 'react-native-gesture-handler';
+import {useRecoilState, useRecoilValue} from 'recoil';
+import {
+  isWaterCountState,
+  isWaterStorageState,
+  isWaterToMealState,
+  waterCountState,
+  watersState,
+  waterToMealState,
+} from './water.hook';
+import FadeInView from '../../components/fade-in-view';
+import storage from '../../helpers/custom-async-storage';
+import {load} from '../../helpers/storage';
+import {startClock} from 'react-native-reanimated';
+import {NUTRIENT_KEY} from '../supplement/constant';
 
 const inputWaterPatten = [
   {name: 'cup', label: 120, iconElm: 'SimpleLineIcons'},
@@ -16,85 +31,240 @@ const inputWaterPatten = [
 ];
 
 const registWater = [
-  {name: '水道水', image: require('../../assets/img/water_640.jpg')},
+  {
+    id: Math.floor(new Date().getTime() / 1000),
+    waterName: '水道水',
+    imageRes: {uri: 3},
+    updateAt: new Date('2021-02-01'),
+    nutrients: [
+      {
+        nutrientName: '水分',
+        amountPerServingValue: '100',
+        amountPerServingUnit: 'g',
+        nutrientKey: 'WATER',
+      },
+    ],
+  },
 ];
+
+const waterImg = require('../../assets/img/water_640.jpg');
 
 const WaterScreen = () => {
   const navigation = useNavigation();
   const [isMinus, setIsMinus] = useState(false);
+  const [waters, setWaters] = useRecoilState(watersState);
+  const isWaterStorage = useRecoilValue(isWaterStorageState);
+  const isWaterCount = useRecoilValue(isWaterCountState);
+  const isWaterToMeal = useRecoilValue(isWaterToMealState);
+  const [count, setCount] = useRecoilState(waterCountState);
+  const [waterToMeal, setWaterToMeal] = useRecoilState(waterToMealState);
+
+  useEffect(() => {
+    console.log('WaterScreen::isWaterStorage', isWaterStorage);
+    console.log('WaterScreen::isWaterCount', isWaterCount);
+    console.log('WaterScreen::isWaterToMeal', isWaterToMeal);
+
+    // storage.remove({
+    //   key: 'myWater',
+    // });
+    // storage.remove({
+    //   key: 'waterCount',
+    // });
+    // storage.remove({
+    //   key: 'waterToMeal',
+    // });
+    load('myWater', setWaters, registWater);
+    load('waterCount', setCount);
+    load('waterToMeal', setWaterToMeal);
+  }, []);
+
+  useEffect(() => {
+    // console.log('waters', waters);
+    // // console.log('waters', waters[0].nutrients);
+    // console.log('WaterScreen::useEffect::count', count);
+
+    if (waters && waters.length > 0) {
+      let waterWeight = {};
+      Object.entries(count).forEach((arr) => {
+        waterWeight[arr[0]] = Object.entries(arr[1])
+          .map((arr) => Number(arr[0]) * arr[1])
+          .reduce((a, x) => a + x);
+      });
+
+      const countSumNutrients = Object.entries(waterWeight).map(
+        ([waterId, waterIntaike], i) => {
+          return {
+            [waters[i].waterName]: waters
+              .filter((water) => water.id === Number(waterId))[0]
+              .nutrients.map((nutrient) => {
+                return {
+                  sum: Number(
+                    (
+                      (Number(nutrient.amountPerServingValue) * waterIntaike) /
+                      100
+                    ).toFixed(1),
+                  ),
+                  nutrientName: nutrient.nutrientName,
+                  amountPerServingUnit: nutrient.amountPerServingUnit,
+                  nutrientKey: nutrient.nutrientKey,
+                };
+              }),
+          };
+        },
+      );
+
+      let toMeals = [];
+      const isMcg = (str: string) => ['mcg', 'μg'].includes(str);
+      countSumNutrients.forEach((sumNutrient, i) => {
+        let toMeal = {};
+        Object.entries(sumNutrient).forEach(([key, obj]) => {
+          obj.forEach((nutrinet) => {
+            const nutrientKey = nutrinet.nutrientKey;
+            const mealUnit = NUTRIENT_KEY[nutrientKey].unit;
+            const waterUnit = nutrinet.amountPerServingUnit;
+
+            const format = (object: Object, waterName: string) => {
+              if (
+                mealUnit === waterUnit ||
+                (isMcg(mealUnit) && isMcg(waterUnit))
+              ) {
+                object[nutrientKey] = nutrinet.sum;
+              } else if (isMcg(mealUnit) && waterUnit === 'mg') {
+                object[nutrientKey] = nutrinet.sum * Math.pow(10, 3);
+              } else if (isMcg(mealUnit) && waterUnit === 'g') {
+                object[nutrientKey] = nutrinet.sum * Math.pow(10, 6);
+              } else if (mealUnit === 'g' && isMcg(waterUnit)) {
+                object[nutrientKey] = nutrinet.sum / Math.pow(10, 6);
+              } else if (mealUnit === 'mg' && isMcg(waterUnit)) {
+                object[nutrientKey] = nutrinet.sum / Math.pow(10, 3);
+              }
+              object['foodName'] = waterName;
+              return object;
+            };
+            toMeal = format(toMeal, key);
+          });
+        });
+        toMeals[i] = toMeal;
+      });
+      // console.log('toMeals', toMeals);
+
+      if (toMeals.length > 0) {
+        setWaterToMeal(toMeals);
+      }
+    }
+  }, [count, waters]);
 
   return (
-    <View style={Styles.screenContainer}>
-      <TitleText title="今日の水分" key={1} />
-      <View style={Styles.rateBarContainer}>
-        <RateProgressBar
-          title=""
-          rimit={2}
-          unit="L"
-          color={screenThemeColor.water}
-          recoilSelector={mealsWATERState}
-        />
-      </View>
-
-      <TitleText title="水分を登録" key={2} />
-      <View style={Styles.waterContentContainer}>
-        {registWater.map((obj, i) => (
-          <View style={Styles.waterContent} key={i}>
-            <View style={Styles.card}>
-              <View style={Styles.cardHeader}>
-                <View>
-                  <Text style={Styles.cardTitle}>{obj.name}</Text>
-                </View>
-                <View>
-                  <CardEditIcons
-                    selectItem={obj}
-                    index={i}
-                    color="lightblue"
-                    recoilSelector={waterIntakeState}
-                    onPress={() => console.log('test')}
-                    isMinus={isMinus}
-                    setIsMinus={setIsMinus}
-                  />
-                </View>
-              </View>
-              <View style={Styles.cardBody}>
-                <View style={Styles.imageContainer}>
-                  <Image
-                    style={[
-                      Styles.imageContext,
-                      shadowStyles('lightblue').boxShadow,
-                      {shadowColor: 'black', borderColor: 'lightblue'},
-                    ]}
-                    source={obj.image}
-                  />
-                </View>
-                <View style={{flexDirection: 'column'}}>
-                  <View style={Styles.bodyContent}>
-                    {inputWaterPatten.map((patten, ii) => (
-                      <WaterCardBodyBtn
-                        key={ii}
-                        patten={patten}
-                        waterName={obj.name}
-                        isMinus={isMinus}
-                      />
-                    ))}
-                  </View>
-                </View>
-              </View>
-            </View>
-          </View>
-        ))}
-        <View style={Styles.moreWaterContent}>
-          <WideBtn
-            navigate={() => navigation.navigate('SupplementForm')}
-            btnText="+"
-            widthRate={3}
-            color="gray"
-            type="btn"
+    <ScrollView>
+      <View style={Styles.screenContainer}>
+        <TitleText title="今日の水分" key={1} />
+        <View style={Styles.rateBarContainer}>
+          <RateProgressBar
+            title=""
+            rimit={2}
+            unit="L"
+            color={screenThemeColor.water}
+            recoilSelector={mealsWATERState}
           />
         </View>
+
+        <TitleText title="水分を登録" key={2} />
+
+        <View style={Styles.waterContentContainer}>
+          <FadeInView>
+            <>
+              {waters.length > 0 &&
+                // TypeError: Attempted to assign to readonly property.になるのでスプレッドしている
+                [...waters]
+                  .sort(
+                    (a, b) =>
+                      new Date(b.updateAt).getTime() -
+                      new Date(a.updateAt).getTime(),
+                  )
+                  .map((obj, i) => (
+                    <View style={Styles.waterContent} key={i}>
+                      <View style={Styles.card}>
+                        <View style={Styles.cardHeader}>
+                          <View style={{maxWidth: '55%'}}>
+                            <Text style={Styles.cardTitle}>
+                              {obj.waterName.length > 13
+                                ? `${obj.waterName.slice(0, 13)}...`
+                                : obj.waterName}
+                            </Text>
+                          </View>
+                          <View>
+                            <CardEditIcons
+                              selectItem={obj}
+                              index={i}
+                              color="lightblue"
+                              setWaters={setWaters}
+                              onPress={() => console.log('test')}
+                              isMinus={isMinus}
+                              setIsMinus={setIsMinus}
+                            />
+                          </View>
+                        </View>
+                        <View style={Styles.cardBody}>
+                          <View style={Styles.imageContainer}>
+                            <Image
+                              style={[
+                                Styles.imageContext,
+                                shadowStyles(screenThemeColor.water).boxShadow,
+                              ]}
+                              source={
+                                obj.waterName === '水道水'
+                                  ? waterImg
+                                  : {uri: obj.imageRes.uri}
+                              }
+                            />
+                          </View>
+                          <View style={{flexDirection: 'column'}}>
+                            <View style={Styles.bodyContent}>
+                              {inputWaterPatten.map((patten, ii) => (
+                                <WaterCardBodyBtn
+                                  key={`${obj.waterName}${ii}`} // waterの他のやつとstate共有するための処置
+                                  patten={patten}
+                                  water={obj}
+                                  isMinus={isMinus}
+                                  holdCount={count}
+                                  setHoldCount={setCount}
+                                />
+                              ))}
+                            </View>
+                          </View>
+                        </View>
+                      </View>
+                    </View>
+                  ))}
+            </>
+          </FadeInView>
+          <View style={Styles.moreWaterContent}>
+            <WideBtn
+              navigate={() =>
+                navigation.navigate('SupplFormScreen', {
+                  mode: 'add',
+                  setMarge: setWaters,
+                  btnColor: screenThemeColor.water,
+                  viewTarget: {
+                    nutrients: [
+                      {
+                        nutrientName: '水分',
+                        amountPerServingValue: '100',
+                        amountPerServingUnit: 'g',
+                      },
+                    ],
+                  },
+                })
+              }
+              btnText="+"
+              widthRate={3}
+              color="gray"
+              type="btn"
+            />
+          </View>
+        </View>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -115,7 +285,9 @@ const Styles = StyleSheet.create({
     // flexWrap: 'wrap',
   },
   waterContent: {},
-  moreWaterContent: {},
+  moreWaterContent: {
+    marginTop: 30,
+  },
   card: {
     width: Dimensions.get('window').width / 1.05,
     margin: 3,

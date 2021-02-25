@@ -18,7 +18,7 @@ import ConfirmationModal from './components/confirmation-modal';
 
 const SuppliArchiveScreen = () => {
   const navigation = useNavigation();
-  const [supplis, setSuppls] = useRecoilState(supplisState);
+  const [supplis, setSupplis] = useRecoilState(supplisState);
   const [isModal, setIsModal] = useState(false);
   const [modalTitle, setModalTitle] = useState('');
   const [modalType, setModalType] = useState<'delete' | 'restore'>();
@@ -27,7 +27,7 @@ const SuppliArchiveScreen = () => {
 
   useEffect(() => {
     if (tapButton === 'yes' && modalType === 'restore' && selectSuppli) {
-      setSuppls((preState) =>
+      setSupplis((preState) =>
         preState.map((obj) =>
           obj.id !== selectSuppli.id
             ? obj
@@ -36,7 +36,7 @@ const SuppliArchiveScreen = () => {
       );
     }
     if (tapButton === 'yes' && modalType === 'delete' && selectSuppli) {
-      setSuppls((preState) =>
+      setSupplis((preState) =>
         preState.filter((obj) => obj.id !== selectSuppli.id),
       );
     }
@@ -68,14 +68,16 @@ const SuppliArchiveScreen = () => {
             <View
               style={[
                 Styles.supplNameContainer,
-                shadowStyles(screenThemeColor.suppl).boxShadow,
+                shadowStyles(screenThemeColor.suppli).boxShadow,
               ]}>
               <TouchableOpacity
                 style={[ComStyles.centeringContainer]}
                 onPress={() => {
                   navigation.navigate('SupplFormScreen', {
                     mode: 'view',
-                    suppli: suppli,
+                    viewTarget: suppli,
+                    setMarge: setSupplis,
+                    btnColor: screenThemeColor.suppli,
                   });
                 }}>
                 <View>
@@ -142,9 +144,9 @@ const Styles = StyleSheet.create({
     alignSelf: 'center',
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: screenThemeColor.suppl,
+    backgroundColor: screenThemeColor.suppli,
     borderRadius: 20,
-    shadowColor: screenThemeColor.suppl,
+    shadowColor: screenThemeColor.suppli,
     shadowOffset: {
       width: 0,
       height: 2,
@@ -160,7 +162,7 @@ const Styles = StyleSheet.create({
   counterIcon: {
     padding: 0,
     borderRadius: 20,
-    shadowColor: screenThemeColor.suppl,
+    shadowColor: screenThemeColor.suppli,
     shadowOffset: {
       width: 0,
       height: 2,
@@ -171,7 +173,7 @@ const Styles = StyleSheet.create({
   },
   nameText: {
     textDecorationLine: 'underline',
-    textDecorationColor: screenThemeColor.suppl,
+    textDecorationColor: screenThemeColor.suppli,
   },
 });
 

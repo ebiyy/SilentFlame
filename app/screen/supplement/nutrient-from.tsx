@@ -4,7 +4,7 @@ import {Controller, Control, DeepMap, FieldError} from 'react-hook-form';
 import NutrientNameModal from './nutrient-name-modal';
 import TextInputController from '../../components/text-input-controller';
 import PickerController from '../../components/picker-controller';
-import {SuppliNutrient} from './suppli';
+import {FormType, SuppliNutrient} from './suppli';
 import {CONTENT_SIZE_UNIT} from './constant';
 import {shadowStyles} from '../../global-style';
 import {useRecoilState} from 'recoil';
@@ -16,10 +16,11 @@ type Props = {
   control: Control<Record<string, any>>;
   errors: DeepMap<Record<string, any>, FieldError>;
   editable: boolean;
+  formType: FormType;
 };
 
 const NutrientForm = (props: Props) => {
-  const {index, nutrient, control, errors, editable} = props;
+  const {index, nutrient, control, errors, editable, formType} = props;
   const [modalVisible, setModalVisible] = useState<boolean>(false);
   const [isScroll, setIsScroll] = useRecoilState(isScrollState);
 
@@ -40,7 +41,7 @@ const NutrientForm = (props: Props) => {
               value={value}
               placeholder="栄養素名"
               placeholderTextColor="lightgray"
-              editable={editable}
+              editable={formType === 'water' && index === 0 ? false : editable}
               onFocus={() => {
                 Keyboard.dismiss();
                 setIsScroll(false);
@@ -75,7 +76,7 @@ const NutrientForm = (props: Props) => {
               nutrient ? String(nutrient.amountPerServingValue) : ''
             }
             errors={errors}
-            editable={editable}
+            editable={formType === 'water' && index === 0 ? false : editable}
             isNum={true}
           />
         </View>
@@ -84,33 +85,39 @@ const NutrientForm = (props: Props) => {
             control={control}
             controlName={`${index}amountPerServingUnit`}
             items={
-              editable
+              formType === 'water' && index === 0 && nutrient
+                ? [nutrient.amountPerServingUnit]
+                : editable
                 ? Object.values(CONTENT_SIZE_UNIT)
                 : nutrient
                 ? [nutrient.amountPerServingUnit]
                 : ['個']
             }
-            defaultValue={CONTENT_SIZE_UNIT.mcg}
+            defaultValue={
+              nutrient ? nutrient.amountPerServingUnit : CONTENT_SIZE_UNIT.mcg
+            }
             errors={errors}
             marginTop={-5}
           />
         </View>
       </View>
 
-      <TextInputController
-        control={control}
-        controlName={`${index}perDailyValue`}
-        placeholder="1日の推奨摂取量に対する割合（％）"
-        defaultValue={
-          nutrient && nutrient.perDailyValue
-            ? String(nutrient.perDailyValue)
-            : ''
-        }
-        errors={errors}
-        isNum={true}
-        editable={editable}
-        required={false}
-      />
+      {formType === 'suppli' && (
+        <TextInputController
+          control={control}
+          controlName={`${index}perDailyValue`}
+          placeholder="1日の推奨摂取量に対する割合（％）"
+          defaultValue={
+            nutrient && nutrient.perDailyValue
+              ? String(nutrient.perDailyValue)
+              : ''
+          }
+          errors={errors}
+          isNum={true}
+          editable={editable}
+          required={false}
+        />
+      )}
     </View>
   );
 };

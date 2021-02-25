@@ -1,4 +1,4 @@
-import {PriceUnit, ContentSizeUnit} from './suppli';
+import {PriceUnit, ContentSizeUnit, formTypeContent} from './suppli';
 
 export const PRICE_UNIT: {[x: string]: PriceUnit} = {
   jpy: '¥',
@@ -12,6 +12,29 @@ export const CONTENT_SIZE_UNIT: {[x: string]: ContentSizeUnit} = {
   g: 'g',
   μg: 'μg',
   kcal: 'kcal',
+};
+
+export const FORM_TYPE_CONTENT: formTypeContent = {
+  suppli: {
+    nutirientsTitle: '栄養素情報(1回分)',
+    controlName: {
+      name: 'suppliName',
+    },
+    placeholder: {
+      name: 'サプリ名',
+      contentSizeValue: '内容量',
+    },
+  },
+  water: {
+    nutirientsTitle: '栄養素情報(100mlあたり)',
+    controlName: {
+      name: 'waterName',
+    },
+    placeholder: {
+      name: '名前',
+      contentSizeValue: '内容量(ml)',
+    },
+  },
 };
 
 export const MOCK_BASE_INFO = {

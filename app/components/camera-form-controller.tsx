@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {Controller, Control, DeepMap, FieldError} from 'react-hook-form';
 import {
   Image,
@@ -49,7 +49,7 @@ const CameraFormController = (props: Props) => {
               />
             );
           }}
-          name="image"
+          name="imageRes"
           rules={{required: false}}
           defaultValue=""
         />
@@ -73,7 +73,7 @@ const CameraFormController = (props: Props) => {
             : () => {}
         }
         underlayColor="white">
-        {imageData ? (
+        {imageData && Object.entries(imageData).length > 0 ? (
           <View style={styles.imageContainer}>
             <Image
               style={{width: imageData.width, height: imageData.height}}

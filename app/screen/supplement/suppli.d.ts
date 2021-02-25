@@ -35,3 +35,21 @@ interface SuppliNutrient {
   perDailyValue?: number | undefined;
   nutrientKey: string;
 }
+
+interface formTypeText {
+  nutirientsTitle: string;
+  controlName: {
+    name: string;
+  };
+  placeholder: {
+    name: string;
+    contentSizeValue: string;
+  };
+}
+
+interface formTypeContent {
+  suppli: formTypeText;
+  water: formTypeText;
+}
+
+type FormType = 'suppli' | 'water';

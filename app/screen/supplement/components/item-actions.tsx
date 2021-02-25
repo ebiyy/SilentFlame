@@ -13,7 +13,7 @@ import Fontisto from 'react-native-vector-icons/Fontisto';
 import {useRecoilState} from 'recoil';
 import WideBtn from '../../../components/wide-btn';
 import {screenThemeColor, shadowStyles, winWidth} from '../../../global-style';
-import {imageResState} from '../suppli.hook';
+import {imageResState, supplisState} from '../suppli.hook';
 
 type setBooleanState = React.Dispatch<React.SetStateAction<boolean>>;
 
@@ -57,6 +57,7 @@ const ItemActions = (props: Props) => {
   const navigation = useNavigation();
   const {switchCount, setSwitchCount, isDelete, setIsDelete} = props;
   const [imageRes, setImageRes] = useRecoilState(imageResState);
+  const [supplis, setSupplis] = useRecoilState(supplisState);
   return (
     <>
       <GenerateSideIcon
@@ -68,19 +69,23 @@ const ItemActions = (props: Props) => {
           {/* <WideBtn
             btnText="サプリを登録する"
             toNavigate="SupplFormScreen"
-            color={screenThemeColor.suppl}
+            color={screenThemeColor.suppli}
             navigatePrames={{mode: 'add'}}
           /> */}
           <TouchableOpacity
             style={{width: winWidth / 2}}
             onPress={() => {
               setImageRes({});
-              navigation.navigate('SupplFormScreen', {mode: 'add'});
+              navigation.navigate('SupplFormScreen', {
+                mode: 'add',
+                setMarge: setSupplis,
+                btnColor: screenThemeColor.suppli,
+              });
             }}>
             <View
               style={[
                 Styles.registrationTimePeriodItems,
-                shadowStyles(screenThemeColor.suppl).boxShadow,
+                shadowStyles(screenThemeColor.suppli).boxShadow,
                 {height: 75},
               ]}>
               <Text style={Styles.btnText}>サプリを登録する</Text>
@@ -103,7 +108,7 @@ const Styles = StyleSheet.create({
   iconContainer: {
     padding: 0,
     borderRadius: 20,
-    shadowColor: screenThemeColor.suppl,
+    shadowColor: screenThemeColor.suppli,
     shadowOffset: {
       width: 0,
       height: 2,

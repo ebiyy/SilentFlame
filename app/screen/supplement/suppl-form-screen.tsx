@@ -14,27 +14,34 @@ import TitleText from '../../components/title-text';
 import {screenThemeColor, shadowStyles, winWidth} from '../../global-style';
 import NutrientFormController from './nutrient-from-controller';
 import SupplementForm from './supplement-form';
-import {useRecoilState, useRecoilValue} from 'recoil';
-import {imageResState, isScrollState, supplisState} from './suppli.hook';
-import {Suppli, SuppliBaseInfo, SuppliNutrient} from './suppli';
+import {SetterOrUpdater, useRecoilValue} from 'recoil';
+import {imageResState, isScrollState} from './suppli.hook';
+import {FormType, Suppli, SuppliBaseInfo, SuppliNutrient} from './suppli';
 import {userIdState} from '../../recoil/user';
-import PickerController from '../../components/picker-controller';
-import {NUTRIENT_KEY} from './constant';
+import {FORM_TYPE, FORM_TYPE_CONTENT, NUTRIENT_KEY} from './constant';
 
 type Params = {
-  mode: 'add' | 'view';
-  suppli?: Suppli;
+  mode: 'add' | 'view' | 'edit';
+  viewTarget?: Suppli | any;
+  setMarge: SetterOrUpdater<any[]>;
+  btnColor: string;
 };
 
-// mode => edit, add, look
 const SupplFormScreen = ({navigation, route}) => {
-  const {mode, suppli = undefined} = route.params as Params;
+  const {
+    mode,
+    viewTarget = undefined,
+    setMarge,
+    btnColor,
+  } = route.params as Params;
   const {control, handleSubmit, errors} = useForm();
   const [editable, setEditable] = useState(mode === 'add');
   const isScroll = useRecoilValue(isScrollState);
-  const [supplis, setSupplis] = useRecoilState(supplisState);
   const imageRes = useRecoilValue(imageResState);
   const userId = useRecoilValue(userIdState);
+  const [formType, setFormType] = useState<FormType>(
+    btnColor === screenThemeColor.suppli ? 'suppli' : 'water',
+  );
 
   const onSubmit = (formValus) => {
     console.log('SupplementForm', formValus, errors);
@@ -73,18 +80,22 @@ const SupplFormScreen = ({navigation, route}) => {
         {imageRes: imageRes},
       );
       // edit modeのみ
-      if (suppli) {
-        const updateSuppli = Object.assign({...suppli}, margeFormValus);
+      if (mode === 'edit') {
+        const updateSuppli = Object.assign({...viewTarget}, margeFormValus);
         console.log('SupplFormScreen::updateSuppli', updateSuppli);
-        setSupplis((preState) =>
-          preState.map((obj) => (obj.id === suppli.id ? updateSuppli : obj)),
+        setMarge((preState) =>
+          preState.map((obj) =>
+            obj.id === viewTarget.id ? updateSuppli : obj,
+          ),
         );
       } else {
         margeFormValus['id'] = Math.floor(new Date().getTime() / 1000);
         margeFormValus['createdAt'] = new Date();
         margeFormValus['author'] = userId;
         console.log('SupplFormScreen::margeFormValus', margeFormValus);
-        setSupplis((preState) => [...preState, margeFormValus]);
+        setMarge((preState) => {
+          return [...preState, margeFormValus];
+        });
       }
       navigation.goBack();
     }
@@ -92,14 +103,10 @@ const SupplFormScreen = ({navigation, route}) => {
 
   const SubmitBtn = () => (
     <View style={Styles.btnSection}>
-      <View
-        style={[
-          shadowStyles(screenThemeColor.suppl).boxShadow,
-          Styles.buttonContainer,
-        ]}>
+      <View style={[shadowStyles(btnColor).boxShadow, Styles.buttonContainer]}>
         <Button
           color="black"
-          title={editable ? (suppli ? '編集終了' : '登録') : '編集'}
+          title={editable ? (mode === 'edit' ? '編集終了' : '登録') : '編集'}
           onPress={
             editable
               ? handleSubmit(onSubmit)
@@ -123,7 +130,7 @@ const SupplFormScreen = ({navigation, route}) => {
         extraScrollHeight={150}
         enableAutomaticScroll={isScroll}>
         <ScrollView style={Styles.container} scrollEnabled={isScroll}>
-          <SubmitBtn />
+          {mode !== 'view' && <SubmitBtn />}
 
           <TitleText title="基本情報" />
           <SupplementForm
@@ -131,27 +138,29 @@ const SupplFormScreen = ({navigation, route}) => {
             errors={errors}
             editable={editable}
             suppliBaseInfo={(() => {
-              if (suppli) {
-                const suppliBaseInfo = {...suppli};
+              if (viewTarget && viewTarget.id) {
+                const suppliBaseInfo = {...viewTarget};
                 delete suppliBaseInfo.nutrients;
                 return suppliBaseInfo as SuppliBaseInfo;
               } else {
                 return undefined;
               }
             })()}
+            formType={formType}
           />
 
           <Divider borderColor="white" />
 
-          <TitleText title="栄養素情報(1回分)" />
+          <TitleText title={FORM_TYPE_CONTENT[formType].nutirientsTitle} />
           <NutrientFormController
             control={control}
             errors={errors}
             editable={editable}
-            suppliNutrients={suppli ? suppli.nutrients : undefined}
+            suppliNutrients={viewTarget ? viewTarget.nutrients : undefined}
+            formType={formType}
           />
 
-          <SubmitBtn />
+          {mode !== 'view' && <SubmitBtn />}
         </ScrollView>
       </KeyboardAwareScrollView>
     </TouchableWithoutFeedback>

@@ -96,7 +96,6 @@ export const isSupplisCountState = selector({
   key: 'isSupplisStorageState',
   get: ({get}) => {
     const suppliCount = get(suppliCountState);
-    console.log('suppliCount', suppliCount);
     if (Object.entries(suppliCount).length > 0) {
       console.log('Run isSupplisCountState');
       storage.save({

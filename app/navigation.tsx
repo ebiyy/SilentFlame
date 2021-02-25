@@ -105,7 +105,7 @@ const Tab = createBottomTabNavigator();
 
 const activeColor = {
   weeky: screenThemeColor.weeky,
-  suppl: screenThemeColor.suppl,
+  suppl: screenThemeColor.suppli,
   meals: screenThemeColor.meals,
   water: screenThemeColor.water,
   setting: screenThemeColor.setting,

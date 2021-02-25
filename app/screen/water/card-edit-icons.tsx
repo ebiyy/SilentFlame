@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/AntDesign';
@@ -10,12 +10,7 @@ type Props = {
   selectItem: any;
   index: number;
   color: string;
-  recoilSelector: RecoilState<
-    {
-      name: string;
-      intake: number;
-    }[]
-  >;
+  setWaters: SetterOrUpdater<any[]>;
   onPress: () => void;
   isMinus: boolean;
   setIsMinus: React.Dispatch<React.SetStateAction<boolean>>;
@@ -25,13 +20,13 @@ const CardEditIcons = (props: Props) => {
   const {
     selectItem,
     index,
-    recoilSelector,
+    setWaters,
     onPress,
     color,
     isMinus,
     setIsMinus,
   } = props;
-  const [state, setState] = useRecoilState(recoilSelector);
+
   const [modalVisible, setModalVisible] = useState(false);
 
   return (
@@ -77,7 +72,9 @@ const CardEditIcons = (props: Props) => {
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
         deleteFunc={() =>
-          setState((preState) => preState.filter((i) => i !== index))
+          setWaters((preState) =>
+            preState.filter((water) => water.id !== selectItem.id),
+          )
         }
       />
     </>

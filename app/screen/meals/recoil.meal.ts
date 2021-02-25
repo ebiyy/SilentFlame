@@ -1,6 +1,7 @@
 import {atom, selector} from 'recoil';
 import {WaterIntak} from '../../helpers/interface';
 import {suppliToMealState} from '../supplement/suppli.hook';
+import {waterToMealState} from '../water/water.hook';
 
 export const mealsState = atom<Meal[]>({
   key: 'mealsState',
@@ -122,24 +123,34 @@ export const mealsENERC_KCALState = selector({
 export const mealsWATERState = selector({
   key: 'mealsWATERState',
   get: ({get}) => {
+    const nutrientKey = 'WATER';
     const meals = get(mealsState);
-    const waterIntake = get(waterIntakeState);
-    const waterIntakeNumArr = waterIntake.map((obj) => obj.intake);
-    const waterValueArr = formatArr(meals.map((meal) => meal.WATER));
+    const waterToMeals = get(waterToMealState).filter(
+      (waterToMeal) => waterToMeal[nutrientKey],
+    );
+    console.log(
+      'mealsWATERState',
+      sumValues([...meals, ...waterToMeals], nutrientKey),
+    );
+    return sumValues([...meals, ...waterToMeals], nutrientKey);
+    // const waterIntake = get(waterIntakeState);
+    // const waterIntakeNumArr = waterIntake.map((obj) => obj.intake);
+    // const waterValueArr = formatArr(meals.map((meal) => meal.WATER));
 
-    if (meals.length > 0 && waterIntakeNumArr.length > 0) {
-      return (
-        waterValueArr.length > 0 &&
-        (sum(waterValueArr.concat(waterIntakeNumArr)) / 1000).toFixed(1)
-      );
-    } else if (waterIntakeNumArr.length > 0) {
-      return (
-        waterValueArr.length > 0 && (sum(waterIntakeNumArr) / 1000).toFixed(1)
-      );
-    } else if (meals.length > 0) {
-      return waterValueArr.length > 0 && (sum(waterValueArr) / 1000).toFixed(1);
-    } else {
-      return 0;
-    }
+    // // return 0;
+    // if (meals.length > 0 && waterIntakeNumArr.length > 0) {
+    //   return (
+    //     waterValueArr.length > 0 &&
+    //     (sum(waterValueArr.concat(waterIntakeNumArr)) / 1000).toFixed(1)
+    //   );
+    // } else if (waterIntakeNumArr.length > 0) {
+    //   return (
+    //     waterValueArr.length > 0 && (sum(waterIntakeNumArr) / 1000).toFixed(1)
+    //   );
+    // } else if (meals.length > 0) {
+    //   return waterValueArr.length > 0 && (sum(waterValueArr) / 1000).toFixed(1);
+    // } else {
+    //   return 0;
+    // }
   },
 });
