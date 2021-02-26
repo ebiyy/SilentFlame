@@ -30,13 +30,6 @@ const WaterCardBodyBtn = (props: Props) => {
       holdCount[water.id][patten.label] >= 0 &&
       count === 0
     ) {
-      console.log(
-        'WaterCardBodyBtn::holdCount',
-        water.id,
-        water.waterName,
-        patten.label,
-        holdCount[water.id][patten.label],
-      );
       setCount(holdCount[water.id][patten.label]);
     }
   }, [holdCount]);

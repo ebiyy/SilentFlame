@@ -63,3 +63,28 @@ export const isWaterCountState = selector({
     return false;
   },
 });
+
+export const isWaterDeleteState = selector({
+  key: 'isWaterDeleteState',
+  get: ({get}) => {
+    const waters = get(watersState);
+    const waterCount = get(waterCountState);
+    console.log(`run isWaterDeleteState`);
+    let newWaterCount = {};
+
+    const hasWaterIds = waters.map((water) => water.id);
+    const hasWaterCountIds = Object.keys(waterCount);
+
+    hasWaterCountIds.forEach((id) => {
+      if (hasWaterIds.includes(Number(id))) {
+        newWaterCount[id] = waterCount[id];
+      }
+    });
+
+    const waterToMeal = get(waterToMealState).filter((wtm) =>
+      hasWaterIds.includes(wtm.indexNumber),
+    );
+    console.log('get(waterToMealState)', get(waterToMealState), waterToMeal);
+    return [newWaterCount, waterToMeal];
+  },
+});

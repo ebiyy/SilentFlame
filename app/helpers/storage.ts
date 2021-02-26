@@ -16,7 +16,7 @@ export const load = (
       },
     })
     .then((res) => {
-      console.log('get supplis data', res);
+      console.log(`get ${key} data`, res);
       setState(res);
     })
     .catch((err) => {

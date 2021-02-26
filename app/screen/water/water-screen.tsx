@@ -12,6 +12,7 @@ import {ScrollView} from 'react-native-gesture-handler';
 import {useRecoilState, useRecoilValue} from 'recoil';
 import {
   isWaterCountState,
+  isWaterDeleteState,
   isWaterStorageState,
   isWaterToMealState,
   waterCountState,
@@ -56,6 +57,7 @@ const WaterScreen = () => {
   const isWaterStorage = useRecoilValue(isWaterStorageState);
   const isWaterCount = useRecoilValue(isWaterCountState);
   const isWaterToMeal = useRecoilValue(isWaterToMealState);
+  const isWaterDelete = useRecoilValue(isWaterDeleteState);
   const [count, setCount] = useRecoilState(waterCountState);
   const [waterToMeal, setWaterToMeal] = useRecoilState(waterToMealState);
 
@@ -63,6 +65,7 @@ const WaterScreen = () => {
     console.log('WaterScreen::isWaterStorage', isWaterStorage);
     console.log('WaterScreen::isWaterCount', isWaterCount);
     console.log('WaterScreen::isWaterToMeal', isWaterToMeal);
+    console.log('WaterScreen::isWaterDelete', isWaterDelete);
 
     // storage.remove({
     //   key: 'myWater',
@@ -79,9 +82,32 @@ const WaterScreen = () => {
   }, []);
 
   useEffect(() => {
+    console.log('WaterScreen::useEffect::count', count);
+    setCount(isWaterDelete[0]);
+
+    if (isWaterDelete[1].length > 0) {
+      setWaterToMeal(isWaterDelete[1]);
+    }
+
+    console.log('WaterScreen::useEffect::count', count);
+    console.log('WaterScreen::useEffect::count', waterToMeal);
+  }, [waters]);
+
+  useEffect(() => {
     // console.log('waters', waters);
     // // console.log('waters', waters[0].nutrients);
-    // console.log('WaterScreen::useEffect::count', count);
+
+    const countIds = Object.keys(count);
+    const waterIds = waters.map((water) => water.id);
+    let isEqual = true;
+
+    countIds.forEach((id) => {
+      if (!waterIds.includes(Number(id))) {
+        isEqual = false;
+      }
+    });
+    console.log('countIds,waterIds,isEqual', countIds, waterIds, isEqual);
+    if (!isEqual) return;
 
     if (waters && waters.length > 0) {
       let waterWeight = {};
@@ -90,7 +116,6 @@ const WaterScreen = () => {
           .map((arr) => Number(arr[0]) * arr[1])
           .reduce((a, x) => a + x);
       });
-
       const countSumNutrients = Object.entries(waterWeight).map(
         ([waterId, waterIntaike], i) => {
           return {
@@ -139,6 +164,7 @@ const WaterScreen = () => {
                 object[nutrientKey] = nutrinet.sum / Math.pow(10, 3);
               }
               object['foodName'] = waterName;
+              object['indexNumber'] = waters[i].id;
               return object;
             };
             toMeal = format(toMeal, key);
@@ -175,6 +201,7 @@ const WaterScreen = () => {
             <>
               {waters.length > 0 &&
                 // TypeError: Attempted to assign to readonly property.になるのでスプレッドしている
+
                 [...waters]
                   .sort(
                     (a, b) =>

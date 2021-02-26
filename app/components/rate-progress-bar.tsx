@@ -18,10 +18,6 @@ const RateProgressBar = (props: Props) => {
   const {title, rimit, unit, color, recoilSelector} = props;
   const sumValue = useRecoilValue(recoilSelector);
 
-  useEffect(() => {
-    console.log('RateProgressBar', sumValue);
-  }, [sumValue]);
-
   return (
     <View style={styles.barContainer}>
       <View style={styles.barTextContainer}>

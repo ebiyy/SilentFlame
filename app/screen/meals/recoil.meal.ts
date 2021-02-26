@@ -128,11 +128,8 @@ export const mealsWATERState = selector({
     const waterToMeals = get(waterToMealState).filter(
       (waterToMeal) => waterToMeal[nutrientKey],
     );
-    console.log(
-      'mealsWATERState',
-      sumValues([...meals, ...waterToMeals], nutrientKey),
-    );
-    return sumValues([...meals, ...waterToMeals], nutrientKey);
+
+    return sumValues([...meals, ...waterToMeals], nutrientKey) / 1000;
     // const waterIntake = get(waterIntakeState);
     // const waterIntakeNumArr = waterIntake.map((obj) => obj.intake);
     // const waterValueArr = formatArr(meals.map((meal) => meal.WATER));
