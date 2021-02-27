@@ -16,7 +16,7 @@ const SECTIONS = [
   },
 ];
 
-const CollapsibleSample = () => {
+export const CollapsibleSample = () => {
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [activeSection, setActiveSection] = useState([]);
 
@@ -82,5 +82,3 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
-
-export default CollapsibleSample;

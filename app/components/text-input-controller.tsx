@@ -2,8 +2,8 @@ import React from 'react';
 import {Controller, Control, DeepMap, FieldError} from 'react-hook-form';
 import {StyleSheet, TextInput} from 'react-native';
 import {useRecoilState} from 'recoil';
-import {shadowStyles} from '../global-style';
-import {isScrollState} from '../screen/supplement/suppli.hook';
+import {shadowStyles} from '../global/styles';
+import {isScrollState} from '../features/suppli/suppli.hook';
 
 type Props = {
   control: Control<Record<string, any>>;
@@ -17,7 +17,7 @@ type Props = {
   required?: boolean;
 };
 
-const TextInputController = (props: Props) => {
+export const TextInputController = (props: Props) => {
   const {
     control,
     controlName,
@@ -78,5 +78,3 @@ const styles = StyleSheet.create({
     color: 'red',
   },
 });
-
-export default TextInputController;

@@ -6,7 +6,7 @@ import React, {useState} from 'react';
 import {ScrollView} from 'react-native';
 import {View, Button, Image} from 'react-native';
 
-const SampleCameraRoll = () => {
+export const SampleCameraRoll = () => {
   const [photos, setPhotos] = useState<PhotoIdentifier[]>();
 
   const handleButtonPress = () => {
@@ -46,5 +46,3 @@ const SampleCameraRoll = () => {
     </>
   );
 };
-
-export default SampleCameraRoll;

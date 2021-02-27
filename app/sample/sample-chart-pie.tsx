@@ -7,7 +7,7 @@ import {
   mealsCHOCDFState,
   mealsFatState,
   mealsProteinState,
-} from '../screen/meals/recoil.meal';
+} from '../features/meal/recoil.meal';
 
 const chartConfig = {
   decimalPlaces: 2, // optional, defaults to 2dp
@@ -19,7 +19,7 @@ type Props = {
   absolute: boolean;
 };
 
-const SampleChartPie = (props: Props) => {
+export const SampleChartPie = (props: Props) => {
   const {absolute} = props;
   const sumProtein = useRecoilValue(mealsProteinState);
   const sumFat = useRecoilValue(mealsFatState);
@@ -91,5 +91,3 @@ const SampleChartPie = (props: Props) => {
     </View>
   );
 };
-
-export default SampleChartPie;

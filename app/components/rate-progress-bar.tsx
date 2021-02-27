@@ -14,7 +14,7 @@ type Props = {
   recoilSelector: RecoilValueReadOnly<any>;
 };
 
-const RateProgressBar = (props: Props) => {
+export const RateProgressBar = (props: Props) => {
   const {title, rimit, unit, color, recoilSelector} = props;
   const sumValue = useRecoilValue(recoilSelector);
 
@@ -52,5 +52,3 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
 });
-
-export default RateProgressBar;

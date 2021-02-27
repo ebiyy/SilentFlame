@@ -16,7 +16,7 @@ type Props = {
   children?: Element;
 };
 
-const WideBtn = (props: Props) => {
+export const WideBtn = (props: Props) => {
   const {navigate, btnText, widthRate, color, type, children} = props;
   return (
     <TouchableHighlight
@@ -62,5 +62,3 @@ const Styles = StyleSheet.create({
   },
   text: {fontSize: 18, fontFamily: 'Hiragino Sans'},
 });
-
-export default WideBtn;

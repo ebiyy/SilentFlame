@@ -36,7 +36,7 @@ function MyTabs() {
 
 const Stack = createStackNavigator();
 
-export default function NavigationScreen() {
+export function NavigationScreen() {
   return (
     <NavigationContainer>
       <Stack.Navigator>

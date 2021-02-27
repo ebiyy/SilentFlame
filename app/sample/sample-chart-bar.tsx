@@ -7,7 +7,7 @@ import {
   mealsCHOCDFState,
   mealsFatState,
   mealsProteinState,
-} from '../screen/meals/recoil.meal';
+} from '../features/meal/recoil.meal';
 
 const chartConfig = {
   backgroundGradientFrom: 'white',
@@ -25,7 +25,7 @@ const chartConfig = {
   },
 };
 
-const SampleChartBar = () => {
+export const SampleChartBar = () => {
   const sumProtein = useRecoilValue(mealsProteinState);
   const sumFat = useRecoilValue(mealsFatState);
   const sumCHOCDFS = useRecoilValue(mealsCHOCDFState);
@@ -62,5 +62,3 @@ const styles = StyleSheet.create({
     // borderRadius: 16,
   },
 });
-
-export default SampleChartBar;

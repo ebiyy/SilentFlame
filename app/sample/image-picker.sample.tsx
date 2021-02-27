@@ -19,7 +19,7 @@ export function PickerButton({title, onPress}) {
   );
 }
 
-export default function SampleImagePicker() {
+export function SampleImagePicker() {
   const [response, setResponse] = useState(null);
 
   useEffect(() => {

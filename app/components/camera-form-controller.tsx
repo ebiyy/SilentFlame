@@ -10,7 +10,7 @@ import {
 import {ImagePickerResponse, launchCamera} from 'react-native-image-picker';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {useRecoilState} from 'recoil';
-import {imageResState} from '../screen/supplement/suppli.hook';
+import {imageResState} from '../features/suppli/suppli.hook';
 
 type Props = {
   control: Control<Record<string, any>>;
@@ -19,7 +19,7 @@ type Props = {
   defaultValue: ImagePickerResponse | undefined;
 };
 
-const CameraFormController = (props: Props) => {
+export const CameraFormController = (props: Props) => {
   const {control, errors, editable, defaultValue} = props;
   const [imageData, setImageData] = useState<ImagePickerResponse | undefined>(
     defaultValue,
@@ -121,5 +121,3 @@ const styles = StyleSheet.create({
     backgroundColor: '#d1d1d1',
   },
 });
-
-export default CameraFormController;

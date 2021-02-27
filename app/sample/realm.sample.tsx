@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {SafeAreaView, Text} from 'react-native';
 // import Realm from 'realm';
 
-const SampleRealm = () => {
+export const SampleRealm = () => {
   // const [realm, setRealm] = useState<Realm>();
 
   // useEffect(() => {
@@ -45,5 +45,3 @@ const SampleRealm = () => {
     </>
   );
 };
-
-export default SampleRealm;

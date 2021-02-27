@@ -11,7 +11,7 @@ type Props = {
   marginTop: number;
 };
 
-const PickerController = (props: Props) => {
+export const PickerController = (props: Props) => {
   const {control, controlName, items, defaultValue, errors, marginTop} = props;
   return (
     <Controller
@@ -34,5 +34,3 @@ const PickerController = (props: Props) => {
     />
   );
 };
-
-export default PickerController;

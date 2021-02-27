@@ -1,9 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {View, Button} from 'react-native';
 import analytics, {firebase} from '@react-native-firebase/analytics';
-import CustomCalendar from './calender';
 
-const FirebaseCustomEvent = () => {
+export const FirebaseCustomEvent = () => {
   const [isInitFirebase, setIsInitFirebase] = useState(true);
   useEffect(() => {
     firebase
@@ -30,5 +29,3 @@ const FirebaseCustomEvent = () => {
     </View>
   );
 };
-
-export default FirebaseCustomEvent;

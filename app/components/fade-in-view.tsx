@@ -7,7 +7,7 @@ type Props = {
   duration?: number;
 };
 
-const FadeInView = (props: Props) => {
+export const FadeInView = (props: Props) => {
   const {style, children, duration = 500} = props;
   const fadeAnim = useRef(new Animated.Value(0)).current; // Initial value for opacity: 0
 
@@ -29,5 +29,3 @@ const FadeInView = (props: Props) => {
     </Animated.View>
   );
 };
-
-export default FadeInView;

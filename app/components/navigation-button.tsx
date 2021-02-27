@@ -1,7 +1,7 @@
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {StyleSheet, Text, TouchableOpacity} from 'react-native';
-import {ComStyles} from '../global-style';
+import {ComStyles} from '../global/styles';
 
 type Props = {
   buttonTitle: string;
@@ -9,7 +9,7 @@ type Props = {
   params?: Object;
 };
 
-const NavigationButton = (props: Props) => {
+export const NavigationButton = (props: Props) => {
   const navigation = useNavigation();
   return (
     <TouchableOpacity
@@ -39,5 +39,3 @@ const Styles = StyleSheet.create({
     fontSize: 22,
   },
 });
-
-export default NavigationButton;

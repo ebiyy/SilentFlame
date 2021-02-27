@@ -5,7 +5,7 @@ type Props = {
   title: string;
 };
 
-const TitleText = (props: Props) => {
+export const TitleText = (props: Props) => {
   const {title} = props;
   return (
     <View style={Styles.container}>
@@ -23,5 +23,3 @@ const Styles = StyleSheet.create({
     marginLeft: 5,
   },
 });
-
-export default TitleText;

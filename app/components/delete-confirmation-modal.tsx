@@ -7,7 +7,7 @@ type Props = {
   deleteFunc: () => void;
 };
 
-const DeleteConfirmationModal = (props: Props) => {
+export const DeleteConfirmationModal = (props: Props) => {
   return (
     <View>
       <View style={styles.centeredView}>
@@ -86,5 +86,3 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
   },
 });
-
-export default DeleteConfirmationModal;

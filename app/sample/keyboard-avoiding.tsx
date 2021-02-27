@@ -12,7 +12,7 @@ import {
   Keyboard,
 } from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {NUTRIENTS} from '../../helpers/csvtojson/nutrients';
+import {NUTRIENTS} from '../config/meal-lists/nutrients';
 
 const generateHitObj = (inputText: string) => {
   const hitArr = NUTRIENTS.filter((obj) => obj.foodName.includes(inputText));
@@ -22,7 +22,7 @@ const generateHitObj = (inputText: string) => {
   );
 };
 
-const KeyboardAvoidingComponent = () => {
+export const KeyboardAvoidingComponent = () => {
   const {control, handleSubmit, errors} = useForm();
   const [inputText, setInputText] = useState('');
   return (
@@ -88,5 +88,3 @@ const styles = StyleSheet.create({
     marginTop: 12,
   },
 });
-
-export default KeyboardAvoidingComponent;

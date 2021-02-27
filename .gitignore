@@ -64,23 +64,6 @@ fatsecret-oath.js
 fatsecret.sample.tsx
 credencial.ts
 
-# csvtojson
-*/csvtojson/*
-app/helpers/csvtojson/index.js
-app/helpers/csvtojson/nutrients.csv
-app/helpers/csvtojson/nutrients.ts
-app/helpers/csvtojson/carbohydrate.csv
-app/helpers/csvtojson/carbohydrate.ts
-app/helpers/csvtojson/dietary_fiber.csv
-app/helpers/csvtojson/dietary-fiber.ts
-app/helpers/csvtojson/fat.ts
-app/helpers/csvtojson/fat.csv
-app/helpers/csvtojson/info.ts
-app/helpers/csvtojson/organic_acid.csv
-app/helpers/csvtojson/organic-acid.ts
-app/helpers/csvtojson/protein.csv
-app/helpers/csvtojson/protein.ts
-
 # firebase
 firebase.json
 app/admob.tsx
@@ -89,3 +72,8 @@ app/helpers/databases/realm-config.json
 ios/SilentFlame/GoogleService-Info.plist
 app/helpers/databases/realm-config.ts
 
+# meal-data
+app/config/meal-lists/*
+utility/csvtojson/*.csv
+
+backup/realm/*

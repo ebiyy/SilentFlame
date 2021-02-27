@@ -7,7 +7,7 @@ import {
   Text,
   StyleSheet,
 } from 'react-native';
-import {screenThemeColor, shadowStyles} from '../global-style';
+import {screenThemeColor, shadowStyles} from '../global/styles';
 
 type Props = {
   btnText: string;
@@ -18,7 +18,7 @@ type Props = {
   height?: number;
 };
 
-const WideBtn = (props: Props) => {
+export const WideBtn = (props: Props) => {
   const navigation = useNavigation();
   const {
     btnText,
@@ -71,5 +71,3 @@ const Styles = StyleSheet.create({
     fontFamily: 'Hiragino Sans',
   },
 });
-
-export default WideBtn;
