@@ -7,7 +7,7 @@ import {
 } from 'react-native-gesture-handler';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {useRecoilState, useRecoilValue} from 'recoil';
-import {userIdState} from '../init-app/user.recoil';
+import {userIdState} from '../init-app/init-app.recoil';
 import {generateMeal, replaceFoodName} from './function.meal';
 import {actionMealState} from './recoil.meal';
 

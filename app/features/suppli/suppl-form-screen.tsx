@@ -13,7 +13,7 @@ import {screenThemeColor, shadowStyles, winWidth} from '../../global/styles';
 import {SetterOrUpdater, useRecoilValue} from 'recoil';
 import {imageResState, isScrollState} from './suppli.hook';
 import {FormType, Suppli, SuppliBaseInfo, SuppliNutrient} from './suppli';
-import {userIdState} from '../init-app/user.recoil';
+import {userIdState} from '../init-app/init-app.recoil';
 import {FORM_TYPE_CONTENT, NUTRIENT_KEY} from './constant';
 import {Divider} from '../../components/divider';
 import {TitleText} from '../../components/title-text';

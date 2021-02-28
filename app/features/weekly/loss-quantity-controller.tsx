@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
     height: 40,
   },
   chartContainer: {
-    marginTop: 2,
+    // marginTop: 2,
     marginHorizontal: 10,
     marginBottom: 10,
     borderWidth: 1,

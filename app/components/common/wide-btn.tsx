@@ -7,7 +7,7 @@ import {
   Text,
   StyleSheet,
 } from 'react-native';
-import {screenThemeColor, shadowStyles} from '../global/styles';
+import {screenThemeColor, shadowStyles} from '../../global/styles';
 
 type Props = {
   btnText: string;

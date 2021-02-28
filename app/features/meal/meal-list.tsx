@@ -13,7 +13,7 @@ import {DIETARY_FIBER} from '../../config/meal-lists/dietary-fiber';
 import {FATS} from '../../config/meal-lists/fat';
 import {ORGANIC_ACID} from '../../config/meal-lists/organic-acid';
 import {PROTEINS} from '../../config/meal-lists/protein';
-import {userIdState} from '../init-app/user.recoil';
+import {userIdState} from '../init-app/init-app.recoil';
 import {generateMeal, replaceFoodName} from './function.meal';
 import {actionMealState} from './recoil.meal';
 

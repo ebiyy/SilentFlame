@@ -21,7 +21,7 @@ import {TitleText} from '../../components/title-text';
 import {CardEditIcons} from './card-edit-icons';
 import {WaterCardBodyBtn} from './water-card-body-btn';
 import {WideBtn} from '../../components/wide-button';
-import {storageLoad} from '../../api/helpers';
+import {storageLoad} from '../../api/storage.helper';
 
 const inputWaterPatten = [
   {name: 'cup', label: 120, iconElm: 'SimpleLineIcons'},

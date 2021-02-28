@@ -1,47 +1,56 @@
 // 参考: https://tegralsblog.com/react-native-calendars-custom-japanese/
 import React, {useEffect, useState} from 'react';
 import {Calendar, LocaleConfig} from 'react-native-calendars';
-import {useRecoilState} from 'recoil';
+import {useRecoilState, useRecoilValue} from 'recoil';
 import {dateState} from './data-manager.recoil';
-import {formatShortStrDate} from '../../api/utils';
+import {convToLocalDate, formatShortStrDate} from '../../api/utils';
 import {LOCALES, mockMarkedDates} from './constants';
 import {DotMarkingData} from './date-manager';
 import {changeMarkedDate} from './functions';
+import {userInfoState} from '../init-app/init-app.recoil';
 
 LocaleConfig.locales.jp = LOCALES;
 LocaleConfig.defaultLocale = 'jp';
 
-export const CustomCalendar = () => {
-  const [selectedDate, setSelectedDate] = useState('');
-  const [markedDate, setMarkedDate] = useState<DotMarkingData>(mockMarkedDates);
-  const [date, setDate] = useRecoilState(dateState);
+type Props = {
+  markedDate: DotMarkingData;
+  date: Date;
+  setSelectedDate: React.Dispatch<React.SetStateAction<string>>;
+};
 
-  useEffect(() => {
-    // ex. '2021-02-16'
-    const strDate = formatShortStrDate(date);
-    setMarkedDate((preState) =>
-      changeMarkedDate(preState, strDate, selectedDate),
-    );
-    setSelectedDate(strDate);
-  }, [date, selectedDate]);
+export const CustomCalendar = (props: Props) => {
+  const {date, markedDate, setSelectedDate} = props;
+  // const [selectedDate, setSelectedDate] = useState('');
+  // const [date, setDate] = useRecoilState(dateState);
+  const userInfo = useRecoilValue(userInfoState);
+
+  // useEffect(() => {
+  //   // ex. '2021-02-16'
+  //   const strDate = formatShortStrDate(date);
+  //   setMarkedDate((preState) =>
+  //     changeMarkedDate(preState, strDate, selectedDate),
+  //   );
+  //   setSelectedDate(strDate);
+  // }, [date, selectedDate]);
 
   return (
     <Calendar
       // 最初に表示される月。 デフォルト値 = Date()
-      current={new Date()}
+      current={new Date(date)}
       // カレンダーで選択できる範囲の最初の日。この日以前の日付はグレーアウトします。 デフォルト値 = undefined
-      minDate={'2021-02-01'}
+      minDate={'2021-01-01'}
+      // minDate={convToLocalDate(userInfo.createdAt)}
       // カレンダーで選択できる範囲の最後の日。この日以前の日付はグレーアウトします。 デフォルト値 = undefined
-      maxDate={'2021-12-31'}
+      maxDate={new Date()}
       // 年月の表示フォーマット。
       monthFormat={'yyyy年 M月'}
       // Handler which gets executed on day press. Default = undefined
       onDayPress={(dateObj) => {
-        setMarkedDate((preState) =>
-          changeMarkedDate(preState, dateObj.dateString, selectedDate),
-        );
+        // setMarkedDate((preState) =>
+        //   changeMarkedDate(preState, dateObj.dateString, selectedDate),
+        // );
         setSelectedDate(dateObj.dateString);
-        setDate(new Date(dateObj.dateString));
+        // setDate(new Date(dateObj.dateString));
       }}
       // 年月を変更したときの挙動。
       onMonthChange={(dateObj) => {

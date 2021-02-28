@@ -15,7 +15,7 @@ import {FadeInView} from '../../components/fade-in-view';
 import {ItemActions} from './components/item-actions';
 import {RecycleBtn} from './components/recycle-btn';
 import {CountSupplement} from './count-supplement';
-import {storage} from '../../api/helpers';
+import {storage} from '../../api/storage.helper';
 
 export const SupplementScreen = () => {
   const navigation = useNavigation();

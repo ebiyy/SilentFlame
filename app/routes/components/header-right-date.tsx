@@ -1,28 +1,87 @@
 // 参考: https://tegralsblog.com/react-native-calendars-custom-japanese/
-import React, {useEffect} from 'react';
+import {useRoute} from '@react-navigation/native';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useRecoilState} from 'recoil';
-import {formatJPDate} from '../../api/utils';
+import {formatJpDate, formatJpMonthDay, weekPeriod} from '../../api/utils';
+import {ConfirmationModal} from '../../components/common/confirmation-modal';
+import {FadeInView} from '../../components/fade-in-view';
 import {dateState} from '../../features/date-manager/data-manager.recoil';
 
 export const HeaderRightDate = () => {
+  const route = useRoute();
   const [date, setDate] = useRecoilState(dateState);
+  const [isWeekly, setIsWeekly] = useState<boolean>();
+  const [modalVisible, setModalVisible] = useState(false);
+  const [modalChoice, setModalChoice] = useState<'yes' | 'no' | undefined>();
 
-  // useEffect(() => {
-  //   console.log('HeaderRightDate', date);
-  // }, [date]);
+  useEffect(() => {
+    console.log('HeaderRightDate', route);
+    if (route.state === undefined) {
+      console.log(1);
+      if (route.name === 'weekly') {
+        setIsWeekly(true);
+        console.log(2);
+      } else {
+        setIsWeekly(false);
+        console.log(3);
+      }
+    } else {
+      if (route.state.index !== undefined) {
+        if (route.state.index === 0) {
+          setIsWeekly(true);
+          console.log(4);
+        } else {
+          setIsWeekly(false);
+          console.log(5);
+        }
+      } else {
+        setIsWeekly(false);
+        console.log(6);
+      }
+    }
+  }, [route]);
+
+  useEffect(() => {
+    if (modalChoice === 'yes') {
+      setDate(new Date());
+      setModalChoice(undefined);
+    }
+  }, [modalChoice]);
 
   return (
-    <TouchableOpacity onPress={() => setDate(new Date())}>
-      <View style={Styles.view}>
-        <Text style={Styles.text}>
-          {formatJPDate(date) === formatJPDate(new Date())
-            ? '今日'
-            : formatJPDate(date)}
-        </Text>
-      </View>
-    </TouchableOpacity>
+    <>
+      {!modalVisible && (
+        <TouchableOpacity
+          onPress={() =>
+            formatJpDate(date) !== formatJpDate(new Date())
+              ? setModalVisible(true)
+              : {}
+          }>
+          <View style={Styles.view}>
+            <Text style={Styles.text}>
+              {formatJpDate(date) === formatJpDate(new Date())
+                ? isWeekly
+                  ? weekPeriod(date)
+                  : '今日'
+                : isWeekly
+                ? weekPeriod(date)
+                : formatJpDate(date)}
+            </Text>
+          </View>
+        </TouchableOpacity>
+      )}
+
+      {modalVisible && (
+        <ConfirmationModal
+          modalVisible={modalVisible}
+          setModalVisible={setModalVisible}
+          modalFunc={setModalChoice}
+          modalTitle="今日の日付に戻しますか？"
+        />
+      )}
+    </>
   );
 };
 

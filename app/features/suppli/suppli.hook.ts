@@ -1,6 +1,6 @@
 import {ImagePickerResponse} from 'react-native-image-picker';
 import {atom, selector} from 'recoil';
-import {storage} from '../../api/helpers';
+import {storage} from '../../api/storage.helper';
 import {
   MOCK_BASE_INFO,
   MOCK_BASE_INFO2,

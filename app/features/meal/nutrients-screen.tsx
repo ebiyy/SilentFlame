@@ -8,7 +8,7 @@ import {screenThemeColor, shadowStyles, winWidth} from '../../global/styles';
 import SwitchSelector from 'react-native-switch-selector';
 import {BASIC_NUTRIENTS_LABEL, NUTRIENTS_LABEL} from './constant.meal';
 import {Divider} from '../../components/divider';
-import {userIdState} from '../init-app/user.recoil';
+import {userIdState} from '../init-app/init-app.recoil';
 import {NutrientsList} from './nutrients-list';
 
 type Params = {

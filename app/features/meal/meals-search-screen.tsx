@@ -5,10 +5,10 @@ import {VirtualizedList} from 'react-native';
 import {View, TextInput, StyleSheet, Text, Dimensions} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useRecoilValue} from 'recoil';
-import {firestoreState} from '../firebase/meal';
+import {firestoreState} from '../../api/firebase.helper';
 import {screenThemeColor, shadowStyles} from '../../global/styles';
 import {NUTRIENTS} from '../../config/meal-lists/nutrients';
-import {userIdState} from '../init-app/user.recoil';
+import {userIdState} from '../init-app/init-app.recoil';
 import {LogMeals} from './log-meals';
 import {MealLsit} from './meal-list';
 

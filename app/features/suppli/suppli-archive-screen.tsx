@@ -14,7 +14,7 @@ import {supplisState} from './suppli.hook';
 import {Suppli} from './suppli';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {TitleText} from '../../components/title-text';
-import {ConfirmationModal} from './components/confirmation-modal';
+import {ConfirmationModal} from '../../components/common/confirmation-modal';
 
 export const SuppliArchiveScreen = () => {
   const navigation = useNavigation();

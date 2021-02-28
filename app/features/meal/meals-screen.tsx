@@ -18,7 +18,7 @@ import {Divider} from '../../components/divider';
 import {FadeInView} from '../../components/fade-in-view';
 import {RateProgressBar} from '../../components/rate-progress-bar';
 import {TitleText} from '../../components/title-text';
-import {WideBtn} from '../../components/wide-btn';
+import {WideBtn} from '../../components/common/wide-btn';
 import {PfcPieChart} from '../../components/pfc-pie-chart';
 import {RegistrationMealCard} from './registration-meal-card';
 

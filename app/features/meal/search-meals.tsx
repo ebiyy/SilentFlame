@@ -17,9 +17,9 @@ import {
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import {useRecoilState, useRecoilValue} from 'recoil';
 import {NUTRIENTS} from '../../config/meal-lists/nutrients';
-import {firestoreState} from '../firebase/meal';
+import {firestoreState} from '../../api/firebase.helper';
 import {screenThemeColor} from '../../global/styles';
-import {userIdState} from '../init-app/user.recoil';
+import {userIdState} from '../init-app/init-app.recoil';
 import {LogMeals} from './log-meals';
 import {MealLsit} from './meal-list';
 import {actionMealState} from './recoil.meal';

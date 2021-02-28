@@ -2,16 +2,16 @@ import {FirebaseFirestoreTypes} from '@react-native-firebase/firestore';
 import {useState, useEffect} from 'react';
 import {useCollection} from 'react-firebase-hooks/firestore';
 import {useRecoilState, useRecoilValue} from 'recoil';
-import {firestoreState, getDocRef} from '../firebase/meal';
+import {firestoreState, getDocRef} from '../../api/firebase.helper';
 import {actionMealState, mealsState} from './recoil.meal';
-import {userIdState} from '../init-app/user.recoil';
+import {userIdState} from '../init-app/init-app.recoil';
 import {
   dateState,
   weeksBeginningDateState,
 } from '../date-manager/data-manager.recoil';
 import {formatShortStrDate} from '../../api/utils';
 import {APP_VERSION} from '../../global/constants';
-import {storage} from '../../api/helpers';
+import {storage} from '../../api/storage.helper';
 
 export const useMargeMealState = () => {
   const [actionMeal, setActionMeal] = useRecoilState(actionMealState);

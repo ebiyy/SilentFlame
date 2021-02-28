@@ -5,8 +5,8 @@ import {useCollection} from 'react-firebase-hooks/firestore';
 import {View, StyleSheet} from 'react-native';
 import {useRecoilValue} from 'recoil';
 import {TitleText} from '../../components/title-text';
-import {firestoreState} from '../firebase/meal';
-import {userIdState} from '../init-app/user.recoil';
+import {firestoreState} from '../../api/firebase.helper';
+import {userIdState} from '../init-app/init-app.recoil';
 import {MealsLsit} from './meals-linst';
 
 type Props = {

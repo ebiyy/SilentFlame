@@ -6,7 +6,7 @@ import {Anti} from '../../components/common/icons';
 export const CustomHeaderTitle = () => {
   const navigation = useNavigation();
   return (
-    <TouchableOpacity onPress={() => navigation.navigate('CustomCalendar')}>
+    <TouchableOpacity onPress={() => navigation.navigate('CalendarScreen')}>
       {Anti('calendar', 'black', 30)}
     </TouchableOpacity>
   );

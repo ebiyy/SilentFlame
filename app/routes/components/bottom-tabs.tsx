@@ -29,8 +29,10 @@ const tabScreen = (
   component: () => JSX.Element,
   iconElm: IconElm,
   iconName: string,
+  i: number,
 ) => (
   <Tab.Screen
+    key={i}
     name={name}
     component={component}
     options={{
@@ -94,8 +96,8 @@ export const RouteTabs = () => {
       <Tab.Navigator
         initialRouteName={SCREEN_NAME.weekly}
         tabBarOptions={tabBarOptions(routeName)}>
-        {tabItems.map((item) =>
-          tabScreen(item.name, item.component, item.iconElm, item.iconName),
+        {tabItems.map((item, i) =>
+          tabScreen(item.name, item.component, item.iconElm, item.iconName, i),
         )}
       </Tab.Navigator>
     </>

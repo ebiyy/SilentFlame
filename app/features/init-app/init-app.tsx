@@ -1,17 +1,13 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, {useEffect, useRef} from 'react';
 import {AppState, AppStateStatus} from 'react-native';
 
-import {atom, useRecoilState} from 'recoil';
-import {FirebaseSetting} from '../firebase/firebase';
-
-export const recoilAppState = atom<AppStateStatus>({
-  key: 'recoilAppState',
-  default: AppState.currentState,
-});
+import {useRecoilState} from 'recoil';
+import {FirebaseSetting} from './firebase';
+import {appState} from './init-app.recoil';
 
 export const InitApp = () => {
   const appCurrentState = useRef(AppState.currentState);
-  const [state, setState] = useRecoilState(recoilAppState);
+  const [app, setApp] = useRecoilState(appState);
 
   useEffect(() => {
     console.log('hook init', appCurrentState.current, appCurrentState);
@@ -29,7 +25,7 @@ export const InitApp = () => {
       console.log('App has come to the foreground!');
     }
     appCurrentState.current = nextAppState;
-    setState(appCurrentState.current);
+    setApp(appCurrentState.current);
     console.log('appCurrentState.current', appCurrentState.current);
   };
 

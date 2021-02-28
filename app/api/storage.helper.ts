@@ -24,6 +24,23 @@ export const storage = new Storage({
   },
 });
 
+export const STORAGE_KEYS = {
+  userInfo: 'userInfo',
+};
+
+export const storageSave = (key: string, data: any) => {
+  storage.save({
+    key,
+    data,
+  });
+};
+
+export const storageRemove = (key: string) => {
+  storage.remove({
+    key,
+  });
+};
+
 export const storageLoad = (
   key: string,
   setState: React.Dispatch<React.SetStateAction<any>>,
@@ -44,7 +61,7 @@ export const storageLoad = (
       setState(res);
     })
     .catch((err) => {
-      console.error(err);
+      console.warn(err);
       switch (err.name) {
         case 'NotFoundError':
           // TODO;

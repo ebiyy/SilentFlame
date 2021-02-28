@@ -14,6 +14,7 @@ import {CustomHeaderBackground} from './components/header-buckground';
 import {HeaderRightDate} from './components/header-right-date';
 import {CustomHeaderTitle} from './components/header-title';
 import {MyTheme} from './counstants';
+import {CalendarScreen} from '../features/date-manager/calender-controller';
 
 const Stack = createStackNavigator();
 
@@ -39,7 +40,7 @@ export const NavigationScreen = () => {
         />
         <Stack.Screen name="NutrientsScreen" component={NutrientsScreen} />
         <Stack.Screen name="MealsSearchScreen" component={MealsSearchScreen} />
-        <Stack.Screen name="CustomCalendar" component={CustomCalendar} />
+        <Stack.Screen name="CalendarScreen" component={CalendarScreen} />
         <Stack.Screen name="NutrientForm" component={NutrientForm} />
         <Stack.Screen
           name="SuppliArchiveScreen"

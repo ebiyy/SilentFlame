@@ -2,14 +2,14 @@ import {DotMarkingData} from './date-manager';
 
 export const changeMarkedDate = (
   preState: DotMarkingData,
-  strDate: string,
   selectedDate: string,
+  beforeDate: string,
 ) => {
   let assignObj = {};
   // 選択済みの日付の背景をリセット
-  if (selectedDate) {
+  if (beforeDate) {
     assignObj = {
-      [selectedDate]: {
+      [beforeDate]: {
         selected: false,
         disableTouchEvent: false,
         selectedColor: 'transparent',
@@ -17,7 +17,7 @@ export const changeMarkedDate = (
     };
   }
   assignObj = Object.assign(assignObj, {
-    [strDate]: {
+    [selectedDate]: {
       selected: true,
       disableTouchEvent: true,
       selectedColor: 'orange',
