@@ -1,5 +1,11 @@
 import {atom, selector} from 'recoil';
-import {storage} from '../../api/storage.helper';
+import {
+  storage,
+  storageSave,
+  storageSaveDateData,
+} from '../../api/storage.helper';
+import {formatShortStrDate} from '../../api/utils';
+import {dateState, editableState} from '../date-manager/data-manager.recoil';
 
 export const watersState = atom<any[]>({
   key: 'watersState',
@@ -20,12 +26,12 @@ export const isWaterStorageState = selector({
   key: 'isWaterStorageState',
   get: ({get}) => {
     const waters = get(watersState);
-    if (waters.length > 0) {
+    const currentDate = get(dateState);
+    const editable = get(editableState);
+    if (waters.length > 0 && editable) {
       console.log('Run isWaterStorageState');
-      storage.save({
-        key: 'myWater',
-        data: waters,
-      });
+      storageSaveDateData('myWater', formatShortStrDate(currentDate), waters);
+      storageSave('myWater', waters);
       return true;
     }
     return false;
@@ -36,12 +42,16 @@ export const isWaterToMealState = selector({
   key: 'isWaterToMealState',
   get: ({get}) => {
     const waterToMeal = get(waterToMealState);
-    if (waterToMeal.length > 0) {
+    const currentDate = get(dateState);
+    const editable = get(editableState);
+    if (waterToMeal.length > 0 && editable) {
       console.log('Run isWaterToMealState');
-      storage.save({
-        key: 'waterToMeal',
-        data: waterToMeal,
-      });
+      storageSaveDateData(
+        'waterToMeal',
+        formatShortStrDate(currentDate),
+        waterToMeal,
+      );
+      storageSave('waterToMeal', {});
       return true;
     }
     return false;
@@ -52,12 +62,16 @@ export const isWaterCountState = selector({
   key: 'isWaterCountState',
   get: ({get}) => {
     const waterCount = get(waterCountState);
-    if (Object.entries(waterCount).length > 0) {
+    const currentDate = get(dateState);
+    const editable = get(editableState);
+    if (Object.entries(waterCount).length > 0 && editable) {
       console.log('Run isWaterCountState');
-      storage.save({
-        key: 'waterCount',
-        data: waterCount,
-      });
+      storageSaveDateData(
+        'waterCount',
+        formatShortStrDate(currentDate),
+        waterCount,
+      );
+      storageSave('waterCount', {});
       return true;
     }
     return false;
@@ -69,6 +83,8 @@ export const isWaterDeleteState = selector({
   get: ({get}) => {
     const waters = get(watersState);
     const waterCount = get(waterCountState);
+    const editable = get(editableState);
+    if (!editable) return [{}, []];
     console.log(`run isWaterDeleteState`);
     let newWaterCount = {};
 

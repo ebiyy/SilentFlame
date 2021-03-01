@@ -15,7 +15,15 @@ import {FadeInView} from '../../components/fade-in-view';
 import {ItemActions} from './components/item-actions';
 import {RecycleBtn} from './components/recycle-btn';
 import {CountSupplement} from './count-supplement';
-import {storage} from '../../api/storage.helper';
+import {
+  storage,
+  storageLoad,
+  storageLoadDateData,
+  storageRemove,
+  storageSave,
+} from '../../api/storage.helper';
+import {dateState, editableState} from '../date-manager/data-manager.recoil';
+import {formatShortStrDate} from '../../api/utils';
 
 export const SupplementScreen = () => {
   const navigation = useNavigation();
@@ -27,135 +35,75 @@ export const SupplementScreen = () => {
   const [count, setCount] = useRecoilState(suppliCountState);
   const isSuppliCount = useRecoilValue(isSupplisCountState);
   const isSuppliToMeal = useRecoilValue(isSuppliToMealState);
+  const currentDate = useRecoilValue(dateState);
+  const editable = useRecoilValue(editableState);
+
+  // useEffect(() => {
+  //   storage.clearMapForKey('mySuppli');
+  //   storage.clearMapForKey('suppliToMeal');
+  //   storage.clearMapForKey('suppliCount');
+  //   storage.remove({
+  //     key: 'mySuppli',
+  //   });
+  //   storage.remove({
+  //     key: 'suppliToMeal',
+  //   });
+  //   storage.remove({
+  //     key: 'suppliCount',
+  //   });
+  // }, [currentDate]);
 
   useEffect(() => {
-    console.log('isSupplisStorage', isSupplisStorage);
-    console.log('isSuppliCount', isSuppliCount);
-    console.log('isSuppliToMeal', isSuppliToMeal);
+    console.log('SupplementScreen::supplis', supplis);
+    console.log('SupplementScreen::suppliCount', count);
+    console.log('SupplementScreen::suppliToMeal', suppliToMeal);
+  }, [count, suppliToMeal, supplis]);
 
-    // storage
-    //   .load({
-    //     key: 'mySuppli',
-    //     autoSync: true,
-    //     syncInBackground: true,
-    //     syncParams: {
-    //       extraFetchOptions: {},
-    //       someFlag: true,
-    //     },
-    //   })
-    //   .then((res) => {
-    //     console.log(
-    //       'get supplis data',
-    //       res.map((o) => o.suppliName),
-    //     );
-    //     setSupplis(res);
-    //   })
-    //   .catch((err) => {
-    //     switch (err.name) {
-    //       case 'NotFoundError':
-    //         // TODO;
-    //         break;
-    //       case 'ExpiredError':
-    //         storage.remove({
-    //           key: 'mySuppli',
-    //         });
-    //         break;
-    //     }
-    //   });
-    // storage
-    //   .load({
-    //     key: 'suppliToMeal',
-    //     autoSync: true,
-    //     syncInBackground: true,
-    //     syncParams: {
-    //       extraFetchOptions: {},
-    //       someFlag: true,
-    //     },
-    //   })
-    //   .then((res) => {
-    //     console.log('SupplementScreen::Load::setSuppliToMeal', res);
-    //     setSuppliToMeal(res);
-    //   })
-    //   .catch((err) => {
-    //     switch (err.name) {
-    //       case 'NotFoundError':
-    //         // TODO;
-    //         break;
-    //       case 'ExpiredError':
-    //         storage.remove({
-    //           key: 'suppliToMeal',
-    //         });
-    //         break;
-    //     }
-    //   });
+  useEffect(() => {
+    // storageLoad('mySuppli', setSupplis);
+    console.log('SupplementScreen', formatShortStrDate(currentDate));
+    if (editable) {
+      storageLoad('mySuppli', setSupplis);
+    } else {
+      storageLoadDateData(
+        'mySuppli',
+        formatShortStrDate(currentDate),
+        setSupplis,
+        [],
+      );
+    }
 
-    // storage
-    //   .load({
-    //     key: 'suppliCount',
-    //     autoSync: true,
-    //     syncInBackground: true,
-    //     syncParams: {
-    //       extraFetchOptions: {},
-    //       someFlag: true,
-    //     },
-    //   })
-    //   .then((res) => {
-    //     console.log('SupplementScreen::Load::suppliCount', res);
-    //     setCount(res);
-    //   })
-    //   .catch((err) => {
-    //     console.error('suppliCount has error', err);
-    //     switch (err.name) {
-    //       case 'NotFoundError':
-    //         // TODO;
-    //         break;
-    //       case 'ExpiredError':
-    //         // storage.remove({
-    //         //   key: 'suppliCount',
-    //         // });
-    //         break;
-    //     }
-    //   });
-    storage
-      .getBatchData([
-        {key: 'mySuppli'},
-        {key: 'suppliToMeal', syncInBackground: false},
-        {key: 'suppliCount'},
-      ])
-      .then((results) => {
-        results.forEach((res, i) => {
-          switch (i) {
-            case 0:
-              console.log(
-                'get supplis data',
-                res.map((o) => o.suppliName),
-              );
-              setSupplis(res);
-              break;
-            case 1:
-              console.log('setSuppliToMeal', res);
-              setSuppliToMeal(res);
-              break;
-            case 2:
-              console.log('setCount', res);
-              setCount(res);
-              break;
-          }
-        });
-      });
-  }, []);
+    // storageLoad('suppliToMeal', setSuppliToMeal);
+    // storageLoad('suppliCount', setCount);
+    storageLoadDateData(
+      'suppliToMeal',
+      formatShortStrDate(currentDate),
+      setSuppliToMeal,
+      {},
+    );
+    storageLoadDateData(
+      'suppliCount',
+      formatShortStrDate(currentDate),
+      setCount,
+      {},
+    );
+  }, [currentDate]);
 
   return (
     <ScrollView>
       <View style={Styles.screenContainer}>
-        <View style={[ComStyles.centeringContainer, Styles.addButtonContainer]}>
-          <ItemActions
-            switchCount={switchCount}
-            setSwitchCount={setSwitchCount}
-            isDelete={isDelete}
-            setIsDelete={setIsDelete}
-          />
-        </View>
+        {editable && (
+          <View
+            style={[ComStyles.centeringContainer, Styles.addButtonContainer]}>
+            <ItemActions
+              switchCount={switchCount}
+              setSwitchCount={setSwitchCount}
+              isDelete={isDelete}
+              setIsDelete={setIsDelete}
+            />
+          </View>
+        )}
+
         <FadeInView>
           {supplis
             .filter((suppli) => !suppli.delete)
@@ -170,14 +118,16 @@ export const SupplementScreen = () => {
               />
             ))}
         </FadeInView>
-        {supplis.filter((suppli) => suppli.delete).length > 0 && !isDelete && (
-          <View style={Styles.recycleBtnContainer}>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('SuppliArchiveScreen')}>
-              <RecycleBtn />
-            </TouchableOpacity>
-          </View>
-        )}
+        {editable &&
+          supplis.filter((suppli) => suppli.delete).length > 0 &&
+          !isDelete && (
+            <View style={Styles.recycleBtnContainer}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('SuppliArchiveScreen')}>
+                <RecycleBtn />
+              </TouchableOpacity>
+            </View>
+          )}
       </View>
     </ScrollView>
   );

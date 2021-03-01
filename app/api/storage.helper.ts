@@ -35,6 +35,14 @@ export const storageSave = (key: string, data: any) => {
   });
 };
 
+export const storageSaveDateData = (key: string, id: string, data: any) => {
+  storage.save({
+    key,
+    id,
+    data,
+  });
+};
+
 export const storageRemove = (key: string) => {
   storage.remove({
     key,
@@ -51,6 +59,43 @@ export const storageLoad = (
       key: key,
       autoSync: true,
       syncInBackground: true,
+      syncParams: {
+        extraFetchOptions: {},
+        someFlag: true,
+      },
+    })
+    .then((res) => {
+      console.log(`get ${key} data`, res);
+      setState(res);
+    })
+    .catch((err) => {
+      console.warn(err);
+      switch (err.name) {
+        case 'NotFoundError':
+          // TODO;
+          if (initState) {
+            setState(initState);
+          }
+          break;
+        case 'ExpiredError':
+          break;
+      }
+    });
+};
+
+export const storageLoadDateData = (
+  key: string,
+  id: string,
+  setState: React.Dispatch<React.SetStateAction<any>>,
+  initState?: any,
+) => {
+  console.log('storageLoadDateData', key, id);
+  storage
+    .load({
+      key,
+      id,
+      autoSync: false,
+      syncInBackground: false,
       syncParams: {
         extraFetchOptions: {},
         someFlag: true,

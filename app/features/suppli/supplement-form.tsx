@@ -24,7 +24,11 @@ export const SupplementForm = (props: Props) => {
         control={control}
         controlName={FORM_TYPE_CONTENT[formType].controlName.name}
         placeholder={FORM_TYPE_CONTENT[formType].placeholder.name}
-        defaultValue={suppliBaseInfo ? suppliBaseInfo.suppliName : ''}
+        defaultValue={
+          suppliBaseInfo
+            ? suppliBaseInfo.suppliName || suppliBaseInfo.waterName
+            : ''
+        }
         errors={errors}
         editable={editable}
       />

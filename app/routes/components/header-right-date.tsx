@@ -4,10 +4,18 @@ import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useRecoilState} from 'recoil';
-import {formatJpDate, formatJpMonthDay, weekPeriod} from '../../api/utils';
+import {
+  formatJpDate,
+  formatJpMonthDay,
+  formatShortStrDate,
+  weekPeriod,
+} from '../../api/utils';
 import {ConfirmationModal} from '../../components/common/confirmation-modal';
 import {FadeInView} from '../../components/fade-in-view';
-import {dateState} from '../../features/date-manager/data-manager.recoil';
+import {
+  dateState,
+  editableState,
+} from '../../features/date-manager/data-manager.recoil';
 
 export const HeaderRightDate = () => {
   const route = useRoute();
@@ -15,6 +23,7 @@ export const HeaderRightDate = () => {
   const [isWeekly, setIsWeekly] = useState<boolean>();
   const [modalVisible, setModalVisible] = useState(false);
   const [modalChoice, setModalChoice] = useState<'yes' | 'no' | undefined>();
+  const [editable, setEditable] = useRecoilState(editableState);
 
   useEffect(() => {
     console.log('HeaderRightDate', route);
@@ -45,6 +54,7 @@ export const HeaderRightDate = () => {
 
   useEffect(() => {
     if (modalChoice === 'yes') {
+      setEditable(true);
       setDate(new Date());
       setModalChoice(undefined);
     }

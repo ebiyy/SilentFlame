@@ -36,7 +36,6 @@ export const CountSupplement = (props: Props) => {
   const [suppliToMeal, setSuppliToMeal] = useRecoilState(suppliToMealState);
 
   useEffect(() => {
-    console.log('CountSupplement::holdCount', holdCount);
     if (holdCount[suppli.id] >= 0 && count === 0) {
       setCount(holdCount[suppli.id]);
     }

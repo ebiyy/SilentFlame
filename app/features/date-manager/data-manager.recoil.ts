@@ -6,6 +6,11 @@ export const dateState = atom<Date>({
   default: new Date(),
 });
 
+export const editableState = atom<boolean>({
+  key: 'editableState',
+  default: true,
+});
+
 export const weeksBeginningDateState = selector({
   key: 'weeksBeginningDateState',
   get: ({get}) => {

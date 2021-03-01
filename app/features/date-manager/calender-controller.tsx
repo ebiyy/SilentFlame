@@ -1,4 +1,4 @@
-import {useNavigation} from '@react-navigation/native';
+import {CommonActions, useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useRecoilState} from 'recoil';
@@ -7,13 +7,14 @@ import {FadeInView} from '../../components/fade-in-view';
 import {shadowStyles, winWidth} from '../../global/styles';
 import {CustomCalendar} from './calender';
 import {mockMarkedDates} from './constants';
-import {dateState} from './data-manager.recoil';
+import {dateState, editableState} from './data-manager.recoil';
 import {DotMarkingData} from './date-manager';
 import {changeMarkedDate} from './functions';
 
 export const CalendarScreen = () => {
   const navigation = useNavigation();
   const [date, setDate] = useRecoilState(dateState);
+  const [editable, setEditable] = useRecoilState(editableState);
   const [selectedDate, setSelectedDate] = useState(formatShortStrDate(date));
   const [markedDate, setMarkedDate] = useState<DotMarkingData>(mockMarkedDates);
   const [beforeDate, setBeforeDate] = useState(formatShortStrDate(date));
@@ -43,8 +44,13 @@ export const CalendarScreen = () => {
             <TouchableOpacity
               style={Styles.btnContent}
               onPress={() => {
+                setEditable(selectedDate === formatShortStrDate(new Date()));
                 setDate(new Date(selectedDate));
-                navigation.navigate('weekly');
+                // navigation.navigate('weekly');
+                navigation.reset({
+                  index: 0,
+                  routes: [{name: 'weekly'}],
+                });
               }}>
               <View style={[Styles.btn, shadowStyles('black').boxShadow]}>
                 <Text style={Styles.btnText}>この日の記録を表示</Text>

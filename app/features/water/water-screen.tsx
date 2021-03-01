@@ -21,7 +21,15 @@ import {TitleText} from '../../components/title-text';
 import {CardEditIcons} from './card-edit-icons';
 import {WaterCardBodyBtn} from './water-card-body-btn';
 import {WideBtn} from '../../components/wide-button';
-import {storageLoad} from '../../api/storage.helper';
+import {
+  storage,
+  storageLoad,
+  storageLoadDateData,
+  storageRemove,
+} from '../../api/storage.helper';
+import {formatShortStrDate} from '../../api/utils';
+import {dateState, editableState} from '../date-manager/data-manager.recoil';
+import tapWater from '../../assets/img/water_640.jpg';
 
 const inputWaterPatten = [
   {name: 'cup', label: 120, iconElm: 'SimpleLineIcons'},
@@ -33,8 +41,15 @@ const registWater = [
   {
     id: Math.floor(new Date().getTime() / 1000),
     waterName: '水道水',
-    imageRes: {uri: 3},
+    imageRes: {
+      uri: Image.resolveAssetSource(tapWater).uri,
+      width: 200,
+      height: 200,
+    },
     updateAt: new Date('2021-02-01'),
+    priceValue: '1000',
+    priceUnit: '¥',
+    contentSizeValue: '0',
     nutrients: [
       {
         nutrientName: '水分',
@@ -58,26 +73,67 @@ export const WaterScreen = () => {
   const isWaterDelete = useRecoilValue(isWaterDeleteState);
   const [count, setCount] = useRecoilState(waterCountState);
   const [waterToMeal, setWaterToMeal] = useRecoilState(waterToMealState);
+  const currentDate = useRecoilValue(dateState);
+  const editable = useRecoilValue(editableState);
+
+  useEffect(() => {
+    console.log('WaterScreen::waters', waters);
+    console.log('WaterScreen::count', count);
+    console.log('WaterScreen::waterToMeal', waterToMeal);
+  }, [count, waterToMeal, waters]);
 
   useEffect(() => {
     console.log('WaterScreen::isWaterStorage', isWaterStorage);
     console.log('WaterScreen::isWaterCount', isWaterCount);
     console.log('WaterScreen::isWaterToMeal', isWaterToMeal);
     console.log('WaterScreen::isWaterDelete', isWaterDelete);
+  }, [isWaterCount, isWaterDelete, isWaterStorage, isWaterToMeal]);
 
-    // storage.remove({
-    //   key: 'myWater',
-    // });
-    // storage.remove({
-    //   key: 'waterCount',
-    // });
-    // storage.remove({
-    //   key: 'waterToMeal',
-    // });
-    storageLoad('myWater', setWaters, registWater);
-    storageLoad('waterCount', setCount);
-    storageLoad('waterToMeal', setWaterToMeal);
-  }, []);
+  // useEffect(() => {
+  //   storage.clearMapForKey('myWater');
+  //   storage.clearMapForKey('waterCount');
+  //   storage.clearMapForKey('waterToMeal');
+  //   storage.remove({
+  //     key: 'myWater',
+  //   });
+  //   storage.remove({
+  //     key: 'waterCount',
+  //   });
+  //   storage.remove({
+  //     key: 'waterToMeal',
+  //   });
+  // }, [currentDate]);
+
+  useEffect(() => {
+    // storageLoad('mySuppli', setSupplis);
+    // storageRemove('myWater');
+    console.log('WaterScreen', formatShortStrDate(currentDate));
+    if (editable) {
+      storageLoad('myWater', setWaters, registWater);
+    } else {
+      storageLoadDateData(
+        'myWater',
+        formatShortStrDate(currentDate),
+        setWaters,
+        [],
+      );
+    }
+
+    // storageLoad('suppliToMeal', setSuppliToMeal);
+    // storageLoad('suppliCount', setCount);
+    storageLoadDateData(
+      'waterCount',
+      formatShortStrDate(currentDate),
+      setCount,
+      {},
+    );
+    storageLoadDateData(
+      'waterToMeal',
+      formatShortStrDate(currentDate),
+      setWaterToMeal,
+      [],
+    );
+  }, [currentDate]);
 
   useEffect(() => {
     console.log('WaterScreen::useEffect::count', count);
@@ -104,7 +160,7 @@ export const WaterScreen = () => {
         isEqual = false;
       }
     });
-    console.log('countIds,waterIds,isEqual', countIds, waterIds, isEqual);
+    // console.log('countIds,waterIds,isEqual', countIds, waterIds, isEqual);
     if (!isEqual) return;
 
     if (waters && waters.length > 0) {
@@ -223,7 +279,6 @@ export const WaterScreen = () => {
                               index={i}
                               color="lightblue"
                               setWaters={setWaters}
-                              onPress={() => console.log('test')}
                               isMinus={isMinus}
                               setIsMinus={setIsMinus}
                             />
@@ -263,30 +318,32 @@ export const WaterScreen = () => {
                   ))}
             </>
           </FadeInView>
-          <View style={Styles.moreWaterContent}>
-            <WideBtn
-              navigate={() =>
-                navigation.navigate('SupplFormScreen', {
-                  mode: 'add',
-                  setMarge: setWaters,
-                  btnColor: screenThemeColor.water,
-                  viewTarget: {
-                    nutrients: [
-                      {
-                        nutrientName: '水分',
-                        amountPerServingValue: '100',
-                        amountPerServingUnit: 'g',
-                      },
-                    ],
-                  },
-                })
-              }
-              btnText="+"
-              widthRate={3}
-              color="gray"
-              type="btn"
-            />
-          </View>
+          {editable && (
+            <View style={Styles.moreWaterContent}>
+              <WideBtn
+                navigate={() =>
+                  navigation.navigate('SupplFormScreen', {
+                    mode: 'add',
+                    setMarge: setWaters,
+                    btnColor: screenThemeColor.water,
+                    viewTarget: {
+                      nutrients: [
+                        {
+                          nutrientName: '水分',
+                          amountPerServingValue: '100',
+                          amountPerServingUnit: 'g',
+                        },
+                      ],
+                    },
+                  })
+                }
+                btnText="+"
+                widthRate={3}
+                color="gray"
+                type="btn"
+              />
+            </View>
+          )}
         </View>
       </View>
     </ScrollView>

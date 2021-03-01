@@ -1,6 +1,12 @@
 import {ImagePickerResponse} from 'react-native-image-picker';
 import {atom, selector} from 'recoil';
-import {storage} from '../../api/storage.helper';
+import {
+  storage,
+  storageSave,
+  storageSaveDateData,
+} from '../../api/storage.helper';
+import {formatShortStrDate} from '../../api/utils';
+import {dateState, editableState} from '../date-manager/data-manager.recoil';
 import {
   MOCK_BASE_INFO,
   MOCK_BASE_INFO2,
@@ -64,12 +70,13 @@ export const isSupplisStorageState = selector({
   key: 'isSupplisStorageState',
   get: ({get}) => {
     const supplis = get(supplisState);
-    if (supplis.length > 0) {
+    const currentDate = get(dateState);
+    const editable = get(editableState);
+    if (supplis.length > 0 && editable) {
       console.log('Run isSupplisStorageState');
-      storage.save({
-        key: 'mySuppli',
-        data: supplis,
-      });
+      storageSaveDateData('mySuppli', formatShortStrDate(currentDate), supplis);
+      storageSave('mySuppli', supplis);
+
       return true;
     }
     return false;
@@ -80,12 +87,16 @@ export const isSuppliToMealState = selector({
   key: 'isSuppliToMealState',
   get: ({get}) => {
     const suppliToMeal = get(suppliToMealState);
-    if (Object.entries(suppliToMeal).length > 0) {
+    const currentDate = get(dateState);
+    const editable = get(editableState);
+    if (Object.entries(suppliToMeal).length > 0 && editable) {
       console.log('Run isSuppliToMealState');
-      storage.save({
-        key: 'suppliToMeal',
-        data: suppliToMeal,
-      });
+      storageSaveDateData(
+        'suppliToMeal',
+        formatShortStrDate(currentDate),
+        suppliToMeal,
+      );
+      storageSave('suppliToMeal', {});
       return true;
     }
     return false;
@@ -93,15 +104,19 @@ export const isSuppliToMealState = selector({
 });
 
 export const isSupplisCountState = selector({
-  key: 'isSupplisStorageState',
+  key: 'isSupplisCountState',
   get: ({get}) => {
     const suppliCount = get(suppliCountState);
-    if (Object.entries(suppliCount).length > 0) {
+    const currentDate = get(dateState);
+    const editable = get(editableState);
+    if (Object.entries(suppliCount).length > 0 && editable) {
       console.log('Run isSupplisCountState');
-      storage.save({
-        key: 'suppliCount',
-        data: suppliCount,
-      });
+      storageSaveDateData(
+        'suppliCount',
+        formatShortStrDate(currentDate),
+        suppliCount,
+      );
+      storageSave('suppliCount', {});
       return true;
     }
     return false;

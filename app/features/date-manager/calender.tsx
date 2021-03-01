@@ -1,12 +1,9 @@
 // 参考: https://tegralsblog.com/react-native-calendars-custom-japanese/
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {Calendar, LocaleConfig} from 'react-native-calendars';
-import {useRecoilState, useRecoilValue} from 'recoil';
-import {dateState} from './data-manager.recoil';
-import {convToLocalDate, formatShortStrDate} from '../../api/utils';
-import {LOCALES, mockMarkedDates} from './constants';
+import {useRecoilValue} from 'recoil';
+import {LOCALES} from './constants';
 import {DotMarkingData} from './date-manager';
-import {changeMarkedDate} from './functions';
 import {userInfoState} from '../init-app/init-app.recoil';
 
 LocaleConfig.locales.jp = LOCALES;

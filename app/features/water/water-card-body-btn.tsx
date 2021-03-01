@@ -4,8 +4,9 @@ import {shadowStyles} from '../../global/styles';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {waterIntakeState} from '../meal/recoil.meal';
-import {useRecoilState} from 'recoil';
+import {useRecoilState, useRecoilValue} from 'recoil';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import {editableState} from '../date-manager/data-manager.recoil';
 
 type Props = {
   patten: {
@@ -23,6 +24,11 @@ export const WaterCardBodyBtn = (props: Props) => {
   const {patten, water, isMinus, holdCount, setHoldCount} = props;
   const [waterIntake, setwWterIntake] = useRecoilState(waterIntakeState);
   const [count, setCount] = useState(0);
+  const editable = useRecoilValue(editableState);
+
+  useEffect(() => {
+    console.log('WaterCardBodyBtn::editable', editable);
+  }, [editable]);
 
   useEffect(() => {
     if (
@@ -55,7 +61,8 @@ export const WaterCardBodyBtn = (props: Props) => {
   const minusWater = () => setCount(count - 1 >= 0 ? count - 1 : 0);
 
   return (
-    <TouchableOpacity onPress={isMinus ? minusWater : addWater}>
+    <TouchableOpacity
+      onPress={editable ? (isMinus ? minusWater : addWater) : () => {}}>
       <View
         style={[Styles.iconBtnConatiner, shadowStyles('lightblue').boxShadow]}>
         {patten.iconElm === 'MaterialCommunityIcons' ? (
