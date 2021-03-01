@@ -1,6 +1,11 @@
 import React, {useEffect, useState} from 'react';
 import {Button, Settings, StyleSheet, Text, View} from 'react-native';
-import {storageLoadDateData} from '../../api/storage.helper';
+import {
+  storage,
+  storageLoadDateData,
+  storageRemove,
+  STORAGE_KEYS,
+} from '../../api/storage.helper';
 import {formatShortStrDate} from '../../api/utils';
 
 export const SettingScreen = () => {
@@ -11,8 +16,20 @@ export const SettingScreen = () => {
     setData(Settings.get('data'));
   };
   const [test, setTest] = useState();
-  const runTest = () => {
-    storageLoadDateData('suppliCount', '2021-02-17', setTest, {});
+  const deleteStorage = () => {
+    [
+      'meals',
+      STORAGE_KEYS.userInfo,
+      'mySuppli',
+      'suppliToMeal',
+      'suppliCount',
+      'myWater',
+      'waterToMeal',
+      'waterCount',
+    ].forEach((key) => {
+      storageRemove(key);
+      storage.clearMapForKey(key);
+    });
   };
 
   useEffect(() => {
@@ -31,7 +48,7 @@ export const SettingScreen = () => {
         onPress={() => storeData({data: 'Native'})}
         title="Store 'Native'"
       />
-      <Button onPress={runTest} title="Storage Test" />
+      <Button onPress={deleteStorage} title="Storage all clear" />
     </View>
   );
 };

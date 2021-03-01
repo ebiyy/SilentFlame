@@ -1,5 +1,8 @@
 import {atom, selector} from 'recoil';
+import {storageSaveDateData} from '../../api/storage.helper';
+import {formatShortStrDate} from '../../api/utils';
 import {WaterIntak} from '../../helpers/interface';
+import {dateState, editableState} from '../date-manager/data-manager.recoil';
 import {suppliToMealState} from '../suppli/suppli.hook';
 import {waterToMealState} from '../water/water.hook';
 
@@ -16,6 +19,22 @@ export const actionMealState = atom<ActionMeal | undefined>({
 export const waterIntakeState = atom<WaterIntak[]>({
   key: 'waterIntakeState',
   default: [],
+});
+
+export const isMealsStorageState = selector({
+  key: 'isMealsStorageState',
+  get: ({get}) => {
+    const meals = get(mealsState);
+    const currentDate = get(dateState);
+    const editable = get(editableState);
+    if (meals.length > 0 && editable) {
+      console.log('Run isSupplisStorageState');
+      storageSaveDateData('meals', formatShortStrDate(currentDate), meals);
+
+      return true;
+    }
+    return false;
+  },
 });
 
 const sumValues = (meals: Meal[], nutrientKey: string) => {

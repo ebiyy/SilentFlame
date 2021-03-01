@@ -15,7 +15,7 @@ import {ORGANIC_ACID} from '../../config/meal-lists/organic-acid';
 import {PROTEINS} from '../../config/meal-lists/protein';
 import {userIdState} from '../init-app/init-app.recoil';
 import {generateMeal, replaceFoodName} from './function.meal';
-import {actionMealState} from './recoil.meal';
+import {actionMealState, mealsState} from './recoil.meal';
 
 type Props = {
   meal: Meal;
@@ -27,7 +27,7 @@ export const MealLsit = (props: Props) => {
   const navigation = useNavigation();
   const {meal, timePeriod, isLast} = props;
   const userId = useRecoilValue(userIdState);
-  const [actionMeal, setActionMeal] = useRecoilState(actionMealState);
+  const [meals, setMeals] = useRecoilState(mealsState);
 
   const setPFC = () => {
     const selectMeal = {...meal};
@@ -108,10 +108,10 @@ export const MealLsit = (props: Props) => {
       <View style={styles.addBtn}>
         <TouchableOpacity
           onPress={() => {
-            setActionMeal({
-              item: generateMeal(setPFC(), 100, timePeriod, userId),
-              action: 'add',
-            });
+            setMeals((preState) => [
+              ...preState,
+              generateMeal(setPFC(), 100, timePeriod, userId),
+            ]);
             navigation.goBack();
           }}>
           <FontAwesome5 name="plus-circle" size={20} />

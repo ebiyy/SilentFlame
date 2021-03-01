@@ -71,7 +71,6 @@ export const SearchMeals = ({route}) => {
   const {control, handleSubmit, errors} = useForm();
   const [inputText, setInputText] = useState('');
   const [submitEditing, setSubmitEditing] = useState(false);
-  const [actionMeal, setActionMeal] = useRecoilState(actionMealState);
   const [isSerach, setIsSerach] = useState(true);
   const [serachResult, setSerachResult] = useState<Nutrients[]>([]);
   const userId = useRecoilValue(userIdState);

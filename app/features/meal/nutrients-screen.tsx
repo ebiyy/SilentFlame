@@ -2,7 +2,7 @@ import React, {Fragment, useState} from 'react';
 import {LogBox, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import {useRecoilState, useRecoilValue} from 'recoil';
-import {actionMealState} from './recoil.meal';
+import {actionMealState, mealsState} from './recoil.meal';
 import {calNutrient, generateMeal} from './function.meal';
 import {screenThemeColor, shadowStyles, winWidth} from '../../global/styles';
 import SwitchSelector from 'react-native-switch-selector';
@@ -25,38 +25,39 @@ export const NutrientsScreen = ({navigation, route}) => {
   const {selectMeal, parentScreen, timePeriod} = route.params as Params;
   const userId = useRecoilValue(userIdState);
   const [intake, setIntake] = useState(selectMeal.intake || 100);
-  const [actionMeal, setActionMeal] = useRecoilState(actionMealState);
   const [listRules, setListRules] = useState<any>(BASIC_NUTRIENTS_LABEL);
+  const [meals, setMeals] = useRecoilState(mealsState);
+
   const toggleSwitch = (v) => {
     setListRules(v === '簡易' ? BASIC_NUTRIENTS_LABEL : NUTRIENTS_LABEL);
   };
 
   const submit = () => {
-    setActionMeal(
-      parentScreen === 'MealsSearchScreen'
-        ? {
-            item: generateMeal(
-              calNutrient(selectMeal, String(intake)),
-              Number(intake),
-              timePeriod,
-              userId,
-            ),
-            action: 'add',
-          }
-        : {
-            item: {
-              ...calNutrient(selectMeal, String(intake)),
-              updatedAt: new Date(),
-              author: userId,
-            },
-            action: 'update',
-          },
-    );
     if (parentScreen === 'MealsSearchScreen') {
+      setMeals((preState) => [
+        ...preState,
+        generateMeal(
+          calNutrient(selectMeal, String(intake)),
+          Number(intake),
+          timePeriod,
+          userId,
+        ),
+      ]);
       navigation.goBack();
       navigation.goBack();
     }
     if (parentScreen === 'MealsScreen') {
+      setMeals((preState) =>
+        preState.map((meal) =>
+          meal.id === selectMeal.id
+            ? {
+                ...calNutrient(selectMeal, String(intake)),
+                updatedAt: new Date(),
+                author: userId,
+              }
+            : meal,
+        ),
+      );
       navigation.goBack();
     }
   };

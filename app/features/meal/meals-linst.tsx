@@ -9,7 +9,7 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {useRecoilState, useRecoilValue} from 'recoil';
 import {userIdState} from '../init-app/init-app.recoil';
 import {generateMeal, replaceFoodName} from './function.meal';
-import {actionMealState} from './recoil.meal';
+import {actionMealState, mealsState} from './recoil.meal';
 
 type Props = {
   meals: (MargeMeal | Nutrients)[];
@@ -20,7 +20,7 @@ export const MealsLsit = (props: Props) => {
   const navigation = useNavigation();
   const {meals, timePeriod} = props;
   const userId = useRecoilValue(userIdState);
-  const [actionMeal, setActionMeal] = useRecoilState(actionMealState);
+  const [meal, setMeals] = useRecoilState(mealsState);
 
   return (
     <>
@@ -82,10 +82,10 @@ export const MealsLsit = (props: Props) => {
               }}>
               <TouchableOpacity
                 onPress={() => {
-                  setActionMeal({
-                    item: generateMeal(obj, 100, timePeriod, userId),
-                    action: 'add',
-                  });
+                  setMeals((preState) => [
+                    ...preState,
+                    generateMeal(obj, 100, timePeriod, userId),
+                  ]);
                   navigation.goBack();
                 }}>
                 <FontAwesome5 name="plus-circle" size={20} />

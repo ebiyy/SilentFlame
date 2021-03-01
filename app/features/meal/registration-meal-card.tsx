@@ -5,7 +5,7 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 import {calNutrient, replaceFoodName} from './function.meal';
 import {useRecoilState} from 'recoil';
-import {actionMealState} from './recoil.meal';
+import {actionMealState, mealsState} from './recoil.meal';
 import {NUTRIENTS_LABEL} from './constant.meal';
 import {screenThemeColor} from '../../global/styles';
 import {DeleteConfirmationModal} from '../../components/delete-confirmation-modal';
@@ -21,7 +21,7 @@ export const RegistrationMealCard = (props: Props) => {
   const [intake, setIntake] = useState(String(meal.intake));
   const [showChangeBtn, setShowChangeBtn] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  const [actionMeal, setActionMeal] = useRecoilState(actionMealState);
+  const [meals, setMeals] = useRecoilState(mealsState);
 
   useEffect(() => {
     cancelBtnPress();
@@ -37,7 +37,9 @@ export const RegistrationMealCard = (props: Props) => {
   };
 
   const submitBtnPress = () => {
-    setActionMeal({item: tempMeal, action: 'update'});
+    setMeals((preState) =>
+      preState.map((obj) => (obj.id === meal.id ? tempMeal : meal)),
+    );
     setShowChangeBtn(false);
   };
 
@@ -81,7 +83,7 @@ export const RegistrationMealCard = (props: Props) => {
               {new Intl.DateTimeFormat('ja-JP', {
                 hour: 'numeric',
                 minute: 'numeric',
-              }).format(tempMeal.addedAt.toDate())}
+              }).format(new Date(tempMeal.addedAt))}
             </Text>
           </View>
           <View style={Styles.iconContainer}>
@@ -160,7 +162,9 @@ export const RegistrationMealCard = (props: Props) => {
       <DeleteConfirmationModal
         modalVisible={modalVisible}
         setModalVisible={setModalVisible}
-        deleteFunc={() => setActionMeal({item: tempMeal, action: 'delete'})}
+        deleteFunc={() =>
+          setMeals((preState) => preState.filter((obj) => obj.id !== meal.id))
+        }
       />
     </>
   );

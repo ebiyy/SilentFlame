@@ -9,10 +9,14 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import {ScrollView} from 'react-native-gesture-handler';
-import {mealsENERC_KCALState} from './recoil.meal';
-import {useMargeMealState} from './hook.meal';
+import {
+  isMealsStorageState,
+  mealsENERC_KCALState,
+  mealsState,
+} from './recoil.meal';
+// import {useMargeMealState} from './hook.meal';
 import {screenThemeColor} from '../../global/styles';
-import {useRecoilValue} from 'recoil';
+import {useRecoilState, useRecoilValue} from 'recoil';
 import {suppliToMealState} from '../suppli/suppli.hook';
 import {Divider} from '../../components/divider';
 import {FadeInView} from '../../components/fade-in-view';
@@ -21,6 +25,14 @@ import {TitleText} from '../../components/title-text';
 import {WideBtn} from '../../components/common/wide-btn';
 import {PfcPieChart} from '../../components/pfc-pie-chart';
 import {RegistrationMealCard} from './registration-meal-card';
+import {
+  storage,
+  storageLoad,
+  storageLoadDateData,
+  storageRemove,
+} from '../../api/storage.helper';
+import {formatShortStrDate} from '../../api/utils';
+import {dateState, editableState} from '../date-manager/data-manager.recoil';
 
 const timePeriod: TimePeriod = {
   breakfast: '朝食',
@@ -31,12 +43,24 @@ const timePeriod: TimePeriod = {
 
 export const MealsScreen = () => {
   const navigation = useNavigation();
-  const meals = useMargeMealState();
+  // const meals = useMargeMealState();
   const suppliToMeal = useRecoilValue(suppliToMealState);
+  const currentDate = useRecoilValue(dateState);
+  const [meals, setMeals] = useRecoilState(mealsState);
+  const editable = useRecoilValue(editableState);
+  const isMealsStorage = useRecoilValue(isMealsStorageState);
 
   // useEffect(() => {
   //   console.log('MealsScreen::suppliToMeal', suppliToMeal);
   // }, [suppliToMeal]);
+
+  useEffect(() => {
+    // storageLoad('mySuppli', setSupplis);
+    // storageRemove('meals');
+    console.log('SupplementScreen', formatShortStrDate(currentDate));
+
+    storageLoadDateData('meals', formatShortStrDate(currentDate), setMeals, []);
+  }, [currentDate]);
 
   return (
     <KeyboardAvoidingView
