@@ -6,18 +6,19 @@ import {
 } from '../../api/storage.helper';
 import {formatShortStrDate} from '../../api/utils';
 import {dateState, editableState} from '../date-manager/data-manager.recoil';
+import {Water, WaterCount} from './water';
 
-export const watersState = atom<any[]>({
+export const watersState = atom<Water[]>({
   key: 'watersState',
   default: [],
 });
 
-export const waterCountState = atom<{}>({
+export const waterCountState = atom<WaterCount>({
   key: 'waterCountState',
   default: {},
 });
 
-export const waterToMealState = atom<any[]>({
+export const waterToMealState = atom<Meal[]>({
   key: 'waterToMealState',
   default: [],
 });
@@ -100,7 +101,7 @@ export const isWaterDeleteState = selector({
     const waterToMeal = get(waterToMealState).filter((wtm) =>
       hasWaterIds.includes(wtm.indexNumber),
     );
-    console.log('get(waterToMealState)', get(waterToMealState), waterToMeal);
+    // console.log('get(waterToMealState)', get(waterToMealState), waterToMeal);
     return [newWaterCount, waterToMeal];
   },
 });

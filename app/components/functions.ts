@@ -6,6 +6,7 @@ export const sumMeal = (meals: Meal[]) => {
   // 特定の栄養素群を持っていないobjectが存在するため要素の大きいものを確認
   const countEntries = meals.map((meal) => Object.keys(meal).length);
   const biggestEnries = countEntries.indexOf(Math.max.apply(0, countEntries));
+  console.log('sumMeal', countEntries, biggestEnries);
   const nurientKeys = Object.keys(meals[biggestEnries]).filter(
     (key) => !excludeKeyGroup.includes(key),
   );

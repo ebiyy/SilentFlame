@@ -20,6 +20,8 @@ import {TitleText} from './title-text';
 import {pfcPieCharConfig} from './constants';
 import {sumMeal} from './functions';
 import {MCi} from './common/icons';
+import {suppliToMealState} from '../features/suppli/suppli.hook';
+import {waterToMealState} from '../features/water/water.hook';
 
 type Props = {
   meals: Meal[];
@@ -35,6 +37,8 @@ export const PfcPieChart = (props: Props) => {
   const sumCHOAV = useRecoilValue(mealsCHOAVState);
   const height = winHeight * 0.205;
   const [isWeight, setIsWeight] = useState(false);
+  const suppliToMeal = useRecoilValue(suppliToMealState);
+  const waterToMeal = useRecoilValue(waterToMealState);
 
   // ex. キャッサバでん粉の場合 炭水化物 < 糖質当量
   const calCHOCDF = () => {
@@ -44,6 +48,10 @@ export const PfcPieChart = (props: Props) => {
       return 0;
     }
   };
+
+  // useEffect(() => {
+  //   console.log('PfcPieChart::waterToMeal', waterToMeal);
+  // }, [waterToMeal]);
 
   // color: https://codepen.io/giana/pen/BoWoQR
   return (
@@ -66,7 +74,9 @@ export const PfcPieChart = (props: Props) => {
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate('NutrientsScreen', {
-                  selectMeal: sumMeal(meals),
+                  selectMeal: sumMeal(
+                    [].concat(meals, Object.values(suppliToMeal), waterToMeal),
+                  ),
                   timePeriod: '',
                   parentScreen: 'PfcPieChart',
                 })

@@ -70,3 +70,6 @@ export const getTimeZone = toFixedToNum(
   new Date().getTimezoneOffset() / hourToMunits,
   1,
 );
+
+export const isToday = (date: Date) =>
+  formatShortStrDate(date) === formatShortStrDate(new Date());

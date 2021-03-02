@@ -10,6 +10,7 @@ import {BASIC_NUTRIENTS_LABEL, NUTRIENTS_LABEL} from './constant.meal';
 import {Divider} from '../../components/divider';
 import {userIdState} from '../init-app/init-app.recoil';
 import {NutrientsList} from './nutrients-list';
+import {editableState} from '../date-manager/data-manager.recoil';
 
 type Params = {
   selectMeal: Meal;
@@ -27,6 +28,7 @@ export const NutrientsScreen = ({navigation, route}) => {
   const [intake, setIntake] = useState(selectMeal.intake || 100);
   const [listRules, setListRules] = useState<any>(BASIC_NUTRIENTS_LABEL);
   const [meals, setMeals] = useRecoilState(mealsState);
+  const editable = useRecoilValue(editableState);
 
   const toggleSwitch = (v) => {
     setListRules(v === '簡易' ? BASIC_NUTRIENTS_LABEL : NUTRIENTS_LABEL);
@@ -104,33 +106,40 @@ export const NutrientsScreen = ({navigation, route}) => {
       </View>
       {parentScreen !== 'PfcPieChart' && (
         <>
-          <View style={styles.container}>
-            <View style={styles.textInputContainer}>
-              <TextInput
-                keyboardType="numeric"
-                style={styles.input}
-                onChangeText={(v) => {
-                  setIntake(String(v));
-                }}
-                maxLength={10}
-                value={String(intake)}
-                placeholder="摂取量(g)"
-                placeholderTextColor="lightgray"
-                clearButtonMode="always"
-                defaultValue={String(intake)}
-              />
-              <Text style={styles.inputLable}>g</Text>
-            </View>
-            <TouchableOpacity style={{width: winWidth / 2.5}} onPress={submit}>
-              <View
-                style={[
-                  styles.btnContainer,
-                  shadowStyles(screenThemeColor.meals).boxShadow,
-                ]}>
-                <Text style={styles.btnText}>この量で登録</Text>
+          {editable ? (
+            <View style={styles.container}>
+              <View style={styles.textInputContainer}>
+                <TextInput
+                  keyboardType="numeric"
+                  style={styles.input}
+                  onChangeText={(v) => {
+                    setIntake(String(v));
+                  }}
+                  maxLength={10}
+                  value={String(intake)}
+                  placeholder="摂取量(g)"
+                  placeholderTextColor="lightgray"
+                  clearButtonMode="always"
+                  defaultValue={String(intake)}
+                />
+                <Text style={styles.inputLable}>g</Text>
               </View>
-            </TouchableOpacity>
-          </View>
+              <TouchableOpacity
+                style={{width: winWidth / 2.5}}
+                onPress={submit}>
+                <View
+                  style={[
+                    styles.btnContainer,
+                    shadowStyles(screenThemeColor.meals).boxShadow,
+                  ]}>
+                  <Text style={styles.btnText}>この量で登録</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          ) : (
+            <View style={{marginTop: 20}}></View>
+          )}
+
           <Divider>{`${Number(intake)}g あたりの栄養素`}</Divider>
         </>
       )}
@@ -138,6 +147,7 @@ export const NutrientsScreen = ({navigation, route}) => {
         selectMeal={selectMeal}
         intake={intake}
         listRules={listRules}
+        isSingle={parentScreen !== 'PfcPieChart'}
       />
     </>
   );

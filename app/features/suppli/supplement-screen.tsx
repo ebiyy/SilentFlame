@@ -15,28 +15,27 @@ import {FadeInView} from '../../components/fade-in-view';
 import {ItemActions} from './components/item-actions';
 import {RecycleBtn} from './components/recycle-btn';
 import {CountSupplement} from './count-supplement';
-import {
-  storage,
-  storageLoad,
-  storageLoadDateData,
-  storageRemove,
-  storageSave,
-} from '../../api/storage.helper';
 import {dateState, editableState} from '../date-manager/data-manager.recoil';
-import {formatShortStrDate} from '../../api/utils';
+import {TitleText} from '../../components/title-text';
+import {formatShortStrDate, isToday} from '../../api/utils';
 
 export const SupplementScreen = () => {
   const navigation = useNavigation();
   const [switchCount, setSwitchCount] = useState(true);
   const [isDelete, setIsDelete] = useState(false);
-  const [supplis, setSupplis] = useRecoilState(supplisState);
-  const isSupplisStorage = useRecoilValue(isSupplisStorageState);
-  const [suppliToMeal, setSuppliToMeal] = useState({});
+  const supplis = useRecoilValue(supplisState);
   const [count, setCount] = useRecoilState(suppliCountState);
-  const isSuppliCount = useRecoilValue(isSupplisCountState);
+  const [editable, setEditable] = useRecoilState(editableState);
+  const date = useRecoilValue(dateState);
+  const isSupplisStorage = useRecoilValue(isSupplisStorageState);
   const isSuppliToMeal = useRecoilValue(isSuppliToMealState);
-  const currentDate = useRecoilValue(dateState);
-  const editable = useRecoilValue(editableState);
+  const isSupplisCount = useRecoilValue(isSupplisCountState);
+
+  useEffect(() => {
+    if (isToday(date)) {
+      setEditable(true);
+    }
+  }, [date]);
 
   // useEffect(() => {
   //   storage.clearMapForKey('mySuppli');
@@ -53,41 +52,11 @@ export const SupplementScreen = () => {
   //   });
   // }, [currentDate]);
 
-  useEffect(() => {
-    console.log('SupplementScreen::supplis', supplis);
-    console.log('SupplementScreen::suppliCount', count);
-    console.log('SupplementScreen::suppliToMeal', suppliToMeal);
-  }, [count, suppliToMeal, supplis]);
-
-  useEffect(() => {
-    // storageLoad('mySuppli', setSupplis);
-    console.log('SupplementScreen', formatShortStrDate(currentDate));
-    if (editable) {
-      storageLoad('mySuppli', setSupplis);
-    } else {
-      storageLoadDateData(
-        'mySuppli',
-        formatShortStrDate(currentDate),
-        setSupplis,
-        [],
-      );
-    }
-
-    // storageLoad('suppliToMeal', setSuppliToMeal);
-    // storageLoad('suppliCount', setCount);
-    storageLoadDateData(
-      'suppliToMeal',
-      formatShortStrDate(currentDate),
-      setSuppliToMeal,
-      {},
-    );
-    storageLoadDateData(
-      'suppliCount',
-      formatShortStrDate(currentDate),
-      setCount,
-      {},
-    );
-  }, [currentDate]);
+  // useEffect(() => {
+  //   console.log('SupplementScreen::supplis', supplis);
+  //   console.log('SupplementScreen::suppliCount', count);
+  //   console.log('SupplementScreen::suppliToMeal', suppliToMeal);
+  // }, [count, suppliToMeal, supplis]);
 
   return (
     <ScrollView>
@@ -105,18 +74,22 @@ export const SupplementScreen = () => {
         )}
 
         <FadeInView>
-          {supplis
-            .filter((suppli) => !suppli.delete)
-            .map((suppli, i) => (
-              <CountSupplement
-                key={i}
-                suppli={suppli}
-                switchCount={switchCount}
-                isDelete={isDelete}
-                holdCount={count}
-                setHoldCount={setCount}
-              />
-            ))}
+          {supplis.length > 0 ? (
+            supplis
+              .filter((suppli) => !suppli.delete)
+              .map((suppli, i) => (
+                <CountSupplement
+                  key={i}
+                  suppli={suppli}
+                  switchCount={switchCount}
+                  isDelete={isDelete}
+                  holdCount={count}
+                  setHoldCount={setCount}
+                />
+              ))
+          ) : (
+            <TitleText title="登録なし" />
+          )}
         </FadeInView>
         {editable &&
           supplis.filter((suppli) => suppli.delete).length > 0 &&

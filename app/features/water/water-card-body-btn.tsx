@@ -6,7 +6,7 @@ import {TouchableOpacity} from 'react-native-gesture-handler';
 import {waterIntakeState} from '../meal/recoil.meal';
 import {useRecoilState, useRecoilValue} from 'recoil';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import {editableState} from '../date-manager/data-manager.recoil';
+import {dateState, editableState} from '../date-manager/data-manager.recoil';
 
 type Props = {
   patten: {
@@ -25,12 +25,15 @@ export const WaterCardBodyBtn = (props: Props) => {
   const [waterIntake, setwWterIntake] = useRecoilState(waterIntakeState);
   const [count, setCount] = useState(0);
   const editable = useRecoilValue(editableState);
+  const date = useRecoilValue(dateState);
 
   useEffect(() => {
-    console.log('WaterCardBodyBtn::editable', editable);
-  }, [editable]);
+    setCount(0);
+  }, [date]);
 
   useEffect(() => {
+    // const temp = holdCount[water.id] && holdCount[water.id][patten.label];
+    // setCount(temp ? temp : 0);
     if (
       holdCount[water.id] &&
       holdCount[water.id][patten.label] >= 0 &&
@@ -38,6 +41,9 @@ export const WaterCardBodyBtn = (props: Props) => {
     ) {
       setCount(holdCount[water.id][patten.label]);
     }
+    // if (Object.entries(holdCount).length === 0 && count !== 0) {
+    //   setCount(0);
+    // }
   }, [holdCount]);
 
   useEffect(() => {

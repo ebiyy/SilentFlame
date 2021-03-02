@@ -2,14 +2,18 @@ import React, {useEffect, useRef} from 'react';
 import {AppState, AppStateStatus} from 'react-native';
 
 import {useRecoilState} from 'recoil';
+import {useDataManager} from './data-manager.hook';
 import {FirebaseSetting} from './firebase';
 import {appState} from './init-app.recoil';
 
 export const InitApp = () => {
   const appCurrentState = useRef(AppState.currentState);
   const [app, setApp] = useRecoilState(appState);
+  const setCurrentDate = useDataManager();
 
   useEffect(() => {
+    setCurrentDate(new Date()); // get storage data
+
     console.log('hook init', appCurrentState.current, appCurrentState);
     AppState.addEventListener('change', handleAppStateChange);
     return () => {

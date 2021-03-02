@@ -32,6 +32,21 @@ export const SettingScreen = () => {
     });
   };
 
+  const toDayDelete = () => {
+    [
+      'meals',
+      // STORAGE_KEYS.userInfo,
+      'mySuppli',
+      'suppliToMeal',
+      'suppliCount',
+      'myWater',
+      'waterToMeal',
+      'waterCount',
+    ].forEach((key) => {
+      storage.remove({key, id: formatShortStrDate(new Date())});
+    });
+  };
+
   useEffect(() => {
     console.log('SettingScreen', test);
   }, [test]);
@@ -49,6 +64,7 @@ export const SettingScreen = () => {
         title="Store 'Native'"
       />
       <Button onPress={deleteStorage} title="Storage all clear" />
+      <Button onPress={toDayDelete} title="Storage today delete" />
     </View>
   );
 };

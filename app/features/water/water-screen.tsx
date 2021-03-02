@@ -27,38 +27,15 @@ import {
   storageLoadDateData,
   storageRemove,
 } from '../../api/storage.helper';
-import {formatShortStrDate} from '../../api/utils';
+import {formatShortStrDate, isToday} from '../../api/utils';
 import {dateState, editableState} from '../date-manager/data-manager.recoil';
-import tapWater from '../../assets/img/water_640.jpg';
+
+import {WaterWeight} from './water';
 
 const inputWaterPatten = [
   {name: 'cup', label: 120, iconElm: 'SimpleLineIcons'},
   {name: 'cup-water', label: 200, iconElm: 'MaterialCommunityIcons'},
   {name: 'bottle-soda-classic', label: 500, iconElm: 'MaterialCommunityIcons'},
-];
-
-const registWater = [
-  {
-    id: Math.floor(new Date().getTime() / 1000),
-    waterName: '水道水',
-    imageRes: {
-      uri: Image.resolveAssetSource(tapWater).uri,
-      width: 200,
-      height: 200,
-    },
-    updateAt: new Date('2021-02-01'),
-    priceValue: '1000',
-    priceUnit: '¥',
-    contentSizeValue: '0',
-    nutrients: [
-      {
-        nutrientName: '水分',
-        amountPerServingValue: '100',
-        amountPerServingUnit: 'g',
-        nutrientKey: 'WATER',
-      },
-    ],
-  },
 ];
 
 const waterImg = require('../../assets/img/water_640.jpg');
@@ -67,139 +44,83 @@ export const WaterScreen = () => {
   const navigation = useNavigation();
   const [isMinus, setIsMinus] = useState(false);
   const [waters, setWaters] = useRecoilState(watersState);
-  const isWaterStorage = useRecoilValue(isWaterStorageState);
-  const isWaterCount = useRecoilValue(isWaterCountState);
-  const isWaterToMeal = useRecoilValue(isWaterToMealState);
-  const isWaterDelete = useRecoilValue(isWaterDeleteState);
   const [count, setCount] = useRecoilState(waterCountState);
-  const [waterToMeal, setWaterToMeal] = useRecoilState(waterToMealState);
-  const currentDate = useRecoilValue(dateState);
-  const editable = useRecoilValue(editableState);
+  const setWaterToMeal = useRecoilState(waterToMealState)[1];
+  const [editable, setEditable] = useRecoilState(editableState);
+  const date = useRecoilValue(dateState);
+  const isWaterStorage = useRecoilValue(isWaterStorageState);
+  const isWaterToMeal = useRecoilValue(isWaterToMealState);
+  const isWaterCount = useRecoilValue(isWaterCountState);
 
   useEffect(() => {
-    console.log('WaterScreen::waters', waters);
-    console.log('WaterScreen::count', count);
-    console.log('WaterScreen::waterToMeal', waterToMeal);
-  }, [count, waterToMeal, waters]);
-
-  useEffect(() => {
-    console.log('WaterScreen::isWaterStorage', isWaterStorage);
-    console.log('WaterScreen::isWaterCount', isWaterCount);
-    console.log('WaterScreen::isWaterToMeal', isWaterToMeal);
-    console.log('WaterScreen::isWaterDelete', isWaterDelete);
-  }, [isWaterCount, isWaterDelete, isWaterStorage, isWaterToMeal]);
-
-  // useEffect(() => {
-  //   storage.clearMapForKey('myWater');
-  //   storage.clearMapForKey('waterCount');
-  //   storage.clearMapForKey('waterToMeal');
-  //   storage.remove({
-  //     key: 'myWater',
-  //   });
-  //   storage.remove({
-  //     key: 'waterCount',
-  //   });
-  //   storage.remove({
-  //     key: 'waterToMeal',
-  //   });
-  // }, [currentDate]);
-
-  useEffect(() => {
-    // storageLoad('mySuppli', setSupplis);
-    // storageRemove('myWater');
-    console.log('WaterScreen', formatShortStrDate(currentDate));
-    if (editable) {
-      storageLoad('myWater', setWaters, registWater);
-    } else {
-      storageLoadDateData(
-        'myWater',
-        formatShortStrDate(currentDate),
-        setWaters,
-        [],
-      );
+    if (isToday(date)) {
+      setEditable(true);
     }
-
-    // storageLoad('suppliToMeal', setSuppliToMeal);
-    // storageLoad('suppliCount', setCount);
-    storageLoadDateData(
-      'waterCount',
-      formatShortStrDate(currentDate),
-      setCount,
-      {},
-    );
-    storageLoadDateData(
-      'waterToMeal',
-      formatShortStrDate(currentDate),
-      setWaterToMeal,
-      [],
-    );
-  }, [currentDate]);
-
-  useEffect(() => {
-    console.log('WaterScreen::useEffect::count', count);
-    setCount(isWaterDelete[0]);
-
-    if (isWaterDelete[1].length > 0) {
-      setWaterToMeal(isWaterDelete[1]);
-    }
-
-    console.log('WaterScreen::useEffect::count', count);
-    console.log('WaterScreen::useEffect::count', waterToMeal);
-  }, [waters]);
+  }, [date]);
 
   useEffect(() => {
     // console.log('waters', waters);
     // // console.log('waters', waters[0].nutrients);
 
-    const countIds = Object.keys(count);
-    const waterIds = waters.map((water) => water.id);
-    let isEqual = true;
+    // const countIds = Object.keys(count);
+    // const waterIds = waters.map((water) => water.id);
+    // let isEqual = true;
 
-    countIds.forEach((id) => {
-      if (!waterIds.includes(Number(id))) {
-        isEqual = false;
-      }
-    });
+    // countIds.forEach((id) => {
+    //   if (!waterIds.includes(Number(id))) {
+    //     isEqual = false;
+    //   }
+    // });
     // console.log('countIds,waterIds,isEqual', countIds, waterIds, isEqual);
-    if (!isEqual) return;
+    // if (!isEqual) return;
 
-    if (waters && waters.length > 0) {
-      let waterWeight = {};
-      Object.entries(count).forEach((arr) => {
-        waterWeight[arr[0]] = Object.entries(arr[1])
-          .map((arr) => Number(arr[0]) * arr[1])
+    if (waters && waters.length > 0 && editable) {
+      let waterWeight = {} as WaterWeight;
+      Object.entries(count).forEach(([waterId, countObj]) => {
+        waterWeight[waterId] = Object.entries(countObj)
+          .map(([intakeLabel, countNum]) => Number(intakeLabel) * countNum)
           .reduce((a, x) => a + x);
       });
+      // console.log('WaterScreen::waterWeight',waterWeight)
       const countSumNutrients = Object.entries(waterWeight).map(
-        ([waterId, waterIntaike], i) => {
+        ([waterId, waterIntake]) => {
+          const currentWater = waters.filter(
+            (water) => water.id === Number(waterId),
+          )[0];
+          const waterName = currentWater.waterName;
           return {
-            [waters[i].waterName]: waters
-              .filter((water) => water.id === Number(waterId))[0]
-              .nutrients.map((nutrient) => {
-                return {
-                  sum: Number(
-                    (
-                      (Number(nutrient.amountPerServingValue) * waterIntaike) /
-                      100
-                    ).toFixed(1),
-                  ),
-                  nutrientName: nutrient.nutrientName,
-                  amountPerServingUnit: nutrient.amountPerServingUnit,
-                  nutrientKey: nutrient.nutrientKey,
-                };
-              }),
+            [waterName]: currentWater.nutrients
+              .map((nutrient) => {
+                const sum = Number(
+                  (
+                    (Number(nutrient.amountPerServingValue) * waterIntake) /
+                    100
+                  ).toFixed(1),
+                );
+                if (nutrient.nutrientKey) {
+                  return {
+                    sum,
+                    nutrientName: nutrient.nutrientName,
+                    amountPerServingUnit: nutrient.amountPerServingUnit,
+                    nutrientKey: nutrient.nutrientKey,
+                  };
+                } else {
+                  return undefined;
+                }
+              })
+              .filter((nutrient) => nutrient !== undefined),
           };
         },
       );
 
-      let toMeals = [];
+      let toMeals: Meal[] = [];
       const isMcg = (str: string) => ['mcg', 'μg'].includes(str);
       countSumNutrients.forEach((sumNutrient, i) => {
         let toMeal = {};
         Object.entries(sumNutrient).forEach(([key, obj]) => {
           obj.forEach((nutrinet) => {
             const nutrientKey = nutrinet.nutrientKey;
-            const mealUnit = NUTRIENT_KEY[nutrientKey].unit;
+            const mealUnit = NUTRIENT_KEY[nutrientKey]?.unit;
             const waterUnit = nutrinet.amountPerServingUnit;
 
             const format = (object: Object, waterName: string) => {
@@ -224,13 +145,14 @@ export const WaterScreen = () => {
             toMeal = format(toMeal, key);
           });
         });
-        toMeals[i] = toMeal;
+        if (Object.entries(toMeal).length > 0) {
+          toMeals = [...toMeals, toMeal];
+        }
       });
-      // console.log('toMeals', toMeals);
 
-      if (toMeals.length > 0) {
-        setWaterToMeal(toMeals);
-      }
+      // if (toMeals.length > 0) {
+      setWaterToMeal(toMeals);
+      // }
     }
   }, [count, waters]);
 
@@ -395,7 +317,7 @@ const Styles = StyleSheet.create({
   },
   cardTitle: {
     padding: 7,
-    fontSize: 20,
+    fontSize: 18,
     textDecorationLine: 'underline',
     textDecorationColor: 'lightblue',
   },

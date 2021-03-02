@@ -4,11 +4,12 @@ import {Button, Dimensions, StyleSheet, Text, View} from 'react-native';
 import Icon from 'react-native-vector-icons/AntDesign';
 import {TextInput, TouchableOpacity} from 'react-native-gesture-handler';
 import {calNutrient, replaceFoodName} from './function.meal';
-import {useRecoilState} from 'recoil';
+import {useRecoilState, useRecoilValue} from 'recoil';
 import {actionMealState, mealsState} from './recoil.meal';
 import {NUTRIENTS_LABEL} from './constant.meal';
 import {screenThemeColor} from '../../global/styles';
 import {DeleteConfirmationModal} from '../../components/delete-confirmation-modal';
+import {editableState} from '../date-manager/data-manager.recoil';
 
 type Props = {
   meal: Meal;
@@ -22,6 +23,7 @@ export const RegistrationMealCard = (props: Props) => {
   const [showChangeBtn, setShowChangeBtn] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const [meals, setMeals] = useRecoilState(mealsState);
+  const editable = useRecoilValue(editableState);
 
   useEffect(() => {
     cancelBtnPress();
@@ -98,11 +100,13 @@ export const RegistrationMealCard = (props: Props) => {
               }>
               <Icon name="infocirlceo" size={22} color="white" />
             </TouchableOpacity>
-            <TouchableOpacity
-              style={[Styles.icon, Styles.closeIcon]}
-              onPress={() => setModalVisible(true)}>
-              <Icon name="closecircleo" size={22} color="white" />
-            </TouchableOpacity>
+            {editable && (
+              <TouchableOpacity
+                style={[Styles.icon, Styles.closeIcon]}
+                onPress={() => setModalVisible(true)}>
+                <Icon name="closecircleo" size={22} color="white" />
+              </TouchableOpacity>
+            )}
           </View>
         </View>
         <View style={Styles.cardBody}>
@@ -116,6 +120,7 @@ export const RegistrationMealCard = (props: Props) => {
                 placeholderTextColor="lightgray"
                 clearButtonMode="always"
                 keyboardType="numeric"
+                editable={editable}
                 defaultValue={String(meal.intake)}
               />
               <Text style={Styles.gramUnit}>g</Text>

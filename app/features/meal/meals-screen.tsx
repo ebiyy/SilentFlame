@@ -1,5 +1,4 @@
-import {useNavigation} from '@react-navigation/native';
-import React, {Fragment, useEffect} from 'react';
+import React, {Fragment, useEffect, useState} from 'react';
 import {
   Keyboard,
   KeyboardAvoidingView,
@@ -25,14 +24,8 @@ import {TitleText} from '../../components/title-text';
 import {WideBtn} from '../../components/common/wide-btn';
 import {PfcPieChart} from '../../components/pfc-pie-chart';
 import {RegistrationMealCard} from './registration-meal-card';
-import {
-  storage,
-  storageLoad,
-  storageLoadDateData,
-  storageRemove,
-} from '../../api/storage.helper';
-import {formatShortStrDate} from '../../api/utils';
 import {dateState, editableState} from '../date-manager/data-manager.recoil';
+import {isToday} from '../../api/utils';
 
 const timePeriod: TimePeriod = {
   breakfast: '朝食',
@@ -42,25 +35,21 @@ const timePeriod: TimePeriod = {
 };
 
 export const MealsScreen = () => {
-  const navigation = useNavigation();
-  // const meals = useMargeMealState();
   const suppliToMeal = useRecoilValue(suppliToMealState);
-  const currentDate = useRecoilValue(dateState);
-  const [meals, setMeals] = useRecoilState(mealsState);
-  const editable = useRecoilValue(editableState);
+  const meals = useRecoilValue(mealsState);
   const isMealsStorage = useRecoilValue(isMealsStorageState);
+  const [editable, setEditable] = useRecoilState(editableState);
+  const date = useRecoilValue(dateState);
+
+  useEffect(() => {
+    if (isToday(date)) {
+      setEditable(true);
+    }
+  }, [date]);
 
   // useEffect(() => {
   //   console.log('MealsScreen::suppliToMeal', suppliToMeal);
   // }, [suppliToMeal]);
-
-  useEffect(() => {
-    // storageLoad('mySuppli', setSupplis);
-    // storageRemove('meals');
-    console.log('SupplementScreen', formatShortStrDate(currentDate));
-
-    storageLoadDateData('meals', formatShortStrDate(currentDate), setMeals, []);
-  }, [currentDate]);
 
   return (
     <KeyboardAvoidingView
@@ -86,25 +75,29 @@ export const MealsScreen = () => {
             </FadeInView>
           )}
 
-          <TitleText title="食品を登録" />
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              marginBottom: 10,
-            }}>
-            {Object.keys(timePeriod).map((key, i) => (
-              <WideBtn
-                key={i}
-                btnText={timePeriod[key]}
-                toNavigate="MealsSearchScreen"
-                navigatePrames={{
-                  timePeriod: key,
-                }}
-                wideRate={4}
-              />
-            ))}
-          </View>
+          {editable && (
+            <>
+              <TitleText title="食品を登録" />
+              <View
+                style={{
+                  flexDirection: 'row',
+                  justifyContent: 'space-between',
+                  marginBottom: 10,
+                }}>
+                {Object.keys(timePeriod).map((key, i) => (
+                  <WideBtn
+                    key={i}
+                    btnText={timePeriod[key]}
+                    toNavigate="MealsSearchScreen"
+                    navigatePrames={{
+                      timePeriod: key,
+                    }}
+                    wideRate={4}
+                  />
+                ))}
+              </View>
+            </>
+          )}
 
           <TitleText title="今日の食品" />
           {Object.keys(timePeriod).map((key, i) => (

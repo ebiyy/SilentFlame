@@ -9,13 +9,14 @@ import {
 } from 'react-native';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import Fontisto from 'react-native-vector-icons/Fontisto';
-import {useRecoilState} from 'recoil';
+import {useRecoilState, useRecoilValue} from 'recoil';
 import {ComStyles, screenThemeColor, shadowStyles} from '../../global/styles';
 import {imageResState, supplisState, suppliToMealState} from './suppli.hook';
 import {Suppli} from './suppli';
 import {CONTENT_SIZE_UNIT, NUTRIENT_KEY} from './constant';
 import {DeleteConfirmationModal} from '../../components/delete-confirmation-modal';
 import {InputValueModal} from './components/input-value-modal';
+import {dateState, editableState} from '../date-manager/data-manager.recoil';
 
 type Props = {
   suppli: Suppli;
@@ -34,59 +35,84 @@ export const CountSupplement = (props: Props) => {
   const [inputModal, setInputModal] = useState(false);
   const [imageRes, setImageRes] = useRecoilState(imageResState);
   const [suppliToMeal, setSuppliToMeal] = useRecoilState(suppliToMealState);
+  const editable = useRecoilValue(editableState);
+  const date = useRecoilValue(dateState);
 
   useEffect(() => {
+    setCount(0);
+  }, [date]);
+
+  useEffect(() => {
+    // const temp = holdCount[suppli.id];
+    // setCount(temp ? temp : 0);
     if (holdCount[suppli.id] >= 0 && count === 0) {
       setCount(holdCount[suppli.id]);
     }
+    // if (Object.entries(holdCount).length === 0 && count !== 0) {
+    //   setCount(0);
+    // }
   }, [holdCount]);
 
   useEffect(() => {
-    const countSumNutrients = suppli.nutrients.map((nutrient) => {
-      const numAPSV = Number(nutrient.amountPerServingValue);
-      return {
-        sum:
+    const countSumNutrients = suppli.nutrients
+      .map((nutrient) => {
+        const numAPSV = Number(nutrient.amountPerServingValue);
+        const sum =
           suppli.contentSizeUnit !== CONTENT_SIZE_UNIT.piece
             ? Number(((numAPSV / suppli.servingSize) * count).toFixed(1))
-            : numAPSV * count,
-        nutrientName: nutrient.nutrientName,
-        amountPerServingUnit: nutrient.amountPerServingUnit,
-        nutrientKey: nutrient.nutrientKey,
-      };
-    });
-    const isMcg = (str: string) => ['mcg', 'μg'].includes(str);
-    let toMeals = {};
-    countSumNutrients.forEach((sumNutrient) => {
-      const nutrientKey = sumNutrient.nutrientKey;
-      const mealUnit = NUTRIENT_KEY[nutrientKey].unit;
-      const suppliUnit = sumNutrient.amountPerServingUnit;
-
-      const format = (toMeal: Object) => {
-        if (mealUnit === suppliUnit || (isMcg(mealUnit) && isMcg(suppliUnit))) {
-          toMeal[nutrientKey] = sumNutrient.sum;
-        } else if (isMcg(mealUnit) && suppliUnit === 'mg') {
-          toMeal[nutrientKey] = sumNutrient.sum * Math.pow(10, 3);
-        } else if (isMcg(mealUnit) && suppliUnit === 'g') {
-          toMeal[nutrientKey] = sumNutrient.sum * Math.pow(10, 6);
-        } else if (mealUnit === 'g' && isMcg(suppliUnit)) {
-          toMeal[nutrientKey] = sumNutrient.sum / Math.pow(10, 6);
-        } else if (mealUnit === 'mg' && isMcg(suppliUnit)) {
-          toMeal[nutrientKey] = sumNutrient.sum / Math.pow(10, 3);
+            : numAPSV * count;
+        if (nutrient.nutrientKey) {
+          return {
+            sum,
+            nutrientName: nutrient.nutrientName,
+            amountPerServingUnit: nutrient.amountPerServingUnit,
+            nutrientKey: nutrient.nutrientKey,
+          };
+        } else {
+          return [];
         }
-        toMeal['foodName'] = suppli.suppliName;
-        return toMeal;
-      };
-      toMeals = format(toMeals);
-    });
+      })
+      .flat();
+    if (countSumNutrients.length > 0) {
+      const isMcg = (str: string) => ['mcg', 'μg'].includes(str);
+      let toMeals = {};
+      countSumNutrients.forEach((sumNutrient) => {
+        const nutrientKey = sumNutrient.nutrientKey;
+        const mealUnit = NUTRIENT_KEY[nutrientKey]?.unit;
+        const suppliUnit = sumNutrient.amountPerServingUnit;
 
-    if (
-      Object.values(toMeals).filter((num) => typeof num === 'number' && num)
-        .length > 0 ||
-      Object.entries(suppliToMeal).length > 0
-    ) {
-      setSuppliToMeal((preState) => {
-        return {...preState, ...{[suppli.id]: toMeals}};
+        if (mealUnit) {
+          const format = (toMeal: Object) => {
+            if (
+              mealUnit === suppliUnit ||
+              (isMcg(mealUnit) && isMcg(suppliUnit))
+            ) {
+              toMeal[nutrientKey] = sumNutrient.sum;
+            } else if (isMcg(mealUnit) && suppliUnit === 'mg') {
+              toMeal[nutrientKey] = sumNutrient.sum * Math.pow(10, 3);
+            } else if (isMcg(mealUnit) && suppliUnit === 'g') {
+              toMeal[nutrientKey] = sumNutrient.sum * Math.pow(10, 6);
+            } else if (mealUnit === 'g' && isMcg(suppliUnit)) {
+              toMeal[nutrientKey] = sumNutrient.sum / Math.pow(10, 6);
+            } else if (mealUnit === 'mg' && isMcg(suppliUnit)) {
+              toMeal[nutrientKey] = sumNutrient.sum / Math.pow(10, 3);
+            }
+            toMeal['foodName'] = suppli.suppliName;
+            return toMeal;
+          };
+          toMeals = format(toMeals);
+        }
       });
+
+      if (
+        Object.values(toMeals).filter((num) => typeof num === 'number' && num)
+          .length > 0 ||
+        Object.entries(suppliToMeal).length > 0
+      ) {
+        setSuppliToMeal((preState) => {
+          return {...preState, ...{[suppli.id]: toMeals}};
+        });
+      }
     }
 
     setHoldCount((preState) => {
@@ -127,7 +153,7 @@ export const CountSupplement = (props: Props) => {
             onPress={() => {
               setImageRes(suppli.imageRes);
               navigation.navigate('SupplFormScreen', {
-                mode: 'edit',
+                mode: editable ? 'edit' : 'view',
                 viewTarget: suppli,
                 setMarge: setSupplis,
                 btnColor: screenThemeColor.suppli,
@@ -138,7 +164,7 @@ export const CountSupplement = (props: Props) => {
             </View>
           </TouchableOpacity>
         </View>
-        {!isDelete && (
+        {!isDelete && editable && (
           <View style={[Styles.counterContainer]}>
             {switchCount ? (
               <TouchableOpacity

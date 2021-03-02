@@ -29,6 +29,7 @@ export const STORAGE_KEYS = {
 };
 
 export const storageSave = (key: string, data: any) => {
+  console.log('storageSave', key);
   storage.save({
     key,
     data,
@@ -36,6 +37,7 @@ export const storageSave = (key: string, data: any) => {
 };
 
 export const storageSaveDateData = (key: string, id: string, data: any) => {
+  console.log('storageSaveDateData', key, id);
   storage.save({
     key,
     id,
@@ -52,8 +54,9 @@ export const storageRemove = (key: string) => {
 export const storageLoad = (
   key: string,
   setState: React.Dispatch<React.SetStateAction<any>>,
-  initState?: any,
+  initState: any,
 ) => {
+  console.log('storageLoad', key);
   storage
     .load({
       key: key,
@@ -87,7 +90,7 @@ export const storageLoadDateData = (
   key: string,
   id: string,
   setState: React.Dispatch<React.SetStateAction<any>>,
-  initState?: any,
+  initState: any,
 ) => {
   console.log('storageLoadDateData', key, id);
   storage

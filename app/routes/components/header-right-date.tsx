@@ -16,6 +16,18 @@ import {
   dateState,
   editableState,
 } from '../../features/date-manager/data-manager.recoil';
+import {useDataManager} from '../../features/init-app/data-manager.hook';
+import {mealsState} from '../../features/meal/recoil.meal';
+import {
+  supplisState,
+  suppliToMealState,
+  suppliCountState,
+} from '../../features/suppli/suppli.hook';
+import {
+  watersState,
+  waterCountState,
+  waterToMealState,
+} from '../../features/water/water.hook';
 
 export const HeaderRightDate = () => {
   const route = useRoute();
@@ -24,38 +36,33 @@ export const HeaderRightDate = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalChoice, setModalChoice] = useState<'yes' | 'no' | undefined>();
   const [editable, setEditable] = useRecoilState(editableState);
+  const setCurrentDate = useDataManager();
 
   useEffect(() => {
-    console.log('HeaderRightDate', route);
     if (route.state === undefined) {
-      console.log(1);
       if (route.name === 'weekly') {
         setIsWeekly(true);
-        console.log(2);
       } else {
         setIsWeekly(false);
-        console.log(3);
       }
     } else {
       if (route.state.index !== undefined) {
         if (route.state.index === 0) {
           setIsWeekly(true);
-          console.log(4);
         } else {
           setIsWeekly(false);
-          console.log(5);
         }
       } else {
         setIsWeekly(false);
-        console.log(6);
       }
     }
   }, [route]);
 
   useEffect(() => {
     if (modalChoice === 'yes') {
-      setEditable(true);
-      setDate(new Date());
+      setCurrentDate(new Date());
+      // setEditable(true);
+      // setDate(new Date());
       setModalChoice(undefined);
     }
   }, [modalChoice]);

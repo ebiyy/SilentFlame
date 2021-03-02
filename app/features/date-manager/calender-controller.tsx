@@ -5,6 +5,18 @@ import {useRecoilState} from 'recoil';
 import {formatShortStrDate} from '../../api/utils';
 import {FadeInView} from '../../components/fade-in-view';
 import {shadowStyles, winWidth} from '../../global/styles';
+import {useDataManager} from '../init-app/data-manager.hook';
+import {mealsState} from '../meal/recoil.meal';
+import {
+  suppliCountState,
+  supplisState,
+  suppliToMealState,
+} from '../suppli/suppli.hook';
+import {
+  watersState,
+  waterCountState,
+  waterToMealState,
+} from '../water/water.hook';
 import {CustomCalendar} from './calender';
 import {mockMarkedDates} from './constants';
 import {dateState, editableState} from './data-manager.recoil';
@@ -18,6 +30,7 @@ export const CalendarScreen = () => {
   const [selectedDate, setSelectedDate] = useState(formatShortStrDate(date));
   const [markedDate, setMarkedDate] = useState<DotMarkingData>(mockMarkedDates);
   const [beforeDate, setBeforeDate] = useState(formatShortStrDate(date));
+  const setCurrentDate = useDataManager();
 
   useEffect(() => {
     setSelectedDate(formatShortStrDate(date));
@@ -31,6 +44,18 @@ export const CalendarScreen = () => {
     setBeforeDate(selectedDate);
   }, [beforeDate, selectedDate]);
 
+  const selectPress = () => {
+    setCurrentDate(new Date(selectedDate));
+    // setEditable(selectedDate === formatShortStrDate(new Date()));
+    // setDate(new Date(selectedDate));
+
+    // navigation.navigate('weekly');
+    navigation.reset({
+      index: 0,
+      routes: [{name: 'weekly'}],
+    });
+  };
+
   return (
     <View style={Styles.container}>
       <CustomCalendar
@@ -41,17 +66,7 @@ export const CalendarScreen = () => {
       {selectedDate !== formatShortStrDate(date) && (
         <FadeInView>
           <View style={Styles.btnContainer}>
-            <TouchableOpacity
-              style={Styles.btnContent}
-              onPress={() => {
-                setEditable(selectedDate === formatShortStrDate(new Date()));
-                setDate(new Date(selectedDate));
-                // navigation.navigate('weekly');
-                navigation.reset({
-                  index: 0,
-                  routes: [{name: 'weekly'}],
-                });
-              }}>
+            <TouchableOpacity style={Styles.btnContent} onPress={selectPress}>
               <View style={[Styles.btn, shadowStyles('black').boxShadow]}>
                 <Text style={Styles.btnText}>この日の記録を表示</Text>
               </View>

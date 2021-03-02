@@ -1,6 +1,10 @@
 import React, {useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
+import {
+  ScrollView,
+  TextInput,
+  TouchableOpacity,
+} from 'react-native-gesture-handler';
 import {screenThemeColor, shadowStyles} from '../../global/styles';
 import {
   carbohydrateNutrientKeys,
@@ -18,7 +22,7 @@ const NUREIENT = {
     ...Object.keys(proteinNutrientKeys).map(
       (key) => proteinNutrientKeys[key].label,
     ),
-    'オルニチン', // not
+    // 'オルニチン', // not
   ],
   // fat: Object.keys(fatNutrientKeys).map(key=>{name: fatNutrientKeys[key].label, key: key}),
   fat: Object.keys(fatNutrientKeys).map((key) => fatNutrientKeys[key].label),
@@ -30,8 +34,8 @@ const NUREIENT = {
       (key) => vitaminNutrientKeys[key].label,
     ),
     // 'コリン',
-    'イノシトール',
-    'PABA',
+    // 'イノシトール',
+    // 'PABA',
   ],
   mineral: Object.keys(mineralNutrientKeys).map(
     (key) => mineralNutrientKeys[key].label,
@@ -45,6 +49,7 @@ const TAB = [
   {dispName: '炭水化物', key: 'carbohydrate'},
   {dispName: 'ビタミン', key: 'vitamin'},
   {dispName: 'ミネラル', key: 'mineral'},
+  {dispName: '手入力', key: 'manual'},
 ];
 
 type Props = {
@@ -62,6 +67,7 @@ export const NutrientNameModal = (props: Props) => {
     nutrientNameOnChange,
   } = props;
   const [tab, setTab] = useState(TAB[0].key);
+  const [value, onChangeText] = useState('');
 
   return (
     <View>
@@ -92,17 +98,51 @@ export const NutrientNameModal = (props: Props) => {
                   </View>
                   <ScrollView>
                     <View style={styles.modalBody}>
-                      {NUREIENT[tab].map((nutrient, i) => (
-                        <TouchableOpacity
-                          key={i}
-                          style={styles.openButton}
-                          onPress={() => {
-                            nutrientNameOnChange(nutrient);
-                            setModalVisible(false);
-                          }}>
-                          <Text style={styles.nutrientText}>{nutrient}</Text>
-                        </TouchableOpacity>
-                      ))}
+                      {tab !== 'manual' ? (
+                        NUREIENT[tab].map((nutrient, i) => (
+                          <TouchableOpacity
+                            key={i}
+                            style={styles.openButton}
+                            onPress={() => {
+                              nutrientNameOnChange(nutrient);
+                              setModalVisible(false);
+                            }}>
+                            <Text style={styles.nutrientText}>{nutrient}</Text>
+                          </TouchableOpacity>
+                        ))
+                      ) : (
+                        <View style={styles.modalFormContainer}>
+                          <TextInput
+                            onChangeText={(text) => onChangeText(text)}
+                            value={value}
+                            style={[
+                              styles.modalTextForm,
+                              shadowStyles('black').boxShadow,
+                            ]}
+                          />
+                          <View style={styles.modalBtnContainer}>
+                            <View
+                              style={[
+                                shadowStyles(screenThemeColor.suppli).boxShadow,
+                                styles.modalBtn,
+                              ]}>
+                              <TouchableOpacity
+                                onPress={
+                                  value
+                                    ? () => {
+                                        nutrientNameOnChange(value);
+                                        setModalVisible(false);
+                                      }
+                                    : () => {}
+                                }>
+                                <Text style={styles.modalBtnText}>
+                                  栄養素を追加
+                                </Text>
+                              </TouchableOpacity>
+                            </View>
+                          </View>
+                        </View>
+                      )}
                     </View>
                   </ScrollView>
                 </View>
@@ -191,5 +231,26 @@ const styles = StyleSheet.create({
   tabText: {
     color: 'black',
     fontWeight: '500',
+  },
+  modalFormContainer: {
+    marginTop: 20,
+    width: '100%',
+  },
+  modalTextForm: {
+    margin: 20,
+    paddingHorizontal: 10,
+    height: 50,
+    fontSize: 20,
+    borderRadius: 10,
+  },
+  modalBtnContainer: {
+    alignItems: 'center',
+  },
+  modalBtn: {
+    padding: 20,
+    borderRadius: 10,
+  },
+  modalBtnText: {
+    fontSize: 20,
   },
 });

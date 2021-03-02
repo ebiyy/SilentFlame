@@ -7,12 +7,15 @@ import {
   TouchableOpacity,
 } from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import {useRecoilValue} from 'recoil';
+import {editableState} from '../date-manager/data-manager.recoil';
 import {nutrientRecalculation} from './function.meal';
 
 type Props = {
   selectMeal: Meal;
   intake: number;
   listRules: any;
+  isSingle: boolean;
 };
 
 LogBox.ignoreLogs([
@@ -20,8 +23,9 @@ LogBox.ignoreLogs([
 ]);
 
 export const NutrientsList = (props: Props) => {
-  const {selectMeal, intake, listRules} = props;
+  const {selectMeal, intake, listRules, isSingle} = props;
   const [isCollapsed, setIsCollapsed] = useState({});
+  const editable = useRecoilValue(editableState);
 
   const setNutrientValue = (value: string, unit: string) => {
     if (value === undefined) return '-';
@@ -47,7 +51,7 @@ export const NutrientsList = (props: Props) => {
         <View key={i} style={{margin: 10}}>
           {/* <Text style={{marginBottom: 10}}>{label}</Text> */}
           <Text>{value}</Text>
-          {value !== '' && value.match(/\d/) && (
+          {value !== '' && value.match(/\d/) && editable && (
             <Text style={{marginTop: 10}}>
               ※備考の数値は入力値によって再計算されません。
             </Text>
@@ -131,9 +135,11 @@ export const NutrientsList = (props: Props) => {
         {Object.keys(listRules).map((key: string, i) =>
           generateItems(key, i, listRules),
         )}
-        <View style={{alignSelf: 'flex-end', marginVertical: 10}}>
-          <Text>※データ元: 日本食品標準成分表2020年版（八訂）</Text>
-        </View>
+        {isSingle && (
+          <View style={{alignSelf: 'flex-end', marginVertical: 10}}>
+            <Text>※データ元: 日本食品標準成分表2020年版（八訂）</Text>
+          </View>
+        )}
       </View>
     </ScrollView>
   );
