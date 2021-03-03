@@ -27,7 +27,7 @@ import {
   storageLoadDateData,
   storageRemove,
 } from '../../api/storage.helper';
-import {formatShortStrDate, isToday} from '../../api/utils';
+import {dateToStr, isToday} from '../../api/utils';
 import {dateState, editableState} from '../date-manager/data-manager.recoil';
 
 import {WaterWeight} from './water';

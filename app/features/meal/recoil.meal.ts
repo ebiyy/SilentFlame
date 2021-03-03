@@ -1,6 +1,7 @@
 import {atom, selector} from 'recoil';
 import {storageSaveDateData} from '../../api/storage.helper';
-import {formatShortStrDate} from '../../api/utils';
+import {dateToStr} from '../../api/utils';
+import {sumMeal} from '../../components/functions';
 import {WaterIntak} from '../../helpers/interface';
 import {dateState, editableState} from '../date-manager/data-manager.recoil';
 import {suppliToMealState} from '../suppli/suppli.hook';
@@ -29,7 +30,7 @@ export const isMealsStorageState = selector({
     const editable = get(editableState);
     if (meals.length > 0 && editable) {
       console.log('Run isSupplisStorageState');
-      storageSaveDateData('meals', formatShortStrDate(currentDate), meals);
+      storageSaveDateData('meals', dateToStr(currentDate), meals);
 
       return true;
     }
@@ -37,7 +38,7 @@ export const isMealsStorageState = selector({
   },
 });
 
-const sumValues = (meals: Meal[], nutrientKey: string) => {
+export const sumValues = (meals: Meal[], nutrientKey: string) => {
   if (meals && meals.length > 0) {
     const valuesArr: number[] = formatArr(
       meals.map((meal) => meal[nutrientKey]),
@@ -87,7 +88,13 @@ export const mealsProteinState = selector({
     const suppliToMeals = Object.values(get(suppliToMealState)).filter(
       (suppliToMeal) => suppliToMeal[nutrientKey],
     );
-    return sumValues([...meals, ...suppliToMeals], nutrientKey);
+    const waterToMeals = get(waterToMealState).filter(
+      (waterToMeal) => waterToMeal[nutrientKey],
+    );
+    return sumValues(
+      [...meals, ...suppliToMeals, ...waterToMeals],
+      nutrientKey,
+    );
   },
 });
 
@@ -99,7 +106,13 @@ export const mealsFatState = selector({
     const suppliToMeals = Object.values(get(suppliToMealState)).filter(
       (suppliToMeal) => suppliToMeal[nutrientKey],
     );
-    return sumValues([...meals, ...suppliToMeals], nutrientKey);
+    const waterToMeals = get(waterToMealState).filter(
+      (waterToMeal) => waterToMeal[nutrientKey],
+    );
+    return sumValues(
+      [...meals, ...suppliToMeals, ...waterToMeals],
+      nutrientKey,
+    );
   },
 });
 
@@ -111,7 +124,13 @@ export const mealsCHOCDFState = selector({
     const suppliToMeals = Object.values(get(suppliToMealState)).filter(
       (suppliToMeal) => suppliToMeal[nutrientKey],
     );
-    return sumValues([...meals, ...suppliToMeals], nutrientKey);
+    const waterToMeals = get(waterToMealState).filter(
+      (waterToMeal) => waterToMeal[nutrientKey],
+    );
+    return sumValues(
+      [...meals, ...suppliToMeals, ...waterToMeals],
+      nutrientKey,
+    );
   },
 });
 
@@ -123,7 +142,13 @@ export const mealsCHOAVState = selector({
     const suppliToMeals = Object.values(get(suppliToMealState)).filter(
       (suppliToMeal) => suppliToMeal[nutrientKey],
     );
-    return sumValues([...meals, ...suppliToMeals], nutrientKey);
+    const waterToMeals = get(waterToMealState).filter(
+      (waterToMeal) => waterToMeal[nutrientKey],
+    );
+    return sumValues(
+      [...meals, ...suppliToMeals, ...waterToMeals],
+      nutrientKey,
+    );
   },
 });
 
@@ -135,7 +160,14 @@ export const mealsENERC_KCALState = selector({
     const suppliToMeals = Object.values(get(suppliToMealState)).filter(
       (suppliToMeal) => suppliToMeal[nutrientKey],
     );
-    return sumValues([...meals, ...suppliToMeals], nutrientKey);
+    const waterToMeals = get(waterToMealState).filter(
+      (waterToMeal) => waterToMeal[nutrientKey],
+    );
+
+    return sumValues(
+      [...meals, ...suppliToMeals, ...waterToMeals],
+      nutrientKey,
+    );
   },
 });
 
@@ -149,24 +181,29 @@ export const mealsWATERState = selector({
     );
 
     return sumValues([...meals, ...waterToMeals], nutrientKey) / 1000;
-    // const waterIntake = get(waterIntakeState);
-    // const waterIntakeNumArr = waterIntake.map((obj) => obj.intake);
-    // const waterValueArr = formatArr(meals.map((meal) => meal.WATER));
+  },
+});
 
-    // // return 0;
-    // if (meals.length > 0 && waterIntakeNumArr.length > 0) {
-    //   return (
-    //     waterValueArr.length > 0 &&
-    //     (sum(waterValueArr.concat(waterIntakeNumArr)) / 1000).toFixed(1)
-    //   );
-    // } else if (waterIntakeNumArr.length > 0) {
-    //   return (
-    //     waterValueArr.length > 0 && (sum(waterIntakeNumArr) / 1000).toFixed(1)
-    //   );
-    // } else if (meals.length > 0) {
-    //   return waterValueArr.length > 0 && (sum(waterValueArr) / 1000).toFixed(1);
-    // } else {
-    //   return 0;
-    // }
+export const concatNutrientState = selector({
+  key: 'concatNutrientState',
+  get: ({get}) => {
+    const meals = get(mealsState);
+    const suppliToMeal = get(suppliToMealState);
+    const waterToMeal = get(waterToMealState);
+
+    const marge = ([] as Meal[])
+      .concat(meals, Object.values(suppliToMeal), waterToMeal)
+      .flat();
+
+    const currentDate = get(dateState);
+    const editable = get(editableState);
+
+    if (marge.length > 0 && editable) {
+      console.log('Run save concatNutrientState');
+      storageSaveDateData('weekly', dateToStr(currentDate), sumMeal(marge));
+      return true;
+    } else {
+      return false;
+    }
   },
 });

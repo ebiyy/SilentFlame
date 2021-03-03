@@ -1,12 +1,14 @@
+import {save} from '@react-native-community/cameraroll';
 import React, {useEffect, useState} from 'react';
 import {Button, Settings, StyleSheet, Text, View} from 'react-native';
 import {
   storage,
   storageLoadDateData,
   storageRemove,
+  storageSave,
   STORAGE_KEYS,
 } from '../../api/storage.helper';
-import {formatShortStrDate} from '../../api/utils';
+import {dateToStr} from '../../api/utils';
 
 export const SettingScreen = () => {
   const [data, setData] = useState(Settings.get('data'));
@@ -43,9 +45,36 @@ export const SettingScreen = () => {
       'waterToMeal',
       'waterCount',
     ].forEach((key) => {
-      storage.remove({key, id: formatShortStrDate(new Date())});
+      storage.remove({key, id: dateToStr(new Date())});
     });
   };
+
+  useEffect(() => {
+    // storage.remove({
+    //   key: 'myWater',
+    //   id: '2021-3-1',
+    // });
+
+    // storage.clearMapForKey('user');
+    // storage.remove({
+    //   key: 'user',
+    // });
+    [
+      // 'meals',
+      // STORAGE_KEYS.userInfo,
+      // 'mySuppli',
+      // 'suppliToMeal',
+      // 'suppliCount',
+      // 'myWater',
+      // 'waterToMeal',
+      // 'waterCount',
+      'weekly',
+    ].forEach((key) => {
+      storage.getIdsForKey(key).then((ids) => {
+        console.log(key, ids);
+      });
+    });
+  }, []);
 
   useEffect(() => {
     console.log('SettingScreen', test);

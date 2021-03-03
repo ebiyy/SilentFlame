@@ -1,4 +1,4 @@
-import React, {Fragment, useState} from 'react';
+import React, {Fragment, useEffect, useState} from 'react';
 import {LogBox, StyleSheet, Text, View} from 'react-native';
 import Collapsible from 'react-native-collapsible';
 import {
@@ -26,6 +26,10 @@ export const NutrientsList = (props: Props) => {
   const {selectMeal, intake, listRules, isSingle} = props;
   const [isCollapsed, setIsCollapsed] = useState({});
   const editable = useRecoilValue(editableState);
+
+  useEffect(() => {
+    console.log('NutrientsScreen::selectMeal', selectMeal);
+  }, [selectMeal]);
 
   const setNutrientValue = (value: string, unit: string) => {
     if (value === undefined) return '-';

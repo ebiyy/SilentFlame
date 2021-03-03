@@ -5,7 +5,7 @@ import {
   storageSave,
   storageSaveDateData,
 } from '../../api/storage.helper';
-import {formatShortStrDate} from '../../api/utils';
+import {dateToStr} from '../../api/utils';
 import {dateState, editableState} from '../date-manager/data-manager.recoil';
 import {
   MOCK_BASE_INFO,
@@ -74,7 +74,7 @@ export const isSupplisStorageState = selector({
     const editable = get(editableState);
     if (supplis.length > 0 && editable) {
       console.log('Run isSupplisStorageState');
-      storageSaveDateData('mySuppli', formatShortStrDate(currentDate), supplis);
+      storageSaveDateData('mySuppli', dateToStr(currentDate), supplis);
       storageSave('mySuppli', supplis);
 
       return true;
@@ -91,11 +91,7 @@ export const isSuppliToMealState = selector({
     const editable = get(editableState);
     if (Object.entries(suppliToMeal).length > 0 && editable) {
       console.log('Run isSuppliToMealState');
-      storageSaveDateData(
-        'suppliToMeal',
-        formatShortStrDate(currentDate),
-        suppliToMeal,
-      );
+      storageSaveDateData('suppliToMeal', dateToStr(currentDate), suppliToMeal);
       storageSave('suppliToMeal', {});
       return true;
     }
@@ -111,11 +107,7 @@ export const isSupplisCountState = selector({
     const editable = get(editableState);
     if (Object.entries(suppliCount).length > 0 && editable) {
       console.log('Run isSupplisCountState');
-      storageSaveDateData(
-        'suppliCount',
-        formatShortStrDate(currentDate),
-        suppliCount,
-      );
+      storageSaveDateData('suppliCount', dateToStr(currentDate), suppliCount);
       storageSave('suppliCount', {});
       return true;
     }

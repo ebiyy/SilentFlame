@@ -1,5 +1,5 @@
 import {atom, selector} from 'recoil';
-import {formatShortStrDate} from '../../api/utils';
+import {dateToStr} from '../../api/utils';
 
 export const dateState = atom<Date>({
   key: 'dateState',
@@ -19,6 +19,6 @@ export const weeksBeginningDateState = selector({
     const weeksBeginningDate = new Date(date);
     weeksBeginningDate.setDate(date.getDate() - date.getDay());
     console.log('weeksBeginningDateState', 'date', date);
-    return formatShortStrDate(weeksBeginningDate);
+    return dateToStr(weeksBeginningDate);
   },
 });

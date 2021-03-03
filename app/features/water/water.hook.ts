@@ -4,7 +4,7 @@ import {
   storageSave,
   storageSaveDateData,
 } from '../../api/storage.helper';
-import {formatShortStrDate} from '../../api/utils';
+import {dateToStr} from '../../api/utils';
 import {dateState, editableState} from '../date-manager/data-manager.recoil';
 import {Water, WaterCount} from './water';
 
@@ -31,7 +31,7 @@ export const isWaterStorageState = selector({
     const editable = get(editableState);
     if (waters.length > 0 && editable) {
       console.log('Run isWaterStorageState');
-      storageSaveDateData('myWater', formatShortStrDate(currentDate), waters);
+      storageSaveDateData('myWater', dateToStr(currentDate), waters);
       storageSave('myWater', waters);
       return true;
     }
@@ -47,11 +47,7 @@ export const isWaterToMealState = selector({
     const editable = get(editableState);
     if (waterToMeal.length > 0 && editable) {
       console.log('Run isWaterToMealState');
-      storageSaveDateData(
-        'waterToMeal',
-        formatShortStrDate(currentDate),
-        waterToMeal,
-      );
+      storageSaveDateData('waterToMeal', dateToStr(currentDate), waterToMeal);
       storageSave('waterToMeal', {});
       return true;
     }
@@ -67,11 +63,7 @@ export const isWaterCountState = selector({
     const editable = get(editableState);
     if (Object.entries(waterCount).length > 0 && editable) {
       console.log('Run isWaterCountState');
-      storageSaveDateData(
-        'waterCount',
-        formatShortStrDate(currentDate),
-        waterCount,
-      );
+      storageSaveDateData('waterCount', dateToStr(currentDate), waterCount);
       storageSave('waterCount', {});
       return true;
     }

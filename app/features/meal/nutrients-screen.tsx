@@ -1,9 +1,9 @@
-import React, {Fragment, useState} from 'react';
+import React, {Fragment, useEffect, useState} from 'react';
 import {LogBox, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {TextInput} from 'react-native-gesture-handler';
 import {useRecoilState, useRecoilValue} from 'recoil';
 import {actionMealState, mealsState} from './recoil.meal';
-import {calNutrient, generateMeal} from './function.meal';
+import {calNutrient, generateMeal, replaceFoodName} from './function.meal';
 import {screenThemeColor, shadowStyles, winWidth} from '../../global/styles';
 import SwitchSelector from 'react-native-switch-selector';
 import {BASIC_NUTRIENTS_LABEL, NUTRIENTS_LABEL} from './constant.meal';
@@ -79,8 +79,19 @@ export const NutrientsScreen = ({navigation, route}) => {
     <>
       <View style={getMarginBottom(15, 'headerContainer')}>
         <View style={getMarginBottom(10, 'headerTitle')}>
-          <Text style={styles.headerTitleText}>
-            {parentScreen === 'PfcPieChart' ? '栄養素の合計' : ''}
+          <Text
+            style={[
+              styles.headerTitleText,
+              parentScreen !== 'PfcPieChart' && {
+                fontSize: 18,
+                paddingBottom: 3,
+              },
+            ]}>
+            {parentScreen === 'PfcPieChart'
+              ? '栄養素の合計'
+              : replaceFoodName(selectMeal.foodName).length > 11
+              ? `${replaceFoodName(selectMeal.foodName).slice(0, 11)}...`
+              : replaceFoodName(selectMeal.foodName)}
           </Text>
         </View>
         <View style={styles.headerSwitch}>

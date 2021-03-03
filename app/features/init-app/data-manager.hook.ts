@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useRecoilState} from 'recoil';
 import {storageLoad, storageLoadDateData} from '../../api/storage.helper';
-import {formatShortStrDate, isToday} from '../../api/utils';
+import {dateToStr, isToday} from '../../api/utils';
 import {dateState, editableState} from '../date-manager/data-manager.recoil';
 import {mealsState} from '../meal/recoil.meal';
 import {
@@ -46,54 +46,44 @@ export const useDataManager = () => {
         } else {
           storageLoadDateData(
             'mySuppli',
-            formatShortStrDate(currentDate),
+            dateToStr(currentDate),
             setSuppli,
             [],
           );
         }
         storageLoadDateData(
           'suppliToMeal',
-          formatShortStrDate(currentDate),
+          dateToStr(currentDate),
           setSuppliToMeal,
           {},
         );
         storageLoadDateData(
           'suppliCount',
-          formatShortStrDate(currentDate),
+          dateToStr(currentDate),
           setSuppliCount,
           {},
         );
       };
 
       const getMealsData = () => {
-        storageLoadDateData(
-          'meals',
-          formatShortStrDate(currentDate),
-          setMeals,
-          [],
-        );
+        storageLoadDateData('meals', dateToStr(currentDate), setMeals, []);
       };
 
       const getWaterData = () => {
         if (isToday(currentDate)) {
           storageLoad('myWater', setWaters, initialWater);
         } else {
-          storageLoadDateData(
-            'myWater',
-            formatShortStrDate(currentDate),
-            setWaters,
-            [],
-          );
+          storageLoadDateData('myWater', dateToStr(currentDate), setWaters, []);
         }
         storageLoadDateData(
           'waterCount',
-          formatShortStrDate(currentDate),
+          dateToStr(currentDate),
           setWaterCount,
           {},
         );
         storageLoadDateData(
           'waterToMeal',
-          formatShortStrDate(currentDate),
+          dateToStr(currentDate),
           setWaterToMeal,
           [],
         );

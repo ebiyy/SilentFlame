@@ -1,5 +1,5 @@
 // 参考: https://tegralsblog.com/react-native-calendars-custom-japanese/
-import {useRoute} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
@@ -7,7 +7,7 @@ import {useRecoilState} from 'recoil';
 import {
   formatJpDate,
   formatJpMonthDay,
-  formatShortStrDate,
+  dateToStr,
   weekPeriod,
 } from '../../api/utils';
 import {ConfirmationModal} from '../../components/common/confirmation-modal';
@@ -28,6 +28,7 @@ import {
   waterCountState,
   waterToMealState,
 } from '../../features/water/water.hook';
+import {weeklyDataState} from '../../features/weekly/recoil.weekly';
 
 export const HeaderRightDate = () => {
   const route = useRoute();
@@ -37,6 +38,8 @@ export const HeaderRightDate = () => {
   const [modalChoice, setModalChoice] = useState<'yes' | 'no' | undefined>();
   const [editable, setEditable] = useRecoilState(editableState);
   const setCurrentDate = useDataManager();
+  const navigation = useNavigation();
+  const setWeekData = useRecoilState(weeklyDataState)[1];
 
   useEffect(() => {
     if (route.state === undefined) {
@@ -60,10 +63,12 @@ export const HeaderRightDate = () => {
 
   useEffect(() => {
     if (modalChoice === 'yes') {
+      setWeekData([]);
       setCurrentDate(new Date());
       // setEditable(true);
       // setDate(new Date());
       setModalChoice(undefined);
+      navigation.navigate('weekly'); // resetではうまく動かない
     }
   }, [modalChoice]);
 

@@ -26,6 +26,7 @@ import {PfcPieChart} from '../../components/pfc-pie-chart';
 import {RegistrationMealCard} from './registration-meal-card';
 import {dateState, editableState} from '../date-manager/data-manager.recoil';
 import {isToday} from '../../api/utils';
+import {storage} from '../../api/storage.helper';
 
 const timePeriod: TimePeriod = {
   breakfast: '朝食',

@@ -17,7 +17,7 @@ import {RecycleBtn} from './components/recycle-btn';
 import {CountSupplement} from './count-supplement';
 import {dateState, editableState} from '../date-manager/data-manager.recoil';
 import {TitleText} from '../../components/title-text';
-import {formatShortStrDate, isToday} from '../../api/utils';
+import {dateToStr, isToday} from '../../api/utils';
 
 export const SupplementScreen = () => {
   const navigation = useNavigation();

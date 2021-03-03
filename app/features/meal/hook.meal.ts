@@ -9,7 +9,7 @@ import {
   dateState,
   weeksBeginningDateState,
 } from '../date-manager/data-manager.recoil';
-import {formatShortStrDate} from '../../api/utils';
+import {dateToStr} from '../../api/utils';
 import {APP_VERSION} from '../../global/constants';
 import {storage} from '../../api/storage.helper';
 
@@ -26,7 +26,7 @@ export const useMargeMealState = () => {
     snapshotListenOptions: {includeMetadataChanges: true},
   });
 
-  const dateKey = formatShortStrDate(date);
+  const dateKey = dateToStr(date);
 
   const createDateObj = {
     [dateKey]: {

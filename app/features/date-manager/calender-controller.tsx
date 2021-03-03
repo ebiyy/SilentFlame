@@ -2,7 +2,7 @@ import {CommonActions, useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useRecoilState} from 'recoil';
-import {formatShortStrDate} from '../../api/utils';
+import {dateToStr} from '../../api/utils';
 import {FadeInView} from '../../components/fade-in-view';
 import {shadowStyles, winWidth} from '../../global/styles';
 import {useDataManager} from '../init-app/data-manager.hook';
@@ -27,13 +27,14 @@ export const CalendarScreen = () => {
   const navigation = useNavigation();
   const [date, setDate] = useRecoilState(dateState);
   const [editable, setEditable] = useRecoilState(editableState);
-  const [selectedDate, setSelectedDate] = useState(formatShortStrDate(date));
+  const [selectedDate, setSelectedDate] = useState(dateToStr(date));
   const [markedDate, setMarkedDate] = useState<DotMarkingData>(mockMarkedDates);
-  const [beforeDate, setBeforeDate] = useState(formatShortStrDate(date));
+  const [beforeDate, setBeforeDate] = useState(dateToStr(date));
   const setCurrentDate = useDataManager();
 
   useEffect(() => {
-    setSelectedDate(formatShortStrDate(date));
+    console.log('CalendarScreen::date', date, dateToStr(date));
+    setSelectedDate(dateToStr(date));
   }, [date]);
 
   useEffect(() => {
@@ -46,7 +47,7 @@ export const CalendarScreen = () => {
 
   const selectPress = () => {
     setCurrentDate(new Date(selectedDate));
-    // setEditable(selectedDate === formatShortStrDate(new Date()));
+    // setEditable(selectedDate === dateToStr(new Date()));
     // setDate(new Date(selectedDate));
 
     // navigation.navigate('weekly');
@@ -63,7 +64,7 @@ export const CalendarScreen = () => {
         markedDate={markedDate}
         setSelectedDate={setSelectedDate}
       />
-      {selectedDate !== formatShortStrDate(date) && (
+      {selectedDate !== dateToStr(date) && (
         <FadeInView>
           <View style={Styles.btnContainer}>
             <TouchableOpacity style={Styles.btnContent} onPress={selectPress}>

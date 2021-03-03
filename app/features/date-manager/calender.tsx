@@ -23,7 +23,7 @@ export const CustomCalendar = (props: Props) => {
 
   // useEffect(() => {
   //   // ex. '2021-02-16'
-  //   const strDate = formatShortStrDate(date);
+  //   const strDate = dateToStr(date);
   //   setMarkedDate((preState) =>
   //     changeMarkedDate(preState, strDate, selectedDate),
   //   );

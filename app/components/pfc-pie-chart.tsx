@@ -24,13 +24,14 @@ import {suppliToMealState} from '../features/suppli/suppli.hook';
 import {waterToMealState} from '../features/water/water.hook';
 
 type Props = {
-  meals: Meal[];
+  meals?: Meal[];
   boxShadow: string;
+  weekData?: Meal;
 };
 
 export const PfcPieChart = (props: Props) => {
   const navigation = useNavigation();
-  const {meals, boxShadow} = props;
+  const {meals, boxShadow, weekData} = props;
   const sumProtein = useRecoilValue(mealsProteinState);
   const sumFat = useRecoilValue(mealsFatState);
   const sumCHOCDF = useRecoilValue(mealsCHOCDFState);
@@ -49,9 +50,15 @@ export const PfcPieChart = (props: Props) => {
     }
   };
 
-  // useEffect(() => {
-  //   console.log('PfcPieChart::waterToMeal', waterToMeal);
-  // }, [waterToMeal]);
+  const calWeekCHOCDF = (week: Meal) => {
+    const CHOCDF = Number(week.CHOCDF);
+    const CHOAV = Number(week.CHOAVLM);
+    if (CHOCDF > CHOAV) {
+      return CHOCDF - CHOAV;
+    } else {
+      return 0;
+    }
+  };
 
   // color: https://codepen.io/giana/pen/BoWoQR
   return (
@@ -74,9 +81,15 @@ export const PfcPieChart = (props: Props) => {
             <TouchableOpacity
               onPress={() =>
                 navigation.navigate('NutrientsScreen', {
-                  selectMeal: sumMeal(
-                    [].concat(meals, Object.values(suppliToMeal), waterToMeal),
-                  ),
+                  selectMeal: meals
+                    ? sumMeal(
+                        [].concat(
+                          meals,
+                          Object.values(suppliToMeal),
+                          waterToMeal,
+                        ),
+                      )
+                    : weekData && weekData,
                   timePeriod: '',
                   parentScreen: 'PfcPieChart',
                 })
@@ -97,28 +110,34 @@ export const PfcPieChart = (props: Props) => {
             data={[
               {
                 name: isWeight ? 'たんぱく質(g)' : 'たんぱく質',
-                nutrinet: sumProtein,
+                nutrinet: meals
+                  ? sumProtein
+                  : weekData && Number(weekData.PROT),
                 color: '#5eee7d',
                 legendFontColor: 'black',
                 legendFontSize: 15,
               },
               {
                 name: isWeight ? '脂質(g)' : '脂質',
-                nutrinet: sumFat,
+                nutrinet: meals ? sumFat : weekData && Number(weekData.FAT),
                 color: '#86cbf3',
                 legendFontColor: 'black',
                 legendFontSize: 15,
               },
               {
                 name: isWeight ? '炭水化物(g)' : '炭水化物',
-                nutrinet: calCHOCDF(),
+                nutrinet: meals
+                  ? calCHOCDF()
+                  : weekData && calWeekCHOCDF(weekData),
                 color: '#f18fc2',
                 legendFontColor: 'black',
                 legendFontSize: 15,
               },
               {
                 name: isWeight ? '糖質(g)' : '糖質',
-                nutrinet: sumCHOAV,
+                nutrinet: meals
+                  ? sumCHOAV
+                  : weekData && Number(weekData.CHOAVLM),
                 color: '#ea4bbc',
                 legendFontColor: 'black',
                 legendFontSize: 15,

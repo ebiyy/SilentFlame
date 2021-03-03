@@ -73,3 +73,22 @@ export const getTimeZone = toFixedToNum(
 
 export const isToday = (date: Date) =>
   formatShortStrDate(date) === formatShortStrDate(new Date());
+
+const addZero = (num: number) =>
+  String(num).length === 2 ? String(num) : `0${String(num)}`;
+
+export const dateToStr = (date: Date | string) => {
+  const targetDate = new Date(date);
+  const year = targetDate.getFullYear();
+  const month = targetDate.getMonth() + 1;
+  const day = targetDate.getDate();
+  const monthStr = addZero(month);
+  const dayStr = addZero(day);
+  return `${year}-${monthStr}-${dayStr}`;
+};
+
+export const addDays = (date: Date, days: number) => {
+  const day = new Date(date);
+  day.setDate(day.getDate() + days);
+  return day;
+};

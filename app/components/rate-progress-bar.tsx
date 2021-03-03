@@ -12,10 +12,11 @@ type Props = {
   unit: string;
   color: string;
   recoilSelector: RecoilValueReadOnly<any>;
+  value?: number;
 };
 
 export const RateProgressBar = (props: Props) => {
-  const {title, rimit, unit, color, recoilSelector} = props;
+  const {title, rimit, unit, color, recoilSelector, value} = props;
   const sumValue = useRecoilValue(recoilSelector);
 
   return (
@@ -23,11 +24,11 @@ export const RateProgressBar = (props: Props) => {
       <View style={styles.barTextContainer}>
         <Text style={[styles.barText, {fontSize: 18}]}>{title}</Text>
         <Text style={styles.barText}>
-          {sumValue ? sumValue : 0} / {rimit} {unit}
+          {value ? value : sumValue ? sumValue : 0} / {rimit} {unit}
         </Text>
       </View>
       <Progress.Bar
-        progress={sumValue / rimit}
+        progress={(value ? value : sumValue) / rimit}
         color={color}
         width={windowWidth * 0.8}
       />

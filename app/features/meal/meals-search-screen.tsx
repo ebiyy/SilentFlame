@@ -90,13 +90,13 @@ export const MealsSearchScreen = ({route}) => {
     },
   );
 
-  useEffect(() => {
-    console.log(
-      'serachResult',
-      serachResult.map((v) => v.foodName),
-      serachResult.length,
-    );
-  }, [serachResult]);
+  // useEffect(() => {
+  //   console.log(
+  //     'serachResult',
+  //     serachResult.map((v) => v.foodName),
+  //     serachResult.length,
+  //   );
+  // }, [serachResult]);
 
   useEffect(() => {
     navigation.setOptions({
