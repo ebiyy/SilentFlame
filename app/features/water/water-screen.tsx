@@ -31,6 +31,7 @@ import {dateToStr, isToday} from '../../api/utils';
 import {dateState, editableState} from '../date-manager/data-manager.recoil';
 
 import {WaterWeight} from './water';
+import {userInfoState} from '../init-app/init-app.recoil';
 
 const inputWaterPatten = [
   {name: 'cup', label: 120, iconElm: 'SimpleLineIcons'},
@@ -51,6 +52,7 @@ export const WaterScreen = () => {
   const isWaterStorage = useRecoilValue(isWaterStorageState);
   const isWaterToMeal = useRecoilValue(isWaterToMealState);
   const isWaterCount = useRecoilValue(isWaterCountState);
+  const userInfo = useRecoilValue(userInfoState);
 
   useEffect(() => {
     if (isToday(date)) {
@@ -163,7 +165,7 @@ export const WaterScreen = () => {
         <View style={Styles.rateBarContainer}>
           <RateProgressBar
             title=""
-            rimit={2}
+            rimit={userInfo ? Number(userInfo.water) : 2}
             unit="L"
             color={screenThemeColor.water}
             recoilSelector={mealsWATERState}

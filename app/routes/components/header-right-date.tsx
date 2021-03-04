@@ -3,31 +3,17 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
-import {useRecoilState} from 'recoil';
+import {useRecoilState, useRecoilValue} from 'recoil';
 import {
-  formatJpDate,
-  formatJpMonthDay,
+  comparisonDate,
   dateToStr,
+  formatJpDate,
   weekPeriod,
 } from '../../api/utils';
 import {ConfirmationModal} from '../../components/common/confirmation-modal';
-import {FadeInView} from '../../components/fade-in-view';
-import {
-  dateState,
-  editableState,
-} from '../../features/date-manager/data-manager.recoil';
+import {dateState} from '../../features/date-manager/data-manager.recoil';
 import {useDataManager} from '../../features/init-app/data-manager.hook';
-import {mealsState} from '../../features/meal/recoil.meal';
-import {
-  supplisState,
-  suppliToMealState,
-  suppliCountState,
-} from '../../features/suppli/suppli.hook';
-import {
-  watersState,
-  waterCountState,
-  waterToMealState,
-} from '../../features/water/water.hook';
+import {userInfoState} from '../../features/init-app/init-app.recoil';
 import {weeklyDataState} from '../../features/weekly/recoil.weekly';
 
 export const HeaderRightDate = () => {
@@ -36,10 +22,21 @@ export const HeaderRightDate = () => {
   const [isWeekly, setIsWeekly] = useState<boolean>();
   const [modalVisible, setModalVisible] = useState(false);
   const [modalChoice, setModalChoice] = useState<'yes' | 'no' | undefined>();
-  const [editable, setEditable] = useRecoilState(editableState);
   const setCurrentDate = useDataManager();
   const navigation = useNavigation();
   const setWeekData = useRecoilState(weeklyDataState)[1];
+  const userInfo = useRecoilValue(userInfoState);
+
+  const getToday = () => {
+    if (userInfo && userInfo.time) {
+      const hour = Number(userInfo.time.split(':')[0]);
+      const minuts = Number(userInfo.time.split(':')[1]);
+      console.log(hour, minuts);
+      // console.log(dateToStr(getToday()) === dateToStr(new Date()));
+      return comparisonDate(new Date(), hour, minuts);
+    }
+    return null;
+  };
 
   useEffect(() => {
     if (route.state === undefined) {
@@ -64,7 +61,11 @@ export const HeaderRightDate = () => {
   useEffect(() => {
     if (modalChoice === 'yes') {
       setWeekData([]);
-      setCurrentDate(new Date());
+      if (userInfo && userInfo.time) {
+        const hour = Number(userInfo.time.split(':')[0]);
+        const minuts = Number(userInfo.time.split(':')[1]);
+        setCurrentDate(comparisonDate(new Date(), hour, minuts));
+      }
       // setEditable(true);
       // setDate(new Date());
       setModalChoice(undefined);
@@ -77,13 +78,13 @@ export const HeaderRightDate = () => {
       {!modalVisible && (
         <TouchableOpacity
           onPress={() =>
-            formatJpDate(date) !== formatJpDate(new Date())
+            getToday() && dateToStr(getToday()) !== dateToStr(date)
               ? setModalVisible(true)
               : {}
           }>
           <View style={Styles.view}>
             <Text style={Styles.text}>
-              {formatJpDate(date) === formatJpDate(new Date())
+              {getToday() && dateToStr(getToday()) === dateToStr(date)
                 ? isWeekly
                   ? weekPeriod(date)
                   : '今日'

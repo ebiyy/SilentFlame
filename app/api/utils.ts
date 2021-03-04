@@ -92,3 +92,31 @@ export const addDays = (date: Date, days: number) => {
   day.setDate(day.getDate() + days);
   return day;
 };
+
+export const nextDate5h = () => {
+  const nextDate = new Date();
+  nextDate.setDate(nextDate.getDate() + 1);
+  const next5h = new Date(
+    `${new Intl.DateTimeFormat('ja-JP', {
+      year: 'numeric',
+      month: 'numeric',
+      day: 'numeric',
+    }).format(nextDate)} 05:00:00`,
+  );
+  return next5h;
+};
+
+export const comparisonDate = (
+  date: Date,
+  setHour?: number,
+  setMinits?: number,
+) => {
+  const d = date;
+  if (setHour) {
+    d.setHours(d.getHours() - setHour);
+    if (setMinits) {
+      d.setMinutes(d.getMinutes() - setMinits);
+    }
+  }
+  return new Date(dateToStr(d));
+};

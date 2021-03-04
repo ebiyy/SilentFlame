@@ -9,6 +9,8 @@ import {
   STORAGE_KEYS,
 } from '../../api/storage.helper';
 import {dateToStr} from '../../api/utils';
+import {shadowStyles, winWidth} from '../../global/styles';
+import {SampleSectionList} from '../../sample/setting-sample/section-list';
 
 export const SettingScreen = () => {
   const [data, setData] = useState(Settings.get('data'));
@@ -80,32 +82,51 @@ export const SettingScreen = () => {
     console.log('SettingScreen', test);
   }, [test]);
 
-  return (
-    <View style={styles.container}>
-      <Text>Stored value:</Text>
-      <Text style={styles.value}>{data}</Text>
-      <Button
-        onPress={() => storeData({data: 'React'})}
-        title="Store 'React'"
-      />
-      <Button
-        onPress={() => storeData({data: 'Native'})}
-        title="Store 'Native'"
-      />
-      <Button onPress={deleteStorage} title="Storage all clear" />
-      <Button onPress={toDayDelete} title="Storage today delete" />
-    </View>
-  );
+  return <SampleSectionList />;
 };
 
 const styles = StyleSheet.create({
+  // container: {
+  //   flex: 1,
+  //   justifyContent: 'center',
+  //   alignItems: 'center',
+  // },
+  // value: {
+  //   fontSize: 24,
+  //   marginVertical: 12,
+  // },
   container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
+    flexWrap: 'wrap',
   },
-  value: {
-    fontSize: 24,
-    marginVertical: 12,
+  card: {
+    width: '33%',
+    height: winWidth / 3,
+    backgroundColor: 'black',
+    ...shadowStyles('black').boxShadow,
   },
 });
+
+// <View style={styles.container}>
+//   {[...Array(9)].map(() => (
+//     <View style={styles.card}></View>
+//   ))}
+
+{
+  /* // <View style={styles.container}>
+    //   <Text>Stored value:</Text>
+    //   <Text style={styles.value}>{data}</Text>
+    //   <Button
+    //     onPress={() => storeData({data: 'React'})}
+    //     title="Store 'React'"
+    //   />
+    //   <Button
+    //     onPress={() => storeData({data: 'Native'})}
+    //     title="Store 'Native'"
+    //   />
+    //   <Button onPress={deleteStorage} title="Storage all clear" />
+    //   <Button onPress={toDayDelete} title="Storage today delete" />
+    // </View> */
+}
+{
+  /* </View> */
+}

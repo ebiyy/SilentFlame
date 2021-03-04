@@ -27,6 +27,7 @@ import {RegistrationMealCard} from './registration-meal-card';
 import {dateState, editableState} from '../date-manager/data-manager.recoil';
 import {isToday} from '../../api/utils';
 import {storage} from '../../api/storage.helper';
+import {userInfoState} from '../init-app/init-app.recoil';
 
 const timePeriod: TimePeriod = {
   breakfast: '朝食',
@@ -41,6 +42,7 @@ export const MealsScreen = () => {
   const isMealsStorage = useRecoilValue(isMealsStorageState);
   const [editable, setEditable] = useRecoilState(editableState);
   const date = useRecoilValue(dateState);
+  const userInfo = useRecoilValue(userInfoState);
 
   useEffect(() => {
     if (isToday(date)) {
@@ -62,7 +64,7 @@ export const MealsScreen = () => {
           <View style={{marginBottom: 15}}>
             <RateProgressBar
               title=""
-              rimit={2200}
+              rimit={userInfo ? Number(userInfo.calorie) : 2200}
               unit="kcal"
               color="#FF6E6B"
               recoilSelector={mealsENERC_KCALState}

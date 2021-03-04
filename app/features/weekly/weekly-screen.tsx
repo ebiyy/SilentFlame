@@ -16,12 +16,14 @@ import {sumMeal} from '../../components/functions';
 import {addDays, dateToStr} from '../../api/utils';
 import {dateState} from '../date-manager/data-manager.recoil';
 import {weeklyDataState} from './recoil.weekly';
+import {userInfoState} from '../init-app/init-app.recoil';
 
 export const WeeklyScreen = () => {
   const concatNutrient = useRecoilValue(concatNutrientState); // need
   const [weekData, setWeekData] = useRecoilState(weeklyDataState);
   const [calWeekData, setCalWeekData] = useState<Meal>();
   const date = useRecoilValue(dateState);
+  const userInfo = useRecoilValue(userInfoState);
 
   useEffect(() => {
     console.log('WeeklyScreen::useEffect');
@@ -61,7 +63,8 @@ export const WeeklyScreen = () => {
   }, [date]);
 
   useEffect(() => {
-    if (weekData && weekData.length > 0) {
+    if (weekData && weekData.flat().length > 0) {
+      console.log('WeeklyScreen::weekData', weekData);
       setCalWeekData(sumMeal(weekData.flat(), weekData.length));
     }
   }, [weekData]);
@@ -77,7 +80,7 @@ export const WeeklyScreen = () => {
               <View style={styles.progressBarContainer}>
                 <RateProgressBar
                   title="今週のカロリー平均"
-                  rimit={2200}
+                  rimit={userInfo ? Number(userInfo.calorie) : 2200}
                   unit="kcal"
                   color="#FF6E6B"
                   recoilSelector={mealsENERC_KCALState}
@@ -87,7 +90,7 @@ export const WeeklyScreen = () => {
               <View style={styles.progressBarContainer}>
                 <RateProgressBar
                   title="今週の水分平均"
-                  rimit={2}
+                  rimit={userInfo ? Number(userInfo.water) : 2}
                   unit="L"
                   color={screenThemeColor.water}
                   recoilSelector={mealsWATERState}

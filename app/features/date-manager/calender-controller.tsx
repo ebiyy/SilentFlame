@@ -1,4 +1,4 @@
-import {CommonActions, useNavigation} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useRecoilState} from 'recoil';
@@ -6,27 +6,15 @@ import {dateToStr} from '../../api/utils';
 import {FadeInView} from '../../components/fade-in-view';
 import {shadowStyles, winWidth} from '../../global/styles';
 import {useDataManager} from '../init-app/data-manager.hook';
-import {mealsState} from '../meal/recoil.meal';
-import {
-  suppliCountState,
-  supplisState,
-  suppliToMealState,
-} from '../suppli/suppli.hook';
-import {
-  watersState,
-  waterCountState,
-  waterToMealState,
-} from '../water/water.hook';
 import {CustomCalendar} from './calender';
 import {mockMarkedDates} from './constants';
-import {dateState, editableState} from './data-manager.recoil';
+import {dateState} from './data-manager.recoil';
 import {DotMarkingData} from './date-manager';
 import {changeMarkedDate} from './functions';
 
 export const CalendarScreen = () => {
   const navigation = useNavigation();
   const [date, setDate] = useRecoilState(dateState);
-  const [editable, setEditable] = useRecoilState(editableState);
   const [selectedDate, setSelectedDate] = useState(dateToStr(date));
   const [markedDate, setMarkedDate] = useState<DotMarkingData>(mockMarkedDates);
   const [beforeDate, setBeforeDate] = useState(dateToStr(date));
