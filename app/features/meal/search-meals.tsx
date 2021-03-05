@@ -180,15 +180,14 @@ export const SearchMeals = ({route}) => {
                         （100gあたりのカロリー）
                       </Text>
                     </View>
-                    <VirtualizedView>
-                      <VirtualizedList
-                        data={[]}
-                        renderItem={renderItem}
-                        keyExtractor={(item, i) => String(i)}
-                        getItemCount={(data) => serachResult.length - 1}
-                        getItem={(date, i) => serachResult[i]}
-                      />
-                    </VirtualizedView>
+
+                    <VirtualizedList
+                      data={[]}
+                      renderItem={renderItem}
+                      keyExtractor={(item, i) => String(i)}
+                      getItemCount={(data) => serachResult.length - 1}
+                      getItem={(date, i) => serachResult[i]}
+                    />
                   </View>
                 )}
               </View>

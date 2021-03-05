@@ -74,7 +74,7 @@ export const getTimeZone = toFixedToNum(
 export const isToday = (date: Date) =>
   formatShortStrDate(date) === formatShortStrDate(new Date());
 
-const addZero = (num: number) =>
+export const addZero = (num: number) =>
   String(num).length === 2 ? String(num) : `0${String(num)}`;
 
 export const dateToStr = (date: Date | string) => {

@@ -10,7 +10,7 @@ import {
 import {TextInput} from 'react-native-gesture-handler';
 import {useRecoilState, useRecoilValue} from 'recoil';
 import {storageLoad, storageSave, STORAGE_KEYS} from '../../api/storage.helper';
-import {isToday, nextDate5h} from '../../api/utils';
+import {comparisonDate, dateToStr, isToday, nextDate5h} from '../../api/utils';
 import {Anti, Fa5i, Ioni, MCi} from '../../components/common/icons';
 import {
   dateState,
@@ -119,8 +119,19 @@ export const SettingsListItem = (props: Props) => {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [dates, setDates] = useState(nextDate5h());
 
+  const getToday = () => {
+    if (userInfo && userInfo.time) {
+      const hour = Number(userInfo.time.split(':')[0]);
+      const minuts = Number(userInfo.time.split(':')[1]);
+      console.log(hour, minuts);
+      // console.log(dateToStr(getToday()) === dateToStr(new Date()));
+      return comparisonDate(new Date(), hour, minuts);
+    }
+    return null;
+  };
+
   useEffect(() => {
-    if (isToday(date)) {
+    if (getToday() && dateToStr(getToday()) === dateToStr(date)) {
       setEditable(true);
     }
   }, [date]);

@@ -89,15 +89,22 @@ export const excludeKeyGroup = [
   'id',
   'author',
   'intake',
+  'memo',
 ];
 
-export const calNutrient = (meal: MargeMeal, v: string) => {
+export const calNutrient = (meal: MargeMeal, intake: string) => {
   const temp = {} as MargeMeal;
   Object.keys(meal).forEach((key) => {
     if (excludeKeyGroup.includes(key)) {
-      temp[key] = meal[key];
+      if (key === 'intake') {
+        console.log(key, Number(intake));
+        temp['intake'] = Number(intake);
+      } else {
+        temp[key] = meal[key];
+      }
     } else {
-      temp[key] = nutrientRecalculation(meal[key], v, meal.intake);
+      console.log(key, Number(intake));
+      temp[key] = nutrientRecalculation(meal[key], intake, meal.intake);
     }
   });
   return temp;

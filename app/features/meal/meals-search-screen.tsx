@@ -11,6 +11,10 @@ import {NUTRIENTS} from '../../config/meal-lists/nutrients';
 import {userIdState} from '../init-app/init-app.recoil';
 import {LogMeals} from './log-meals';
 import {MealLsit} from './meal-list';
+import {addDays, dateToStr} from '../../api/utils';
+import {storage} from '../../api/storage.helper';
+import {dateState} from '../date-manager/data-manager.recoil';
+import {TitleText} from '../../components/title-text';
 
 const generateHitObj = (inputText: string) => {
   const fullSerach = (text: string) =>
@@ -76,54 +80,60 @@ export const MealsSearchScreen = ({route}) => {
   const [submitEditing, setSubmitEditing] = useState(false);
   const [isSerach, setIsSerach] = useState(true);
   const [serachResult, setSerachResult] = useState<Nutrients[]>([]);
-  const userId = useRecoilValue(userIdState);
-  const firestore = useRecoilValue(firestoreState);
-  const [value, loading, error] = useCollection(
-    firestore
-      .collection('Meal')
-      .doc(userId)
-      .collection('Meal')
-      .orderBy('addedAt')
-      .limit(10),
-    {
-      snapshotListenOptions: {includeMetadataChanges: true},
-    },
-  );
-
-  // useEffect(() => {
-  //   console.log(
-  //     'serachResult',
-  //     serachResult.map((v) => v.foodName),
-  //     serachResult.length,
-  //   );
-  // }, [serachResult]);
+  const [logMeals, setLogMeals] = useState<Meal[]>([]);
+  const date = useRecoilValue(dateState);
 
   useEffect(() => {
-    navigation.setOptions({
-      title: '食事を登録',
-    });
-  }, []);
-
-  useEffect(() => {
-    firestore
-      .collection('Meal')
-      .doc(userId)
-      .collection('2021-02-13')
-      .doc('4ZvUQkuqavEEWFF9OOL5')
-      .get()
-      .then((result) => console.log('result.data()', result.data()));
-  }, []);
+    if (!isSerach && logMeals.length === 0) {
+      const currentDate = new Date(date);
+      const monthIds = [...new Array(31)].map((v, i) =>
+        dateToStr(addDays(currentDate, -i)),
+      );
+      monthIds.forEach((id) => {
+        storage
+          .load({
+            key: 'meals',
+            id,
+          })
+          .then((res) => {
+            setLogMeals((preState) => [
+              ...preState,
+              ...res.filter(
+                (r) =>
+                  !preState.map((meal) => meal.foodName).includes(r.foodName) ||
+                  !preState.map((meal) => meal.intake).includes(r.intake),
+              ),
+            ]);
+          })
+          .catch((err) => {
+            // any exception including data not found
+            // goes to catch()
+            console.warn(err.message);
+            switch (err.name) {
+              case 'NotFoundError':
+                // TODO;
+                break;
+              case 'ExpiredError':
+                // TODO
+                break;
+            }
+          });
+      });
+    }
+  }, [isSerach]);
 
   const Item = ({meal, isLast}) => (
     <MealLsit meal={meal} timePeriod={timePeriod} isLast={isLast} />
   );
 
   const renderItem = ({item}) => {
-    const isLast = serachResult.indexOf(item) + 1 === serachResult.length;
+    const isLast = isSerach
+      ? serachResult.indexOf(item) + 1 === serachResult.length
+      : logMeals.indexOf(item) + 1 === logMeals.length;
     if (item) {
       return <Item meal={{...item}} isLast={isLast} />;
     }
-    return <Text>結果なし</Text>;
+    return <Text>{isSerach ? '結果なし' : '履歴なし'}</Text>;
   };
 
   return (
@@ -132,10 +142,18 @@ export const MealsSearchScreen = ({route}) => {
         data={[]}
         renderItem={renderItem}
         keyExtractor={(item, i) => String(i)}
-        getItemCount={() => (serachResult.length > 0 ? serachResult.length : 0)}
-        getItem={(date, i) => serachResult[i]}
+        getItemCount={() =>
+          isSerach
+            ? serachResult.length > 0
+              ? serachResult.length
+              : 0
+            : logMeals.length > 0
+            ? logMeals.length
+            : 0
+        }
+        getItem={(date, i) => (isSerach ? serachResult[i] : logMeals[i])}
         ListEmptyComponent={
-          inputText ? (
+          (isSerach ? inputText : logMeals.length === 1) ? (
             <View style={{margin: 20}}>
               <Text
                 style={{
@@ -197,7 +215,12 @@ export const MealsSearchScreen = ({route}) => {
                 )}
               </View>
             ) : (
-              <LogMeals timePeriod={timePeriod} />
+              <View style={styles.headerConteinr}>
+                <TitleText title="履歴" />
+                <View style={styles.headerSubTextConteinr}>
+                  <Text>（過去１ヶ月間で登録された食品）</Text>
+                </View>
+              </View>
             )}
           </View>
         }
@@ -259,5 +282,13 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderWidth: 1,
     borderColor: screenThemeColor.meals,
+  },
+  headerConteinr: {
+    marginTop: 10,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  headerSubTextConteinr: {
+    alignSelf: 'center',
   },
 });

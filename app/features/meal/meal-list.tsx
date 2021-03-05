@@ -29,6 +29,12 @@ export const MealLsit = (props: Props) => {
   const userId = useRecoilValue(userIdState);
   const [meals, setMeals] = useRecoilState(mealsState);
 
+  useEffect(() => {
+    if (meal.memo && meal.memo.length > 1) {
+      console.log('MealLsit', meal.memo);
+    }
+  }, [meal]);
+
   const setPFC = () => {
     const selectMeal = {...meal};
     const getObj = (
@@ -98,10 +104,17 @@ export const MealLsit = (props: Props) => {
           <View style={styles.cardTitle}>
             <Text>{replaceFoodName(meal.foodName)}</Text>
           </View>
-          <View
-            style={[styles.cardContent, {marginLeft: meal.intake ? 0 : 30}]}>
-            <Text style={styles.kcalText}>{meal.ENERC_KCAL} kcal</Text>
-            {meal.intake && <Text style={{fontSize: 12}}>{meal.intake} g</Text>}
+          <View>
+            <View
+              style={[styles.cardContent, {marginLeft: meal.intake ? 0 : 30}]}>
+              <Text style={styles.kcalText}>{meal.ENERC_KCAL} kcal</Text>
+              {meal.intake && (
+                <Text style={{fontSize: 12}}>{meal.intake} g</Text>
+              )}
+            </View>
+            {/* <View>
+              {meal.memo && meal.memo.length > 1 && <Text>{meal.memo}</Text>}
+            </View> */}
           </View>
         </View>
       </TouchableHighlight>

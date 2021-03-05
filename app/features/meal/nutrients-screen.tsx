@@ -1,6 +1,12 @@
 import React, {Fragment, useEffect, useState} from 'react';
-import {LogBox, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {TextInput} from 'react-native-gesture-handler';
+import {
+  LogBox,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  TextInput,
+} from 'react-native';
 import {useRecoilState, useRecoilValue} from 'recoil';
 import {actionMealState, mealsState} from './recoil.meal';
 import {calNutrient, generateMeal, replaceFoodName} from './function.meal';
@@ -29,6 +35,7 @@ export const NutrientsScreen = ({navigation, route}) => {
   const [listRules, setListRules] = useState<any>(BASIC_NUTRIENTS_LABEL);
   const [meals, setMeals] = useRecoilState(mealsState);
   const editable = useRecoilValue(editableState);
+  const [memo, setMemo] = useState(selectMeal.memo ? selectMeal.memo : '');
 
   const toggleSwitch = (v) => {
     setListRules(v === '簡易' ? BASIC_NUTRIENTS_LABEL : NUTRIENTS_LABEL);
@@ -38,12 +45,15 @@ export const NutrientsScreen = ({navigation, route}) => {
     if (parentScreen === 'MealsSearchScreen') {
       setMeals((preState) => [
         ...preState,
-        generateMeal(
-          calNutrient(selectMeal, String(intake)),
-          Number(intake),
-          timePeriod,
-          userId,
-        ),
+        {
+          ...generateMeal(
+            calNutrient(selectMeal, String(intake)),
+            Number(intake),
+            timePeriod,
+            userId,
+          ),
+          ...{memo: memo},
+        },
       ]);
       navigation.goBack();
       navigation.goBack();
@@ -56,6 +66,7 @@ export const NutrientsScreen = ({navigation, route}) => {
                 ...calNutrient(selectMeal, String(intake)),
                 updatedAt: new Date(),
                 author: userId,
+                memo: memo,
               }
             : meal,
         ),
@@ -150,6 +161,33 @@ export const NutrientsScreen = ({navigation, route}) => {
           ) : (
             <View style={{marginTop: 20}}></View>
           )}
+          {(memo && !editable) ||
+            (editable && (
+              <View
+                style={{
+                  width: '80%',
+                  alignSelf: 'center',
+                  marginBottom: 20,
+                  flexDirection: 'row',
+                }}>
+                <View
+                  style={{marginBottom: 5, alignSelf: 'center', marginEnd: 40}}>
+                  <Text style={{fontSize: 15}}>メモ</Text>
+                </View>
+
+                <TextInput
+                  style={[styles.input, {width: '78%', height: 30}]}
+                  multiline={true}
+                  numberOfLines={2}
+                  onChangeText={(text) => setMemo(text)}
+                  value={memo}
+                  placeholder="市販の１つ分の分量などをメモ"
+                  placeholderTextColor="#ddd"
+                  clearButtonMode="always"
+                  editable={editable}
+                />
+              </View>
+            ))}
 
           <Divider>{`${Number(intake)}g あたりの栄養素`}</Divider>
         </>
@@ -169,6 +207,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     margin: 25,
+    marginTop: 18,
     marginBottom: 20,
   },
   formContainer: {

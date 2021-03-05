@@ -26,6 +26,11 @@ export const RegistrationMealCard = (props: Props) => {
   const editable = useRecoilValue(editableState);
 
   useEffect(() => {
+    console.log(
+      meals.map((meal) => {
+        return {name: meal.foodName, id: meal.id};
+      }),
+    );
     cancelBtnPress();
     // console.log(props);
   }, [props]);
@@ -39,13 +44,16 @@ export const RegistrationMealCard = (props: Props) => {
   };
 
   const submitBtnPress = () => {
+    console.log('tempMeal', tempMeal);
     setMeals((preState) =>
-      preState.map((obj) => (obj.id === meal.id ? tempMeal : meal)),
+      preState.map((obj) => (obj.id === meal.id ? tempMeal : obj)),
     );
     setShowChangeBtn(false);
   };
 
   const cancelBtnPress = () => {
+    console.log(meal.foodName);
+    console.log(tempMeal.foodName);
     setIntake(String(meal.intake));
     setTempMeal(meal);
     setShowChangeBtn(false);
