@@ -105,7 +105,7 @@ const UNIT = {
   water: 'L',
 };
 
-const VALEU = {
+export const VALEU = {
   time: '04:00',
   calorie: '2200',
   water: '2',
