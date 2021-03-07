@@ -17,6 +17,9 @@ import {addDays, dateToStr} from '../../api/utils';
 import {dateState} from '../date-manager/data-manager.recoil';
 import {weeklyDataState} from './recoil.weekly';
 import {userInfoState} from '../init-app/init-app.recoil';
+import {SamplePickerModule} from '../../sample/picker-module';
+import {mockWeekData} from './constants';
+import {SampleBaner} from '../../components/sample-baner';
 
 export const WeeklyScreen = () => {
   const concatNutrient = useRecoilValue(concatNutrientState); // need
@@ -64,7 +67,6 @@ export const WeeklyScreen = () => {
 
   useEffect(() => {
     if (weekData && weekData.flat().length > 0) {
-      console.log('WeeklyScreen::weekData', weekData);
       setCalWeekData(sumMeal(weekData.flat(), weekData.length));
     }
   }, [weekData]);
@@ -73,33 +75,45 @@ export const WeeklyScreen = () => {
     <FadeInView>
       <ScrollView scrollEnabled={winHeight < 800}>
         <LossQuantityController />
-        {calWeekData && (
-          <>
-            <PfcPieChart weekData={calWeekData} boxShadow="black" />
-            <View>
-              <View style={styles.progressBarContainer}>
-                <RateProgressBar
-                  title="今週のカロリー平均"
-                  rimit={userInfo ? Number(userInfo.calorie) : 2200}
-                  unit="kcal"
-                  color="#FF6E6B"
-                  recoilSelector={mealsENERC_KCALState}
-                  value={Number(calWeekData.ENERC_KCAL)}
-                />
-              </View>
-              <View style={styles.progressBarContainer}>
-                <RateProgressBar
-                  title="今週の水分平均"
-                  rimit={userInfo ? Number(userInfo.water) : 2}
-                  unit="L"
-                  color={screenThemeColor.water}
-                  recoilSelector={mealsWATERState}
-                  value={Number(calWeekData.WATER)}
-                />
-              </View>
+        <View style={calWeekData ? {position: 'relative'} : {}}>
+          <PfcPieChart
+            weekData={calWeekData ? calWeekData : mockWeekData}
+            boxShadow="black"
+          />
+          <View>
+            <View style={styles.progressBarContainer}>
+              <RateProgressBar
+                title="今週のカロリー平均"
+                rimit={userInfo ? Number(userInfo.calorie) : 2200}
+                unit="kcal"
+                color="#FF6E6B"
+                recoilSelector={mealsENERC_KCALState}
+                value={Number(
+                  calWeekData
+                    ? calWeekData.ENERC_KCAL
+                    : mockWeekData.ENERC_KCAL,
+                )}
+              />
             </View>
-          </>
-        )}
+            <View style={styles.progressBarContainer}>
+              <RateProgressBar
+                title="今週の水分平均"
+                rimit={userInfo ? Number(userInfo.water) : 2}
+                unit="L"
+                color={screenThemeColor.water}
+                recoilSelector={mealsWATERState}
+                value={Number(
+                  (
+                    Number(
+                      calWeekData ? calWeekData.WATER : mockWeekData.WATER,
+                    ) / 1000
+                  ).toFixed(1),
+                )}
+              />
+            </View>
+          </View>
+          {!calWeekData && <SampleBaner type="bottom" />}
+        </View>
       </ScrollView>
     </FadeInView>
   );

@@ -7,6 +7,7 @@ import {lossQuantityView} from './constants';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {LossQuantityChart} from './loss-quantity-chart';
 import {TitleText} from '../../components/title-text';
+import {SampleBaner} from '../../components/sample-baner';
 
 type SwitchBtnProps = {
   state: string;
@@ -49,12 +50,23 @@ export const LossQuantityController = () => {
     }
   };
 
+  const isHealthDataMock = () => {
+    const mock = weightData?.filter(
+      (v) => v.startDate === '2021-01-31T03:54:11.000+0900',
+    );
+    return mock && mock.length > 0;
+  };
+
   useEffect(() => {
     getLossQuantityData(setWeightData, setBodyFatData, setLeanBodyMassData);
   }, []);
 
+  useEffect(() => {
+    console.log('LossQuantityController', weightData);
+  }, [weightData]);
+
   return (
-    <View>
+    <View style={isHealthDataMock() ? {position: 'relative'} : {}}>
       <View style={styles.container}>
         <TitleText title="減量の状況" />
         <View style={styles.switchBtnContainer}>
@@ -71,6 +83,7 @@ export const LossQuantityController = () => {
       <View style={[styles.chartContainer, shadowStyles('black').boxShadow]}>
         <LossQuantityChart healthData={viewData(viewType)} />
       </View>
+      {isHealthDataMock() && <SampleBaner type="top" />}
     </View>
   );
 };

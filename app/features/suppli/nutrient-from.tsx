@@ -9,6 +9,7 @@ import {isScrollState} from './suppli.hook';
 import {PickerController} from '../../components/picker-controller';
 import {TextInputController} from '../../components/text-input-controller';
 import {NutrientNameModal} from './nutrient-name-modal';
+import {UnitController} from '../../components/unit-controller';
 
 type Props = {
   index: number;
@@ -73,7 +74,9 @@ export const NutrientForm = (props: Props) => {
             controlName={`${index}amountPerServingValue`}
             placeholder="1回分の成分量"
             defaultValue={
-              nutrient ? String(nutrient.amountPerServingValue) : ''
+              nutrient && nutrient.amountPerServingValue
+                ? String(nutrient.amountPerServingValue)
+                : ''
             }
             errors={errors}
             editable={formType === 'water' && index === 0 ? false : editable}
@@ -81,23 +84,13 @@ export const NutrientForm = (props: Props) => {
           />
         </View>
         <View style={styles.pickerView}>
-          <PickerController
+          <UnitController
             control={control}
             controlName={`${index}amountPerServingUnit`}
-            items={
-              formType === 'water' && index === 0 && nutrient
-                ? [nutrient.amountPerServingUnit]
-                : editable
-                ? Object.values(CONTENT_SIZE_UNIT)
-                : nutrient
-                ? [nutrient.amountPerServingUnit]
-                : ['個']
-            }
-            defaultValue={
-              nutrient ? nutrient.amountPerServingUnit : CONTENT_SIZE_UNIT.mcg
-            }
+            items={Object.values(CONTENT_SIZE_UNIT)}
+            defaultValue={nutrient ? nutrient.amountPerServingUnit : ''}
             errors={errors}
-            marginTop={-5}
+            editable={formType === 'water' && index === 0 ? false : editable}
           />
         </View>
       </View>
@@ -147,7 +140,6 @@ const styles = StyleSheet.create({
   },
   pickerView: {
     width: '33%',
-    marginTop: -72,
     padding: 0,
     maxHeight: 60,
   },

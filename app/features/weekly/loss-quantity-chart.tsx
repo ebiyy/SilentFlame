@@ -18,7 +18,21 @@ export const LossQuantityChart = (props: Props) => {
   useEffect(() => {
     if (healthData) {
       // 過去から表示させるため配列順並び替え
-      setData(healthData.slice(0, 7).reverse());
+      const reverseData = [...healthData].reverse();
+      let hData: HealthData[] = [];
+      let date: string;
+      reverseData.forEach((obj) => {
+        if (!date) {
+          date = obj.startDate.slice(0, 10);
+          hData = [obj];
+        } else {
+          if (date !== obj.startDate.slice(0, 10)) {
+            date = obj.startDate.slice(0, 10);
+            hData = [...hData, obj];
+          }
+        }
+      });
+      setData(hData.reverse().slice(0, 7).reverse());
     }
   }, [healthData]);
 

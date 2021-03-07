@@ -127,7 +127,7 @@ export const SupplFormScreen = ({navigation, route}) => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <KeyboardAwareScrollView
-        extraScrollHeight={150}
+        extraScrollHeight={100}
         enableAutomaticScroll={isScroll}>
         <ScrollView style={Styles.container} scrollEnabled={isScroll}>
           {mode !== 'view' && <SubmitBtn />}

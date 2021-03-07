@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Controller, Control, DeepMap, FieldError} from 'react-hook-form';
 import {StyleSheet, TextInput} from 'react-native';
 import {useRecoilState} from 'recoil';
@@ -31,6 +31,10 @@ export const TextInputController = (props: Props) => {
   } = props;
   const [isScroll, setIsScroll] = useRecoilState(isScrollState);
 
+  useEffect(() => {
+    console.log(defaultValue);
+  }, [defaultValue]);
+
   return (
     <Controller
       control={control}
@@ -55,7 +59,7 @@ export const TextInputController = (props: Props) => {
       )}
       name={controlName}
       rules={{required: required}}
-      defaultValue={defaultValue}
+      defaultValue={defaultValue ? defaultValue : ''}
     />
   );
 };

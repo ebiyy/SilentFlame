@@ -1,5 +1,6 @@
 import React from 'react';
 import {Text, View} from 'react-native';
+import {shadowStyles} from '../../global/styles';
 
 interface Props {
   icon: JSX.Element;
@@ -11,9 +12,12 @@ const StyledSectionWrapper = (props) => (
     style={{
       marginTop: 20,
       marginBottom: 10,
-      width: '100%',
+      width: '55%',
       flexDirection: 'row',
       alignItems: 'center',
+      backgroundColor: '#090909',
+      borderRadius: 10,
+      ...shadowStyles('#090909').boxShadow,
     }}>
     {props.children}
   </View>

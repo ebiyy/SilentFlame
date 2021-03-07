@@ -1,11 +1,11 @@
 import React from 'react';
 import {View, StyleSheet} from 'react-native';
 import {Control, DeepMap, FieldError} from 'react-hook-form';
-import {CONTENT_SIZE_UNIT, FORM_TYPE_CONTENT} from './constant';
+import {FORM_TYPE_CONTENT} from './constant';
 import {FormType, SuppliBaseInfo} from './suppli';
 import {CameraFormController} from '../../components/camera-form-controller';
 import {TextInputController} from '../../components/text-input-controller';
-import {PickerController} from '../../components/picker-controller';
+import {UnitController} from '../../components/unit-controller';
 
 type Props = {
   control: Control<Record<string, any>>;
@@ -68,7 +68,9 @@ export const SupplementForm = (props: Props) => {
             controlName="priceValue"
             placeholder="金額"
             defaultValue={
-              suppliBaseInfo ? String(suppliBaseInfo.priceValue) : ''
+              suppliBaseInfo && suppliBaseInfo.priceValue
+                ? String(suppliBaseInfo.priceValue)
+                : ''
             }
             errors={errors}
             isNum={true}
@@ -77,19 +79,13 @@ export const SupplementForm = (props: Props) => {
           />
         </View>
         <View style={styles.pickerView}>
-          <PickerController
+          <UnitController
             control={control}
             controlName="priceUnit"
-            items={
-              editable
-                ? ['¥', '$']
-                : suppliBaseInfo
-                ? [suppliBaseInfo.priceUnit]
-                : ['¥']
-            }
+            items={['¥', '$']}
             defaultValue={suppliBaseInfo ? suppliBaseInfo.priceUnit : '¥'}
             errors={errors}
-            marginTop={-78}
+            editable={editable}
           />
         </View>
       </View>
@@ -100,57 +96,70 @@ export const SupplementForm = (props: Props) => {
           <TextInputController
             control={control}
             controlName="contentSizeValue"
-            placeholder={
-              FORM_TYPE_CONTENT[formType].placeholder.contentSizeValue
-            }
+            placeholder="内容量"
             defaultValue={
-              suppliBaseInfo ? String(suppliBaseInfo.contentSizeValue) : ''
+              suppliBaseInfo && suppliBaseInfo.contentSizeValue
+                ? String(suppliBaseInfo.contentSizeValue)
+                : ''
             }
             errors={errors}
             isNum={true}
             editable={editable}
             required={false}
           />
+          {formType === 'suppli' && (
+            <>
+              <TextInputController
+                control={control}
+                controlName="servingSize"
+                placeholder="1日分の量"
+                defaultValue={
+                  suppliBaseInfo && suppliBaseInfo.servingSize
+                    ? String(suppliBaseInfo.servingSize)
+                    : ''
+                }
+                errors={errors}
+                isNum={true}
+                editable={editable}
+                required={false}
+              />
+              <TextInputController
+                control={control}
+                controlName="amountPerServing"
+                placeholder="1回分の量"
+                defaultValue={
+                  suppliBaseInfo && suppliBaseInfo.amountPerServing
+                    ? String(suppliBaseInfo.amountPerServing)
+                    : ''
+                }
+                errors={errors}
+                isNum={true}
+                editable={editable}
+              />
+            </>
+          )}
         </View>
-        {formType === 'suppli' && (
-          <View style={styles.pickerView}>
-            <PickerController
+
+        <View
+          style={[
+            styles.pickerView,
+            {maxHeight: formType === 'suppli' ? 165 : 50},
+          ]}>
+          <View style={{height: '100%'}}>
+            <UnitController
               control={control}
               controlName="contentSizeUnit"
-              items={
-                editable
-                  ? Object.values(CONTENT_SIZE_UNIT)
-                  : suppliBaseInfo
-                  ? [suppliBaseInfo.contentSizeUnit]
-                  : ['個']
-              }
+              items={formType === 'suppli' ? ['個', 'g'] : ['ml', 'L']}
               defaultValue={
-                suppliBaseInfo ? suppliBaseInfo.contentSizeUnit : '個'
+                suppliBaseInfo ? suppliBaseInfo.contentSizeUnit : ''
               }
               errors={errors}
-              marginTop={-40}
-            />
-          </View>
-        )}
-      </View>
-
-      {formType === 'suppli' && (
-        <View style={styles.splitForm}>
-          <View style={{width: '66%'}}>
-            <TextInputController
-              control={control}
-              controlName="servingSize"
-              placeholder="1日分の量"
-              defaultValue={
-                suppliBaseInfo ? String(suppliBaseInfo.servingSize) : ''
-              }
-              errors={errors}
-              isNum={true}
               editable={editable}
+              required={formType === 'suppli' ? true : false}
             />
           </View>
         </View>
-      )}
+      </View>
     </>
   );
 };
@@ -162,7 +171,7 @@ const styles = StyleSheet.create({
   pickerView: {
     width: '33%',
     padding: 0,
-    maxHeight: 60,
+    maxHeight: 165,
     zIndex: 0,
   },
 });

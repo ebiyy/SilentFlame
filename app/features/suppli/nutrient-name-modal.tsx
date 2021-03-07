@@ -140,6 +140,11 @@ export const NutrientNameModal = (props: Props) => {
                                 </Text>
                               </TouchableOpacity>
                             </View>
+                            <Text
+                              style={{paddingTop: 40, paddingHorizontal: 20}}>
+                              ※ここで登録された栄養素は栄養素一覧には表示されません。
+                              メモ用としてご利用ください。
+                            </Text>
                           </View>
                         </View>
                       )}

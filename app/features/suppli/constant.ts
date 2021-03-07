@@ -32,7 +32,7 @@ export const FORM_TYPE_CONTENT: formTypeContent = {
     },
     placeholder: {
       name: '名前',
-      contentSizeValue: '内容量(ml)',
+      contentSizeValue: '内容量',
     },
   },
 };
