@@ -50,10 +50,28 @@ export const WeeklyScreen = () => {
   //   });
   // }, []);
 
+  // useEffect(() => {
+  //   [
+  //     'meals',
+  //     STORAGE_KEYS.userInfo,
+  //     'mySuppli',
+  //     'suppliToMeal',
+  //     'suppliCount',
+  //     'myWater',
+  //     'waterToMeal',
+  //     'waterCount',
+  //     'weekly',
+  //   ].forEach((key) => {
+  //     storage.remove({
+  //       key,
+  //     });
+  //   });
+  //   storage.clearMap();
+  // }, []);
+
   const callReview = () => {
     if (isCallReview) {
       callInAppReview();
-      setIsCallReview(false);
     }
   };
 
@@ -67,7 +85,7 @@ export const WeeklyScreen = () => {
     const weeks = [...new Array(7)].map((v, i) =>
       dateToStr(addDays(currentDate, -i)),
     );
-    console.log('WeeklyScreen::weeks', weeks);
+    // console.log('WeeklyScreen::weeks', weeks);
 
     weeks.forEach((id) => {
       storage
@@ -76,7 +94,7 @@ export const WeeklyScreen = () => {
           id,
         })
         .then((res) => {
-          setWeekData((preState) => [...preState, res]);
+          setWeekData((preState) => [...preState, {id, data: res}]);
         })
         .catch((err) => {
           // any exception including data not found
@@ -99,51 +117,57 @@ export const WeeklyScreen = () => {
   }, [date]);
 
   useEffect(() => {
-    console.log('WeeklyScreen::concatNutrient', Boolean(concatNutrient));
     if (concatNutrient) {
-      getWeeklyData();
+      setWeekData((preState) =>
+        preState.map((v) =>
+          v.id === dateToStr(date)
+            ? {id: dateToStr(date), data: concatNutrient}
+            : v,
+        ),
+      );
     }
   }, [concatNutrient]);
 
   useEffect(() => {
     if (weekData && weekData.flat().length > 0) {
+      console.log('WeeklyScreen::weekData', weekData);
       console.log(
-        'WeeklyScreen::sumMeal',
-        sumMeal(weekData.flat(), weekData.length),
+        'WeeklyScreen::weekData::map',
+        weekData.flat().map((v) => v.data),
       );
-      setCalWeekData(sumMeal(weekData.flat(), weekData.length));
+      setCalWeekData(
+        sumMeal(
+          weekData.flat().map((v) => v.data),
+          weekData.length,
+        ),
+      );
     }
 
     // 表示タイミングは1.5週、1ヶ月,1.25ヶ月分のデータができたら
     // TODO: 初期表示時以外で出したい、出たことを確認せずカウントアップしているが、連続して表示することを防止するのでそれはそれであり、だがなんとかしたい
-    storage.getIdsForKey('weekly').then((ids) => {
-      console.log('weekly', ids, ids.length);
-      if (ids.length >= 12 && userInfo.revieCount === undefined) {
-        callReview();
-        storageSave(STORAGE_KEYS.userInfo, {...userInfo, ...{revieCount: 1}});
-      } else if (ids.length >= 30 && userInfo.revieCount === 1) {
-        callReview();
-        storageSave(STORAGE_KEYS.userInfo, {
-          ...userInfo,
-          ...{revieCount: userInfo.revieCount + 1},
-        });
-      } else if (ids.length === 37 && userInfo.revieCount === 2) {
-        callReview();
-        storageSave(STORAGE_KEYS.userInfo, {
-          ...userInfo,
-          ...{revieCount: userInfo.revieCount + 1},
-        });
-      }
-    });
+    if (isCallReview) {
+      setIsCallReview(false);
+      storage.getIdsForKey('weekly').then((ids) => {
+        console.log('weekly', ids, ids.length);
+        if (ids.length >= 12 && userInfo.revieCount === undefined) {
+          callReview();
+          storageSave(STORAGE_KEYS.userInfo, {...userInfo, ...{revieCount: 1}});
+        } else if (ids.length >= 30 && userInfo.revieCount === 1) {
+          callReview();
+          storageSave(STORAGE_KEYS.userInfo, {
+            ...userInfo,
+            ...{revieCount: userInfo.revieCount + 1},
+          });
+        } else if (ids.length === 37 && userInfo.revieCount === 2) {
+          callReview();
+          storageSave(STORAGE_KEYS.userInfo, {
+            ...userInfo,
+            ...{revieCount: userInfo.revieCount + 1},
+          });
+        }
+      });
+    }
   }, [weekData]);
-
-  useEffect(() => {
-    console.log('WeeklyScreen::route', route, navigate);
-  }, [route, navigate]);
-
-  useEffect(() => {
-    console.log('WeeklyScreen::calWeekData', calWeekData);
-  }, [calWeekData]);
 
   return (
     <FadeInView>

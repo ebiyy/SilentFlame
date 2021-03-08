@@ -61,10 +61,6 @@ export const LossQuantityController = () => {
     getLossQuantityData(setWeightData, setBodyFatData, setLeanBodyMassData);
   }, []);
 
-  useEffect(() => {
-    console.log('LossQuantityController', weightData);
-  }, [weightData]);
-
   return (
     <View style={isHealthDataMock() ? {position: 'relative'} : {}}>
       <View style={styles.container}>

@@ -20,7 +20,7 @@ export const firebaseAuth = (
       docRef.get().then((doc) => {
         if (doc.exists) {
           // console.log('doc.exists', doc.data());
-          storageSave(STORAGE_KEYS.userInfo, doc.data());
+          storageSave(STORAGE_KEYS.userInfo, {...VALEU, ...doc.data()});
         } else {
           // console.log('!doc.exists');
           const info = {

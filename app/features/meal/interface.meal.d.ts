@@ -5,6 +5,12 @@ interface MealDocs extends DateMeals {
   appVersion: string;
 }
 
+interface WeeklyData {
+  [x: string]: Meal;
+  id: string;
+  data: Meal;
+}
+
 interface DateMeals {
   [dateKey: string]: {
     meals: Meal[];

@@ -3,6 +3,7 @@ import {excludeKeyGroup} from '../features/meal/function.meal';
 const invalidValues = ['-', 'Tr', '(Tr)', undefined];
 
 export const sumMeal = (meals: Meal[], weekIndex?: number) => {
+  console.log('sumMeal', meals);
   // 特定の栄養素群を持っていないobjectが存在するため要素の大きいものを確認
   const countEntries = meals.map((meal) => Object.keys(meal).length);
   const biggestEnries = countEntries.indexOf(Math.max.apply(0, countEntries));
@@ -11,18 +12,18 @@ export const sumMeal = (meals: Meal[], weekIndex?: number) => {
     (key) => !excludeKeyGroup.includes(key),
   );
   // console.log('sumMeal', nurientKeys);
-  let sumMeal = {};
+  let meal = {} as Meal;
   nurientKeys.forEach((key) => {
-    sumMeal[key] = meals.map((meal) => meal[key]).reduce(mealsReducer);
-    sumMeal[key] = Number(sumMeal[key])
-      ? (Number(sumMeal[key]) / (weekIndex ? weekIndex : 1)).toFixed(0)
-      : invalidValues.includes(sumMeal[key])
-      ? sumMeal[key]
-      : isparenthesis(sumMeal[key]);
+    meal[key] = meals.map((meal) => meal[key]).reduce(mealsReducer);
+    meal[key] = Number(meal[key])
+      ? (Number(meal[key]) / (weekIndex ? weekIndex : 1)).toFixed(0)
+      : invalidValues.includes(meal[key])
+      ? meal[key]
+      : isparenthesis(meal[key]);
   });
-  sumMeal = {...sumMeal, foodName: '摂取食品の合計', remarks: '', intake: 100};
-  // console.log(sumMeal);
-  return sumMeal;
+  meal = {...meal, foodName: '摂取食品の合計', remarks: '', intake: 100};
+  // console.log(meal);
+  return meal;
 };
 
 const mealsReducer = (acc: string, cur: string) => {

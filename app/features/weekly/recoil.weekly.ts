@@ -1,6 +1,6 @@
 import {atom} from 'recoil';
 
-export const weeklyDataState = atom<Meal[]>({
+export const weeklyDataState = atom<WeeklyData[]>({
   key: 'weeklyDataState',
   default: [],
 });

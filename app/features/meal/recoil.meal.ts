@@ -194,7 +194,7 @@ export const concatNutrientState = selector({
 
     if (
       meals.length > 0 ||
-      Object.entries(suppliToMeal) ||
+      Object.entries(suppliToMeal).length > 0 ||
       waterToMeal.length > 0
     ) {
       const marge = ([] as Meal[])
@@ -210,15 +210,11 @@ export const concatNutrientState = selector({
       const editable = get(editableState);
 
       if (marge.length > 0 && editable) {
-        const sum = sumMeal(marge);
+        const sumMargeMeal = sumMeal(marge);
         console.log('Run save concatNutrientState');
-        storageSaveDateData('weekly', dateToStr(currentDate), sum);
-        return sum;
-      } else {
-        return false;
+        storageSaveDateData('weekly', dateToStr(currentDate), sumMargeMeal);
+        return sumMargeMeal;
       }
-    } else {
-      return false;
     }
   },
 });

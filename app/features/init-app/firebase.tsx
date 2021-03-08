@@ -5,8 +5,13 @@ import {clientId, appId, apiKey, projectId} from '@env';
 import firebase from '@react-native-firebase/app';
 import {userIdState, userInfoState} from './init-app.recoil';
 import {NavigationScreen} from '../../routes/navigation';
-import {storageLoad, STORAGE_KEYS} from '../../api/storage.helper';
+import {
+  storageLoad,
+  storageRemove,
+  STORAGE_KEYS,
+} from '../../api/storage.helper';
 import {firebaseAuth} from './functions';
+import {VALEU} from '../../sample/setting-sample/setting-list-item';
 
 const initFirebase = async () => {
   const credentials = {
@@ -32,21 +37,21 @@ export const FirebaseSetting = () => {
   const [userInfo, setUserInfo] = useRecoilState(userInfoState);
 
   useEffect(() => {
-    // storageRemove(STORAGE_KEYS.userInfo);
     initFirebase()
       .then(() => {
         console.log('fin initFirebase');
       })
       .catch((e) => console.warn('initFirebase', e))
-      .finally(() => storageLoad(STORAGE_KEYS.userInfo, setUserInfo, {}));
+      .finally(() => storageLoad(STORAGE_KEYS.userInfo, setUserInfo, VALEU));
   }, [setUserInfo]);
 
   useEffect(() => {
     console.log('userInfo', userInfo);
     if (userInfo === undefined) {
       return;
-    } else if (Object.keys(userInfo).length > 0) {
-      setUserId((userInfo as UserInfo).id);
+    }
+    if (Object.keys(userInfo).includes('id')) {
+      setUserId(userInfo.id);
     } else {
       firebaseAuth(setUserId);
     }
