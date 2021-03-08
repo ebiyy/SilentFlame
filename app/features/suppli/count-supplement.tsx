@@ -196,13 +196,28 @@ export const CountSupplement = (props: Props) => {
       <DeleteConfirmationModal
         modalVisible={deleteModal}
         setModalVisible={setDeleteModal}
-        deleteFunc={() =>
+        deleteFunc={() => {
           setSupplis((preState) =>
             preState.map((suppl) =>
               suppl.id !== suppli.id ? suppl : {...suppl, delete: true},
             ),
-          )
-        }
+          );
+          let nextMeal = {};
+          Object.entries(suppliToMeal).forEach(([key, value]) => {
+            if (Number(key) !== suppli.id) {
+              nextMeal[key] = value;
+            }
+          });
+          setSuppliToMeal(nextMeal);
+
+          let nextCount = {};
+          Object.entries(holdCount).forEach(([key, value]) => {
+            if (Number(key) !== suppli.id) {
+              nextCount[key] = value;
+            }
+          });
+          setHoldCount(nextCount);
+        }}
       />
       <InputValueModal
         modalVisible={inputModal}

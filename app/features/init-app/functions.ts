@@ -3,7 +3,7 @@ import firestore from '@react-native-firebase/firestore';
 import {SetterOrUpdater} from 'recoil';
 import {storageSave, STORAGE_KEYS} from '../../api/storage.helper';
 import {setNowUtcDate, getTimeZone} from '../../api/utils';
-import {VALEU} from '../../sample/setting-sample/setting-list-item';
+import {VALEU} from '../setting/setting-list-item';
 
 /**
  * firebaseからID取得し、ローカルに保持。ローカル情報がなくなった場合の保管にも利用。

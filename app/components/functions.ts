@@ -3,7 +3,7 @@ import {excludeKeyGroup} from '../features/meal/function.meal';
 const invalidValues = ['-', 'Tr', '(Tr)', undefined];
 
 export const sumMeal = (meals: Meal[], weekIndex?: number) => {
-  console.log('sumMeal', meals);
+  // console.log('sumMeal', meals);
   // 特定の栄養素群を持っていないobjectが存在するため要素の大きいものを確認
   const countEntries = meals.map((meal) => Object.keys(meal).length);
   const biggestEnries = countEntries.indexOf(Math.max.apply(0, countEntries));

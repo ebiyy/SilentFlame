@@ -38,7 +38,7 @@ export const CardEditIcons = (props: Props) => {
       ),
     );
     setWaterToMeal((preState) =>
-      preState.filter((meal) => meal.indexNumber !== selectItem.id),
+      preState.filter((water) => water.indexNumber !== selectItem.id),
     );
     const nextState = {};
     Object.entries(waterCount).forEach(([key, value]) => {

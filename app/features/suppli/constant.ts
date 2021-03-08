@@ -6,7 +6,7 @@ export const PRICE_UNIT: {[x: string]: PriceUnit} = {
 };
 
 export const CONTENT_SIZE_UNIT: {[x: string]: ContentSizeUnit} = {
-  piece: '個',
+  // piece: '個',
   mcg: 'mcg',
   mg: 'mg',
   g: 'g',

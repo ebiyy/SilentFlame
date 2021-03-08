@@ -29,7 +29,7 @@ export const isMealsStorageState = selector({
     const meals = get(mealsState);
     const currentDate = get(dateState);
     const editable = get(editableState);
-    if (meals.length > 0 && editable) {
+    if (editable) {
       console.log('Run isSupplisStorageState');
       storageSaveDateData('meals', dateToStr(currentDate), meals);
 
@@ -205,7 +205,7 @@ export const concatNutrientState = selector({
         )
         .flat();
 
-      console.log('concatNutrientState::marge', marge);
+      // console.log('concatNutrientState::marge', marge);
       const currentDate = get(dateState);
       const editable = get(editableState);
 

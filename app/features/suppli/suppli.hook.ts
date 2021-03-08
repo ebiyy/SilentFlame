@@ -72,7 +72,7 @@ export const isSupplisStorageState = selector({
     const supplis = get(supplisState);
     const currentDate = get(dateState);
     const editable = get(editableState);
-    if (supplis.length > 0 && editable) {
+    if (editable) {
       console.log('Run isSupplisStorageState');
       storageSaveDateData('mySuppli', dateToStr(currentDate), supplis);
       storageSave('mySuppli', supplis);
@@ -89,7 +89,7 @@ export const isSuppliToMealState = selector({
     const suppliToMeal = get(suppliToMealState);
     const currentDate = get(dateState);
     const editable = get(editableState);
-    if (Object.entries(suppliToMeal).length > 0 && editable) {
+    if (editable) {
       console.log('Run isSuppliToMealState');
       storageSaveDateData('suppliToMeal', dateToStr(currentDate), suppliToMeal);
       storageSave('suppliToMeal', {});
@@ -105,7 +105,7 @@ export const isSupplisCountState = selector({
     const suppliCount = get(suppliCountState);
     const currentDate = get(dateState);
     const editable = get(editableState);
-    if (Object.entries(suppliCount).length > 0 && editable) {
+    if (editable) {
       console.log('Run isSupplisCountState');
       storageSaveDateData('suppliCount', dateToStr(currentDate), suppliCount);
       storageSave('suppliCount', {});

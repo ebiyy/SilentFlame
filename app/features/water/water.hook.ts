@@ -29,7 +29,7 @@ export const isWaterStorageState = selector({
     const waters = get(watersState);
     const currentDate = get(dateState);
     const editable = get(editableState);
-    if (waters.length > 0 && editable) {
+    if (editable) {
       console.log('Run isWaterStorageState');
       storageSaveDateData('myWater', dateToStr(currentDate), waters);
       storageSave('myWater', waters);
@@ -45,10 +45,10 @@ export const isWaterToMealState = selector({
     const waterToMeal = get(waterToMealState);
     const currentDate = get(dateState);
     const editable = get(editableState);
-    if (waterToMeal.length > 0 && editable) {
-      console.log('Run isWaterToMealState');
+    if (editable) {
+      console.log('Run isWaterToMealState', waterToMeal);
       storageSaveDateData('waterToMeal', dateToStr(currentDate), waterToMeal);
-      storageSave('waterToMeal', {});
+      storageSave('waterToMeal', []);
       return true;
     }
     return false;
@@ -61,8 +61,8 @@ export const isWaterCountState = selector({
     const waterCount = get(waterCountState);
     const currentDate = get(dateState);
     const editable = get(editableState);
-    if (Object.entries(waterCount).length > 0 && editable) {
-      console.log('Run isWaterCountState');
+    if (editable) {
+      console.log('Run isWaterCountState', waterCount);
       storageSaveDateData('waterCount', dateToStr(currentDate), waterCount);
       storageSave('waterCount', {});
       return true;

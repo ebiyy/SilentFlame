@@ -53,7 +53,7 @@ export const WeeklyScreen = () => {
   // useEffect(() => {
   //   [
   //     'meals',
-  //     STORAGE_KEYS.userInfo,
+  //     // STORAGE_KEYS.userInfo,
   //     'mySuppli',
   //     'suppliToMeal',
   //     'suppliCount',
@@ -117,24 +117,29 @@ export const WeeklyScreen = () => {
   }, [date]);
 
   useEffect(() => {
+    console.log('WeeklyScreen::concatNutrient', concatNutrient, weekData);
     if (concatNutrient) {
-      setWeekData((preState) =>
-        preState.map((v) =>
-          v.id === dateToStr(date)
-            ? {id: dateToStr(date), data: concatNutrient}
-            : v,
-        ),
-      );
+      if (weekData.filter((v) => v.id === dateToStr(date).length > 0)) {
+        setWeekData([{id: dateToStr(date), data: concatNutrient}]);
+      } else {
+        setWeekData((preState) =>
+          preState.map((v) =>
+            v.id === dateToStr(date)
+              ? {id: dateToStr(date), data: concatNutrient}
+              : v,
+          ),
+        );
+      }
     }
   }, [concatNutrient]);
 
   useEffect(() => {
     if (weekData && weekData.flat().length > 0) {
-      console.log('WeeklyScreen::weekData', weekData);
-      console.log(
-        'WeeklyScreen::weekData::map',
-        weekData.flat().map((v) => v.data),
-      );
+      // console.log('WeeklyScreen::weekData', weekData);
+      // console.log(
+      //   'WeeklyScreen::weekData::map',
+      //   weekData.flat().map((v) => v.data),
+      // );
       setCalWeekData(
         sumMeal(
           weekData.flat().map((v) => v.data),

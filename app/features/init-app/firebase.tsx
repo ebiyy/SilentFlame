@@ -11,7 +11,7 @@ import {
   STORAGE_KEYS,
 } from '../../api/storage.helper';
 import {firebaseAuth} from './functions';
-import {VALEU} from '../../sample/setting-sample/setting-list-item';
+import {VALEU} from '../setting/setting-list-item';
 
 const initFirebase = async () => {
   const credentials = {

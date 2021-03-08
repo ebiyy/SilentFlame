@@ -12,11 +12,8 @@ import {useRecoilState, useRecoilValue} from 'recoil';
 import {storageLoad, storageSave, STORAGE_KEYS} from '../../api/storage.helper';
 import {comparisonDate, dateToStr, isToday, nextDate5h} from '../../api/utils';
 import {Anti, Fa5i, Ioni, MCi} from '../../components/common/icons';
-import {
-  dateState,
-  editableState,
-} from '../../features/date-manager/data-manager.recoil';
-import {userInfoState} from '../../features/init-app/init-app.recoil';
+import {dateState, editableState} from '../date-manager/data-manager.recoil';
+import {userInfoState} from '../init-app/init-app.recoil';
 import {shadowStyles} from '../../global/styles';
 
 import {MenuItem} from './setting-list';
