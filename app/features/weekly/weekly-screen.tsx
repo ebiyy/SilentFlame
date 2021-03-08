@@ -57,8 +57,8 @@ export const WeeklyScreen = () => {
     }
   };
 
-  useEffect(() => {
-    console.log('WeeklyScreen::useEffect');
+  const getWeeklyData = () => {
+    console.log('WeeklyScreen::getWeeklyData');
     setWeekData([]);
     const currentDate = new Date(date);
     // ex. today:"2021-03-04"
@@ -92,10 +92,20 @@ export const WeeklyScreen = () => {
           }
         });
     });
+  };
+
+  useEffect(() => {
+    getWeeklyData();
   }, [date]);
 
   useEffect(() => {
-    console.log('WeeklyScreen::weekData', weekData, weekData.flat().length);
+    console.log('WeeklyScreen::concatNutrient', Boolean(concatNutrient));
+    if (concatNutrient) {
+      getWeeklyData();
+    }
+  }, [concatNutrient]);
+
+  useEffect(() => {
     if (weekData && weekData.flat().length > 0) {
       console.log(
         'WeeklyScreen::sumMeal',
@@ -131,15 +141,19 @@ export const WeeklyScreen = () => {
     console.log('WeeklyScreen::route', route, navigate);
   }, [route, navigate]);
 
+  useEffect(() => {
+    console.log('WeeklyScreen::calWeekData', calWeekData);
+  }, [calWeekData]);
+
   return (
     <FadeInView>
       <ScrollView scrollEnabled={winHeight < 800}>
         <LossQuantityController />
         <View style={calWeekData ? {position: 'relative'} : {}}>
-          {/* <PfcPieChart
+          <PfcPieChart
             weekData={calWeekData ? calWeekData : mockWeekData}
             boxShadow="black"
-          /> */}
+          />
           <View>
             <View style={styles.progressBarContainer}>
               <RateProgressBar

@@ -26,13 +26,7 @@ export const RegistrationMealCard = (props: Props) => {
   const editable = useRecoilValue(editableState);
 
   useEffect(() => {
-    console.log(
-      meals.map((meal) => {
-        return {name: meal.foodName, id: meal.id};
-      }),
-    );
     cancelBtnPress();
-    // console.log(props);
   }, [props]);
 
   const intakeOnChange = (v: string) => {

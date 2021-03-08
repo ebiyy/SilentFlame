@@ -59,7 +59,7 @@ export const CountSupplement = (props: Props) => {
         const numAPSV = Number(nutrient.amountPerServingValue);
         const sum =
           suppli.contentSizeUnit !== CONTENT_SIZE_UNIT.piece
-            ? Number(((numAPSV / suppli.servingSize) * count).toFixed(1))
+            ? Number(((numAPSV / suppli.amountPerServing) * count).toFixed(1))
             : numAPSV * count;
         if (nutrient.nutrientKey) {
           return {

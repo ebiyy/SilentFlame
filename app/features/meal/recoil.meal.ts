@@ -6,6 +6,7 @@ import {WaterIntak} from '../../helpers/interface';
 import {dateState, editableState} from '../date-manager/data-manager.recoil';
 import {suppliToMealState} from '../suppli/suppli.hook';
 import {waterToMealState} from '../water/water.hook';
+import {initSumMeal} from '../weekly/constants';
 
 export const mealsState = atom<Meal[]>({
   key: 'mealsState',
@@ -191,17 +192,31 @@ export const concatNutrientState = selector({
     const suppliToMeal = get(suppliToMealState);
     const waterToMeal = get(waterToMealState);
 
-    const marge = ([] as Meal[])
-      .concat(meals, Object.values(suppliToMeal), waterToMeal)
-      .flat();
+    if (
+      meals.length > 0 ||
+      Object.entries(suppliToMeal) ||
+      waterToMeal.length > 0
+    ) {
+      const marge = ([] as Meal[])
+        .concat(
+          meals.length > 0 ? meals : initSumMeal,
+          Object.values(suppliToMeal),
+          waterToMeal,
+        )
+        .flat();
 
-    const currentDate = get(dateState);
-    const editable = get(editableState);
+      console.log('concatNutrientState::marge', marge);
+      const currentDate = get(dateState);
+      const editable = get(editableState);
 
-    if (marge.length > 0 && editable) {
-      console.log('Run save concatNutrientState');
-      storageSaveDateData('weekly', dateToStr(currentDate), sumMeal(marge));
-      return true;
+      if (marge.length > 0 && editable) {
+        const sum = sumMeal(marge);
+        console.log('Run save concatNutrientState');
+        storageSaveDateData('weekly', dateToStr(currentDate), sum);
+        return sum;
+      } else {
+        return false;
+      }
     } else {
       return false;
     }

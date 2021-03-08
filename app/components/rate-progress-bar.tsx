@@ -24,7 +24,8 @@ export const RateProgressBar = (props: Props) => {
       <View style={styles.barTextContainer}>
         <Text style={[styles.barText, {fontSize: 18}]}>{title}</Text>
         <Text style={styles.barText}>
-          {value ? value : sumValue ? sumValue : 0} / {rimit} {unit}
+          {value !== undefined ? value : sumValue ? sumValue : 0} / {rimit}{' '}
+          {unit}
         </Text>
       </View>
       <Progress.Bar

@@ -14,9 +14,11 @@ export const sumMeal = (meals: Meal[], weekIndex?: number) => {
   let sumMeal = {};
   nurientKeys.forEach((key) => {
     sumMeal[key] = meals.map((meal) => meal[key]).reduce(mealsReducer);
-    sumMeal[key] = (Number(sumMeal[key]) / (weekIndex ? weekIndex : 1)).toFixed(
-      0,
-    );
+    sumMeal[key] = Number(sumMeal[key])
+      ? (Number(sumMeal[key]) / (weekIndex ? weekIndex : 1)).toFixed(0)
+      : invalidValues.includes(sumMeal[key])
+      ? sumMeal[key]
+      : isparenthesis(sumMeal[key]);
   });
   sumMeal = {...sumMeal, foodName: '摂取食品の合計', remarks: '', intake: 100};
   // console.log(sumMeal);
