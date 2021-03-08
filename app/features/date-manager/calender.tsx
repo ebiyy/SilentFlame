@@ -5,6 +5,7 @@ import {useRecoilValue} from 'recoil';
 import {LOCALES} from './constants';
 import {DotMarkingData} from './date-manager';
 import {userInfoState} from '../init-app/init-app.recoil';
+import {convToLocalDate, dateToStr} from '../../api/utils';
 
 LocaleConfig.locales.jp = LOCALES;
 LocaleConfig.defaultLocale = 'jp';
@@ -35,8 +36,8 @@ export const CustomCalendar = (props: Props) => {
       // 最初に表示される月。 デフォルト値 = Date()
       current={new Date(date)}
       // カレンダーで選択できる範囲の最初の日。この日以前の日付はグレーアウトします。 デフォルト値 = undefined
-      minDate={'2021-01-01'}
-      // minDate={convToLocalDate(userInfo.createdAt)}
+      // minDate={'2021-01-01'}
+      minDate={dateToStr(userInfo.createdAt)}
       // カレンダーで選択できる範囲の最後の日。この日以前の日付はグレーアウトします。 デフォルト値 = undefined
       maxDate={new Date()}
       // 年月の表示フォーマット。

@@ -11,7 +11,7 @@ import {
   mealsWATERState,
 } from '../meal/recoil.meal';
 import {LossQuantityController} from './loss-quantity-controller';
-import {storage} from '../../api/storage.helper';
+import {storage, storageSave, STORAGE_KEYS} from '../../api/storage.helper';
 import {sumMeal} from '../../components/functions';
 import {addDays, dateToStr} from '../../api/utils';
 import {dateState} from '../date-manager/data-manager.recoil';
@@ -20,13 +20,42 @@ import {userInfoState} from '../init-app/init-app.recoil';
 import {SamplePickerModule} from '../../sample/picker-module';
 import {mockWeekData} from './constants';
 import {SampleBaner} from '../../components/sample-baner';
+import {callInAppReview} from './sample-in-app-review';
+import {useRoute} from '@react-navigation/core';
+import {useNavigation} from '@react-navigation/native';
 
 export const WeeklyScreen = () => {
+  const route = useRoute();
+  const navigate = useNavigation();
   const concatNutrient = useRecoilValue(concatNutrientState); // need
   const [weekData, setWeekData] = useRecoilState(weeklyDataState);
   const [calWeekData, setCalWeekData] = useState<Meal>();
   const date = useRecoilValue(dateState);
   const userInfo = useRecoilValue(userInfoState);
+  const [isCallReview, setIsCallReview] = useState<boolean>(true);
+
+  // useEffect(() => {
+  //   [
+  //     'meals',
+  //     // STORAGE_KEYS.userInfo,
+  //     'mySuppli',
+  //     'suppliToMeal',
+  //     'suppliCount',
+  //     'myWater',
+  //     'waterToMeal',
+  //     'waterCount',
+  //     'weekly',
+  //   ].forEach((key) => {
+  //     storage.remove({key, id: dateToStr(new Date())});
+  //   });
+  // }, []);
+
+  const callReview = () => {
+    if (isCallReview) {
+      callInAppReview();
+      setIsCallReview(false);
+    }
+  };
 
   useEffect(() => {
     console.log('WeeklyScreen::useEffect');
@@ -66,20 +95,51 @@ export const WeeklyScreen = () => {
   }, [date]);
 
   useEffect(() => {
+    console.log('WeeklyScreen::weekData', weekData, weekData.flat().length);
     if (weekData && weekData.flat().length > 0) {
+      console.log(
+        'WeeklyScreen::sumMeal',
+        sumMeal(weekData.flat(), weekData.length),
+      );
       setCalWeekData(sumMeal(weekData.flat(), weekData.length));
     }
+
+    // 表示タイミングは1.5週、1ヶ月,1.25ヶ月分のデータができたら
+    // TODO: 初期表示時以外で出したい、出たことを確認せずカウントアップしているが、連続して表示することを防止するのでそれはそれであり、だがなんとかしたい
+    storage.getIdsForKey('weekly').then((ids) => {
+      console.log('weekly', ids, ids.length);
+      if (ids.length >= 12 && userInfo.revieCount === undefined) {
+        callReview();
+        storageSave(STORAGE_KEYS.userInfo, {...userInfo, ...{revieCount: 1}});
+      } else if (ids.length >= 30 && userInfo.revieCount === 1) {
+        callReview();
+        storageSave(STORAGE_KEYS.userInfo, {
+          ...userInfo,
+          ...{revieCount: userInfo.revieCount + 1},
+        });
+      } else if (ids.length === 37 && userInfo.revieCount === 2) {
+        callReview();
+        storageSave(STORAGE_KEYS.userInfo, {
+          ...userInfo,
+          ...{revieCount: userInfo.revieCount + 1},
+        });
+      }
+    });
   }, [weekData]);
+
+  useEffect(() => {
+    console.log('WeeklyScreen::route', route, navigate);
+  }, [route, navigate]);
 
   return (
     <FadeInView>
       <ScrollView scrollEnabled={winHeight < 800}>
         <LossQuantityController />
         <View style={calWeekData ? {position: 'relative'} : {}}>
-          <PfcPieChart
+          {/* <PfcPieChart
             weekData={calWeekData ? calWeekData : mockWeekData}
             boxShadow="black"
-          />
+          /> */}
           <View>
             <View style={styles.progressBarContainer}>
               <RateProgressBar
