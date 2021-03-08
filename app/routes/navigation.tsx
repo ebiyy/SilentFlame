@@ -15,6 +15,7 @@ import {HeaderRightDate} from './components/header-right-date';
 import {CustomHeaderTitle} from './components/header-title';
 import {MyTheme} from './counstants';
 import {CalendarScreen} from '../features/date-manager/calender-controller';
+import {WaterArchiveScreen} from '../features/water/water-archive-screen';
 
 const Stack = createStackNavigator();
 
@@ -45,6 +46,10 @@ export const NavigationScreen = () => {
         <Stack.Screen
           name="SuppliArchiveScreen"
           component={SuppliArchiveScreen}
+        />
+        <Stack.Screen
+          name="WaterArchiveScreen"
+          component={WaterArchiveScreen}
         />
         {/* <Stack.Screen name="Settings" component={FirebaseCustomEvent} /> */}
       </Stack.Navigator>

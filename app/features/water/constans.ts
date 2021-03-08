@@ -11,9 +11,10 @@ export const initialWater = [
       height: 200,
     },
     updateAt: new Date('2021-02-01'),
-    priceValue: '1000',
+    priceValue: '0.13',
     priceUnit: '¥',
-    contentSizeValue: '0',
+    contentSizeValue: '1',
+    contentSizeUnit: 'L',
     nutrients: [
       {
         nutrientName: '水分',

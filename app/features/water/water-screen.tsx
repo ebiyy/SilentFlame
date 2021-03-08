@@ -1,6 +1,13 @@
 import {useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
-import {Dimensions, Image, StyleSheet, Text, View} from 'react-native';
+import {
+  Dimensions,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {screenThemeColor, shadowStyles} from '../../global/styles';
 import {mealsWATERState} from '../meal/recoil.meal';
 import {ScrollView} from 'react-native-gesture-handler';
@@ -32,6 +39,7 @@ import {dateState, editableState} from '../date-manager/data-manager.recoil';
 
 import {WaterWeight} from './water';
 import {userInfoState} from '../init-app/init-app.recoil';
+import {RecycleBtn} from '../suppli/components/recycle-btn';
 
 const inputWaterPatten = [
   {name: 'cup', label: 120, iconElm: 'SimpleLineIcons'},
@@ -172,15 +180,16 @@ export const WaterScreen = () => {
           />
         </View>
 
-        <TitleText title="水分を登録" key={2} />
+        <TitleText title="水分リスト" key={2} />
 
         <View style={Styles.waterContentContainer}>
           <FadeInView>
             <>
               {waters.length > 0 &&
+                waters.filter((water) => !water.delete).length > 0 &&
                 // TypeError: Attempted to assign to readonly property.になるのでスプレッドしている
 
-                [...waters]
+                [...waters.filter((water) => !water.delete)]
                   .sort(
                     (a, b) =>
                       new Date(b.updateAt).getTime() -
@@ -215,11 +224,7 @@ export const WaterScreen = () => {
                                 Styles.imageContext,
                                 shadowStyles(screenThemeColor.water).boxShadow,
                               ]}
-                              source={
-                                obj.waterName === '水道水'
-                                  ? waterImg
-                                  : {uri: obj.imageRes.uri}
-                              }
+                              source={{uri: obj.imageRes.uri}}
                             />
                           </View>
                           <View style={{flexDirection: 'column'}}>
@@ -243,30 +248,41 @@ export const WaterScreen = () => {
             </>
           </FadeInView>
           {editable && (
-            <View style={Styles.moreWaterContent}>
-              <WideBtn
-                navigate={() =>
-                  navigation.navigate('SupplFormScreen', {
-                    mode: 'add',
-                    setMarge: setWaters,
-                    btnColor: screenThemeColor.water,
-                    viewTarget: {
-                      nutrients: [
-                        {
-                          nutrientName: '水分',
-                          amountPerServingValue: '100',
-                          amountPerServingUnit: 'g',
-                        },
-                      ],
-                    },
-                  })
-                }
-                btnText="+"
-                widthRate={3}
-                color="gray"
-                type="btn"
-              />
-            </View>
+            <>
+              <View style={Styles.moreWaterContent}>
+                <WideBtn
+                  navigate={() =>
+                    navigation.navigate('SupplFormScreen', {
+                      mode: 'add',
+                      setMarge: setWaters,
+                      btnColor: screenThemeColor.water,
+                      viewTarget: {
+                        nutrients: [
+                          {
+                            nutrientName: '水分',
+                            amountPerServingValue: '100',
+                            amountPerServingUnit: 'g',
+                          },
+                        ],
+                      },
+                    })
+                  }
+                  btnText="+"
+                  widthRate={3}
+                  color="gray"
+                  type="btn"
+                />
+              </View>
+              {waters.filter((water) => water.delete).length > 0 && (
+                <TouchableOpacity>
+                  <View style={Styles.recycleBtnContainer}>
+                    <RecycleBtn
+                      onPress={() => navigation.navigate('WaterArchiveScreen')}
+                    />
+                  </View>
+                </TouchableOpacity>
+              )}
+            </>
           )}
         </View>
       </View>
@@ -339,5 +355,9 @@ const Styles = StyleSheet.create({
   bodyContent: {
     flexDirection: 'row',
     justifyContent: 'space-around',
+  },
+  recycleBtnContainer: {
+    alignItems: 'center',
+    marginTop: 50,
   },
 });

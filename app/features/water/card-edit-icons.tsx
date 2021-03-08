@@ -33,7 +33,9 @@ export const CardEditIcons = (props: Props) => {
 
   const deleteAction = () => {
     setWaters((preState) =>
-      preState.filter((water) => water.id !== selectItem.id),
+      preState.map((water) =>
+        water.id !== selectItem.id ? water : {...water, delete: true},
+      ),
     );
     setWaterToMeal((preState) =>
       preState.filter((meal) => meal.indexNumber !== selectItem.id),
