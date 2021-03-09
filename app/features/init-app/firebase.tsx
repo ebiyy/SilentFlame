@@ -46,11 +46,7 @@ export const FirebaseSetting = () => {
   }, [setUserInfo]);
 
   useEffect(() => {
-    console.log('userInfo', userInfo);
-    if (userInfo === undefined) {
-      return;
-    }
-    if (Object.keys(userInfo).includes('id')) {
+    if (userInfo && Object.keys(userInfo).includes('id')) {
       setUserId(userInfo.id);
     } else {
       firebaseAuth(setUserId);

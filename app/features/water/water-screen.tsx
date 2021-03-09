@@ -62,11 +62,11 @@ export const WaterScreen = () => {
   const isWaterCount = useRecoilValue(isWaterCountState);
   const userInfo = useRecoilValue(userInfoState);
 
-  useEffect(() => {
-    if (isToday(date)) {
-      setEditable(true);
-    }
-  }, [date]);
+  // useEffect(() => {
+  //   if (isToday(date)) {
+  //     setEditable(true);
+  //   }
+  // }, [date]);
 
   useEffect(() => {
     // console.log('waters', waters);
@@ -173,7 +173,7 @@ export const WaterScreen = () => {
         <View style={Styles.rateBarContainer}>
           <RateProgressBar
             title=""
-            rimit={userInfo ? Number(userInfo.water) : 2}
+            rimit={userInfo && userInfo.water ? Number(userInfo.water) : 2}
             unit="L"
             color={screenThemeColor.water}
             recoilSelector={mealsWATERState}

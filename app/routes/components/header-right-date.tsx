@@ -28,11 +28,11 @@ export const HeaderRightDate = () => {
   const userInfo = useRecoilValue(userInfoState);
 
   const getToday = () => {
+    // console.log('HeaderRightDate::getToday');
     if (userInfo && userInfo.time) {
       const hour = Number(userInfo.time.split(':')[0]);
       const minuts = Number(userInfo.time.split(':')[1]);
-      // console.log('HeaderRightDate::getToday', hour, minuts);
-      // console.log(dateToStr(getToday()) === dateToStr(new Date()));
+
       return comparisonDate(new Date(), hour, minuts);
     }
     return null;

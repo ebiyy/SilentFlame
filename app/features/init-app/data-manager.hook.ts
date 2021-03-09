@@ -1,6 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {useRecoilState} from 'recoil';
-import {storageLoad, storageLoadDateData} from '../../api/storage.helper';
+import {
+  storageLoad,
+  storageLoadDateData,
+  STORAGE_KEYS,
+} from '../../api/storage.helper';
 import {dateToStr, isToday} from '../../api/utils';
 import {dateState, editableState} from '../date-manager/data-manager.recoil';
 import {mealsState} from '../meal/recoil.meal';
@@ -15,6 +19,7 @@ import {
   waterCountState,
   waterToMealState,
 } from '../water/water.hook';
+import {userInfoState} from './init-app.recoil';
 
 // const [suppli, setSuppli] = useRecoilState(supplisState);
 // const [suppliToMeal, setSuppliToMeal] = useRecoilState(suppliToMealState);
@@ -37,6 +42,7 @@ export const useDataManager = () => {
   const setWaterToMeal = useRecoilState(waterToMealState)[1];
   const setEditable = useRecoilState(editableState)[1];
   const setDate = useRecoilState(dateState)[1];
+  const setUserInfo = useRecoilState(userInfoState)[1];
 
   useEffect(() => {
     if (currentDate) {
@@ -88,6 +94,8 @@ export const useDataManager = () => {
           [],
         );
       };
+      // これがないとフォアグランド時にuserInfoが初期化される
+      // storageLoad(STORAGE_KEYS.userInfo, setUserInfo, {});
 
       setEditable(false);
       getSuppliData();

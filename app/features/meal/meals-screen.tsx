@@ -25,7 +25,7 @@ import {WideBtn} from '../../components/common/wide-btn';
 import {PfcPieChart} from '../../components/pfc-pie-chart';
 import {RegistrationMealCard} from './registration-meal-card';
 import {dateState, editableState} from '../date-manager/data-manager.recoil';
-import {isToday} from '../../api/utils';
+import {comparisonDate, dateToStr, isToday} from '../../api/utils';
 import {storage} from '../../api/storage.helper';
 import {userInfoState} from '../init-app/init-app.recoil';
 
@@ -44,11 +44,20 @@ export const MealsScreen = () => {
   const date = useRecoilValue(dateState);
   const userInfo = useRecoilValue(userInfoState);
 
-  useEffect(() => {
-    if (isToday(date)) {
-      setEditable(true);
-    }
-  }, [date]);
+  // const getToday = () => {
+  //   if (userInfo && userInfo.time) {
+  //     const hour = Number(userInfo.time.split(':')[0]);
+  //     const minuts = Number(userInfo.time.split(':')[1]);
+  //     return comparisonDate(new Date(), hour, minuts);
+  //   }
+  //   return null;
+  // };
+
+  // useEffect(() => {
+  //   if (getToday() && dateToStr(getToday()) === dateToStr(date)) {
+  //     setEditable(true);
+  //   }
+  // }, [date]);
 
   // useEffect(() => {
   //   console.log('MealsScreen::suppliToMeal', suppliToMeal);
@@ -64,7 +73,9 @@ export const MealsScreen = () => {
           <View style={{marginBottom: 15}}>
             <RateProgressBar
               title=""
-              rimit={userInfo ? Number(userInfo.calorie) : 2200}
+              rimit={
+                userInfo && userInfo.calorie ? Number(userInfo.calorie) : 2200
+              }
               unit="kcal"
               color="#FF6E6B"
               recoilSelector={mealsENERC_KCALState}

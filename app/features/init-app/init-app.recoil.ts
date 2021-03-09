@@ -8,7 +8,7 @@ export const appState = atom<AppStateStatus>({
 
 export const userInfoState = atom<UserInfo | {} | undefined>({
   key: 'userInfoState',
-  default: undefined,
+  default: {},
 });
 
 export const userIdState = atom<string | undefined>({

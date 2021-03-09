@@ -46,8 +46,8 @@ export const RegistrationMealCard = (props: Props) => {
   };
 
   const cancelBtnPress = () => {
-    console.log(meal.foodName);
-    console.log(tempMeal.foodName);
+    // console.log(meal.foodName);
+    // console.log(tempMeal.foodName);
     setIntake(String(meal.intake));
     setTempMeal(meal);
     setShowChangeBtn(false);

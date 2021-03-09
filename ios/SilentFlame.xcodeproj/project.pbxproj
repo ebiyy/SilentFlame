@@ -818,7 +818,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.jegukoko.silent-flame";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.jegukoko.silent-flame.staging";
 				PRODUCT_NAME = SilentFlame;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -845,7 +845,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "com.jegukoko.silent-flame";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.jegukoko.silent-flame.staging";
 				PRODUCT_NAME = SilentFlame;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 1;

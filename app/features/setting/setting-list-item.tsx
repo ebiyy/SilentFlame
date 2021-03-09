@@ -116,22 +116,20 @@ export const SettingsListItem = (props: Props) => {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [dates, setDates] = useState(nextDate5h());
 
-  const getToday = () => {
-    if (userInfo && userInfo.time) {
-      const hour = Number(userInfo.time.split(':')[0]);
-      const minuts = Number(userInfo.time.split(':')[1]);
-      console.log(hour, minuts);
-      // console.log(dateToStr(getToday()) === dateToStr(new Date()));
-      return comparisonDate(new Date(), hour, minuts);
-    }
-    return null;
-  };
+  // const getToday = () => {
+  //   if (userInfo && userInfo.time) {
+  //     const hour = Number(userInfo.time.split(':')[0]);
+  //     const minuts = Number(userInfo.time.split(':')[1]);
+  //     return comparisonDate(new Date(), hour, minuts);
+  //   }
+  //   return null;
+  // };
 
-  useEffect(() => {
-    if (getToday() && dateToStr(getToday()) === dateToStr(date)) {
-      setEditable(true);
-    }
-  }, [date]);
+  // useEffect(() => {
+  //   if (getToday() && dateToStr(getToday()) === dateToStr(date)) {
+  //     setEditable(true);
+  //   }
+  // }, [date]);
 
   useEffect(() => {
     storageSave(STORAGE_KEYS.userInfo, userInfo);

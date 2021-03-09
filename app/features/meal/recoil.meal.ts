@@ -1,5 +1,5 @@
 import {atom, selector} from 'recoil';
-import {storageSaveDateData} from '../../api/storage.helper';
+import {storageSave, storageSaveDateData} from '../../api/storage.helper';
 import {dateToStr} from '../../api/utils';
 import {sumMeal} from '../../components/functions';
 import {WaterIntak} from '../../helpers/interface';
@@ -32,7 +32,7 @@ export const isMealsStorageState = selector({
     if (editable) {
       console.log('Run isSupplisStorageState');
       storageSaveDateData('meals', dateToStr(currentDate), meals);
-
+      storageSave('meals', []);
       return true;
     }
     return false;

@@ -31,11 +31,11 @@ export const SupplementScreen = () => {
   const isSuppliToMeal = useRecoilValue(isSuppliToMealState);
   const isSupplisCount = useRecoilValue(isSupplisCountState);
 
-  useEffect(() => {
-    if (isToday(date)) {
-      setEditable(true);
-    }
-  }, [date]);
+  // useEffect(() => {
+  //   if (isToday(date)) {
+  //     setEditable(true);
+  //   }
+  // }, [date]);
 
   // useEffect(() => {
   //   storage.clearMapForKey('mySuppli');

@@ -14,7 +14,7 @@ import {LossQuantityController} from './loss-quantity-controller';
 import {storage, storageSave, STORAGE_KEYS} from '../../api/storage.helper';
 import {sumMeal} from '../../components/functions';
 import {addDays, dateToStr} from '../../api/utils';
-import {dateState} from '../date-manager/data-manager.recoil';
+import {dateState, editableState} from '../date-manager/data-manager.recoil';
 import {weeklyDataState} from './recoil.weekly';
 import {userInfoState} from '../init-app/init-app.recoil';
 import {SamplePickerModule} from '../../sample/picker-module';
@@ -33,6 +33,7 @@ export const WeeklyScreen = () => {
   const date = useRecoilValue(dateState);
   const userInfo = useRecoilValue(userInfoState);
   const [isCallReview, setIsCallReview] = useState<boolean>(true);
+  const editable = useRecoilValue(editableState);
 
   // useEffect(() => {
   //   [
@@ -68,6 +69,10 @@ export const WeeklyScreen = () => {
   //   });
   //   storage.clearMap();
   // }, []);
+
+  useEffect(() => {
+    console.log('WeeklyScreen::userInfo', userInfo, userInfo.water);
+  }, [userInfo]);
 
   const callReview = () => {
     if (isCallReview) {
@@ -117,18 +122,24 @@ export const WeeklyScreen = () => {
   }, [date]);
 
   useEffect(() => {
-    console.log('WeeklyScreen::concatNutrient', concatNutrient, weekData);
-    if (concatNutrient) {
-      if (weekData.filter((v) => v.id === dateToStr(date).length > 0)) {
-        setWeekData([{id: dateToStr(date), data: concatNutrient}]);
-      } else {
-        setWeekData((preState) =>
-          preState.map((v) =>
-            v.id === dateToStr(date)
-              ? {id: dateToStr(date), data: concatNutrient}
-              : v,
-          ),
-        );
+    // console.log('WeeklyScreen::concatNutrient', concatNutrient, weekData);
+    // weekDataのデータ取得前に動作するとまずいが大丈夫そう
+    if (editable) {
+      if (concatNutrient) {
+        if (weekData.filter((v) => v.id === dateToStr(date)).length === 0) {
+          setWeekData((preState) => [
+            ...preState,
+            {id: dateToStr(date), data: concatNutrient},
+          ]);
+        } else {
+          setWeekData((preState) =>
+            preState.map((v) =>
+              v.id === dateToStr(date)
+                ? {id: dateToStr(date), data: concatNutrient}
+                : v,
+            ),
+          );
+        }
       }
     }
   }, [concatNutrient]);
@@ -143,7 +154,7 @@ export const WeeklyScreen = () => {
       setCalWeekData(
         sumMeal(
           weekData.flat().map((v) => v.data),
-          weekData.length,
+          weekData.flat().length,
         ),
       );
     }
@@ -187,7 +198,9 @@ export const WeeklyScreen = () => {
             <View style={styles.progressBarContainer}>
               <RateProgressBar
                 title="今週のカロリー平均"
-                rimit={userInfo ? Number(userInfo.calorie) : 2200}
+                rimit={
+                  userInfo && userInfo.calorie ? Number(userInfo.calorie) : 2200
+                }
                 unit="kcal"
                 color="#FF6E6B"
                 recoilSelector={mealsENERC_KCALState}
@@ -201,7 +214,7 @@ export const WeeklyScreen = () => {
             <View style={styles.progressBarContainer}>
               <RateProgressBar
                 title="今週の水分平均"
-                rimit={userInfo ? Number(userInfo.water) : 2}
+                rimit={userInfo && userInfo.water ? Number(userInfo.water) : 2}
                 unit="L"
                 color={screenThemeColor.water}
                 recoilSelector={mealsWATERState}
