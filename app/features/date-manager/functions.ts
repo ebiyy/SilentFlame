@@ -19,10 +19,6 @@ export const changeMarkedDate = (
   let assignObj = {};
   // 選択済みの日付の背景をリセット
   if (beforeDate) {
-    console.log(
-      'getDots(preState, selectedDate)',
-      getDots(preState, selectedDate),
-    );
     assignObj = {
       [beforeDate]: {
         selected: false,

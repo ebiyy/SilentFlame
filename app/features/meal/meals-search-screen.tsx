@@ -158,6 +158,18 @@ export const MealsSearchScreen = ({route}) => {
                 }}>
                 検索結果なし
               </Text>
+              <Text style={{margin: 10, marginTop: 30}}>
+                平仮名のみでの検索か、別名ので検索をお試しください。
+              </Text>
+              <Text style={{margin: 10, marginTop: 3}}>
+                例：× ほうれん草 -> ○ ほうれんそう
+              </Text>
+              <Text style={{marginHorizontal: 10}}>
+                例：× しゃけ -> ○ さけ
+              </Text>
+              <Text style={{marginHorizontal: 10, marginTop: 13}}>
+                また、料理名、商品名などは収録されていません。
+              </Text>
             </View>
           ) : null
         }

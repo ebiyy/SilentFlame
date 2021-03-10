@@ -106,6 +106,20 @@ export const CalendarScreen = () => {
           setSelectedDate={setSelectedDate}
         />
       )}
+      <View style={{margin: 30}}>
+        <Text style={{marginVertical: 5}}>
+          <Text style={{color: screenThemeColor.meals}}>● </Text>
+          <Text>食事情報を登録した日</Text>
+        </Text>
+        <Text style={{marginVertical: 5}}>
+          <Text style={{color: screenThemeColor.suppli}}>● </Text>
+          <Text>サプリ情報を登録した日</Text>
+        </Text>
+        <Text style={{marginVertical: 5}}>
+          <Text style={{color: screenThemeColor.water}}>● </Text>
+          <Text>水分情報を登録した日</Text>
+        </Text>
+      </View>
 
       {selectedDate !== dateToStr(date) &&
         markedDate[selectedDate] &&
@@ -129,7 +143,7 @@ const Styles = StyleSheet.create({
     marginVertical: 30,
   },
   btnContainer: {
-    margin: 70,
+    margin: 22,
     alignItems: 'center',
   },
   btnContent: {
