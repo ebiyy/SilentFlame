@@ -1,5 +1,16 @@
 import {DotMarkingData} from './date-manager';
 
+const getDots = (state, date) => {
+  if (state) {
+    if (state[date]) {
+      if (state[date]['dots']) {
+        return state[date]['dots'];
+      }
+    }
+  }
+  return [];
+};
+
 export const changeMarkedDate = (
   preState: DotMarkingData,
   selectedDate: string,
@@ -8,11 +19,16 @@ export const changeMarkedDate = (
   let assignObj = {};
   // 選択済みの日付の背景をリセット
   if (beforeDate) {
+    console.log(
+      'getDots(preState, selectedDate)',
+      getDots(preState, selectedDate),
+    );
     assignObj = {
       [beforeDate]: {
         selected: false,
         disableTouchEvent: false,
         selectedColor: 'transparent',
+        dots: getDots(preState, beforeDate),
       },
     };
   }
@@ -20,7 +36,8 @@ export const changeMarkedDate = (
     [selectedDate]: {
       selected: true,
       disableTouchEvent: true,
-      selectedColor: 'orange',
+      selectedColor: '#ddd',
+      dots: getDots(preState, selectedDate),
     },
   });
   return {...preState, ...assignObj};

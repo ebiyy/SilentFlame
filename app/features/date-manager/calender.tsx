@@ -59,6 +59,7 @@ export const CustomCalendar = (props: Props) => {
       // スワイプでの年月変更の可否。 デフォルト値 = false
       enableSwipeMonths={false}
       markedDates={markedDate}
+      markingType={'multi-dot'}
     />
   );
 };
