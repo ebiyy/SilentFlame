@@ -1,3 +1,10 @@
+import {
+  storageSaveDateData,
+  storageSave,
+  storageRemove,
+  storage,
+} from './storage.helper';
+
 export const toFixedToNum = (num: number, fixed: number) =>
   Number(num.toFixed(fixed));
 
@@ -119,4 +126,31 @@ export const comparisonDate = (
     }
   }
   return new Date(dateToStr(d));
+};
+
+export const selectorSaveStore = (
+  editable: boolean,
+  currentDate: Date,
+  storeKey: string,
+  data: any,
+  init: {} | [],
+) => {
+  console.log('selectorSaveStore', dateToStr(currentDate));
+  if (editable) {
+    // データがなかったら削除したいけど動作怪しかったからコメントアウト
+    // if (
+    //   (Array.isArray(data) && data.length === 0) ||
+    //   Object.keys(data).length === 0
+    // ) {
+    //   storage.remove({
+    //     key: storeKey,
+    //     id: dateToStr(currentDate),
+    //   });
+    //   return true;
+    // }
+    storageSaveDateData(storeKey, dateToStr(currentDate), data);
+    storageSave(storeKey, init);
+    return true;
+  }
+  return false;
 };

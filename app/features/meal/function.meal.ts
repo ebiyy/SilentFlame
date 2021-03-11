@@ -116,6 +116,14 @@ export const generateMeal = (
   timePeriod: TimePeriodKey,
   userId: string,
 ): Meal => {
+  console.log('generateMeal', {
+    intake: intake,
+    addedAt: new Date(),
+    updatedAt: new Date(),
+    timePeriod: timePeriod,
+    id: Math.floor(new Date().getTime() / 1000),
+    author: userId,
+  });
   return {
     ...nutrient,
     intake: intake,

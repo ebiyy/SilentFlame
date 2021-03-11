@@ -79,6 +79,11 @@ export const MealsSearchScreen = ({route}) => {
   const [logMeals, setLogMeals] = useState<Meal[]>([]);
   const date = useRecoilValue(dateState);
 
+  useEffect(()=>{
+    console.log('logMeals',logMeals)
+    console.log('logMeals',logMeals.map(v => [v.intake,typeof v.intake]))
+  },[logMeals])
+
   useEffect(() => {
     if (!isSerach && logMeals.length === 0) {
       const currentDate = new Date(date);
@@ -161,11 +166,14 @@ export const MealsSearchScreen = ({route}) => {
               <Text style={{margin: 10, marginTop: 30}}>
                 平仮名のみでの検索か、別名ので検索をお試しください。
               </Text>
-              <Text style={{margin: 10, marginTop: 3}}>
+              <Text style={{marginHorizontal: 10, marginTop: 3}}>
                 例：× ほうれん草 -> ○ ほうれんそう
               </Text>
               <Text style={{marginHorizontal: 10}}>
                 例：× しゃけ -> ○ さけ
+              </Text>
+              <Text style={{marginHorizontal: 10}}>
+                例：× 鶏胸肉 -> ○ にわとり　むね
               </Text>
               <Text style={{marginHorizontal: 10, marginTop: 13}}>
                 また、料理名、商品名などは収録されていません。

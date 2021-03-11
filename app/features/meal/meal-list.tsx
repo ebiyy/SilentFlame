@@ -95,7 +95,12 @@ export const MealLsit = (props: Props) => {
         activeOpacity={0.6}
         onPress={() => {
           navigation.navigate('NutrientsScreen', {
-            selectMeal: generateMeal(setPFC(), 100, timePeriod, userId),
+            selectMeal: generateMeal(
+              meal.intake !== 100 ? meal : setPFC(),
+              meal.intake ? meal.intake : 100,
+              timePeriod,
+              userId,
+            ),
             parentScreen: 'MealsSearchScreen',
             timePeriod: timePeriod,
           });
@@ -123,7 +128,12 @@ export const MealLsit = (props: Props) => {
           onPress={() => {
             setMeals((preState) => [
               ...preState,
-              generateMeal(setPFC(), 100, timePeriod, userId),
+              generateMeal(
+                meal.intake !== 100 ? meal : setPFC(),
+                meal.intake ? meal.intake : 100,
+                timePeriod,
+                userId,
+              ),
             ]);
             navigation.goBack();
           }}>

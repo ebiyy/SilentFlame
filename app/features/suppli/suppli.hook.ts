@@ -5,7 +5,7 @@ import {
   storageSave,
   storageSaveDateData,
 } from '../../api/storage.helper';
-import {dateToStr} from '../../api/utils';
+import {dateToStr, selectorSaveStore} from '../../api/utils';
 import {dateState, editableState} from '../date-manager/data-manager.recoil';
 import {
   MOCK_BASE_INFO,
@@ -76,7 +76,6 @@ export const isSupplisStorageState = selector({
       console.log('Run isSupplisStorageState');
       storageSaveDateData('mySuppli', dateToStr(currentDate), supplis);
       storageSave('mySuppli', supplis);
-
       return true;
     }
     return false;
@@ -89,13 +88,13 @@ export const isSuppliToMealState = selector({
     const suppliToMeal = get(suppliToMealState);
     const currentDate = get(dateState);
     const editable = get(editableState);
-    if (editable) {
-      console.log('Run isSuppliToMealState');
-      storageSaveDateData('suppliToMeal', dateToStr(currentDate), suppliToMeal);
-      storageSave('suppliToMeal', {});
-      return true;
-    }
-    return false;
+    return selectorSaveStore(
+      editable,
+      currentDate,
+      'suppliToMeal',
+      suppliToMeal,
+      {},
+    );
   },
 });
 
@@ -105,12 +104,12 @@ export const isSupplisCountState = selector({
     const suppliCount = get(suppliCountState);
     const currentDate = get(dateState);
     const editable = get(editableState);
-    if (editable) {
-      console.log('Run isSupplisCountState');
-      storageSaveDateData('suppliCount', dateToStr(currentDate), suppliCount);
-      storageSave('suppliCount', {});
-      return true;
-    }
-    return false;
+    return selectorSaveStore(
+      editable,
+      currentDate,
+      'suppliCount',
+      suppliCount,
+      {},
+    );
   },
 });
