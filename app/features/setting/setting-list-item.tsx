@@ -30,7 +30,7 @@ const actionForMenuItem = (item) => {
   console.log('actionForMenuItem', item);
   switch (item) {
     case '使い方について': {
-      return Linking.openURL('https://twitter.com/ebiyy12');
+      return Linking.openURL('https://note.com/esuke/n/n9f64c4d6c112');
     }
     case 'フィードバック': {
       return Linking.openURL('https://twitter.com/ebiyy12');
