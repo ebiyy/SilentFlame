@@ -37,11 +37,11 @@ const settingsData: {
     data: ['使い方について', 'フィードバック'],
   },
   {
-    title: 'プライバシー',
+    title: '個人情報保護方針',
     icon: (
       <IconWrapper>{MCi('play-protected-content', '#fff', 20)}</IconWrapper>
     ),
-    data: ['個人情報保護方針'],
+    data: ['プライバシーポリシー'],
   },
 ];
 

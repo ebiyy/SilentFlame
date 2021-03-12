@@ -96,7 +96,7 @@ export const MealLsit = (props: Props) => {
         onPress={() => {
           navigation.navigate('NutrientsScreen', {
             selectMeal: generateMeal(
-              meal.intake !== 100 ? meal : setPFC(),
+              meal.intake && meal.intake !== 100 ? meal : setPFC(),
               meal.intake ? meal.intake : 100,
               timePeriod,
               userId,
@@ -129,7 +129,7 @@ export const MealLsit = (props: Props) => {
             setMeals((preState) => [
               ...preState,
               generateMeal(
-                meal.intake !== 100 ? meal : setPFC(),
+                meal.intake && meal.intake !== 100 ? meal : setPFC(),
                 meal.intake ? meal.intake : 100,
                 timePeriod,
                 userId,

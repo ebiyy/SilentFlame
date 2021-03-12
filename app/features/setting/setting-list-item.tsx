@@ -26,6 +26,23 @@ interface Props {
   isLastElement?: boolean;
 }
 
+const actionForMenuItem = (item) => {
+  console.log('actionForMenuItem', item);
+  switch (item) {
+    case '使い方について': {
+      return Linking.openURL('https://twitter.com/ebiyy12');
+    }
+    case 'フィードバック': {
+      return Linking.openURL('https://twitter.com/ebiyy12');
+    }
+    case 'プライバシーポリシー': {
+      return Linking.openURL('https://ebiyy.github.io/');
+    }
+    default:
+      return {};
+  }
+};
+
 const ThemeSwitch = () => {
   const {colorScheme, setColorScheme} = useState();
 
@@ -41,9 +58,10 @@ const ThemeSwitch = () => {
 };
 
 const StyledSettingsListItemWrapper = (props) => {
-  const {isFirstElement, isLastElement, children, disabled} = props;
+  const {isFirstElement, isLastElement, children, disabled, onPress} = props;
   return (
     <TouchableOpacity
+      onPress={onPress}
       disabled={disabled}
       style={{
         width: '100%',
@@ -62,17 +80,6 @@ const StyledSettingsListItemWrapper = (props) => {
     </TouchableOpacity>
   );
 };
-
-// const returnText = (item: string) => {
-//   switch (item) {
-//     case '日付変更時間':
-//       return '04:00';
-//     case 'カロリーの目安':
-//       return '2200 kcal';
-//     case '水分の目安':
-//       return '2 L';
-//   }
-// };
 
 const returnKey = (item: string) => {
   switch (item) {
@@ -158,7 +165,7 @@ export const SettingsListItem = (props: Props) => {
       disabled={['日付変更時間', 'カロリーの目安', '水分の目安'].includes(
         props.item,
       )}
-      onPress={() => {}}>
+      onPress={() => actionForMenuItem(props.item)}>
       {!['日付変更時間', 'カロリーの目安', '水分の目安'].includes(
         props.item,
       ) && <Text style={{color: '#090909', fontSize: 16}}>{props.item}</Text>}

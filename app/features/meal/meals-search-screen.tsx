@@ -62,6 +62,7 @@ const generateHitObj = (inputText: string) => {
   } else {
     hitArr = fullSerach(searchTextArr[0]);
   }
+  console.log('hitArr', hitArr)
   return hitArr;
 };
 
