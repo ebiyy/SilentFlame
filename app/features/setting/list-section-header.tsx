@@ -12,7 +12,7 @@ const StyledSectionWrapper = (props) => (
     style={{
       marginTop: 20,
       marginBottom: 10,
-      width: '55%',
+      width: '60%',
       flexDirection: 'row',
       alignItems: 'center',
       backgroundColor: '#090909',
