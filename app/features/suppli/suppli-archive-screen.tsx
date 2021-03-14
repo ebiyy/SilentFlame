@@ -9,12 +9,18 @@ import {
 } from 'react-native';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import {useRecoilState} from 'recoil';
-import {ComStyles, screenThemeColor, shadowStyles} from '../../global/styles';
+import {
+  ComStyles,
+  screenThemeColor,
+  shadowStyles,
+  winHeight,
+} from '../../global/styles';
 import {supplisState} from './suppli.hook';
 import {Suppli} from './suppli';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {TitleText} from '../../components/title-text';
 import {ConfirmationModal} from '../../components/common/confirmation-modal';
+import {isAndroid} from '@freakycoder/react-native-helpers';
 
 export const SuppliArchiveScreen = () => {
   const navigation = useNavigation();
@@ -44,7 +50,7 @@ export const SuppliArchiveScreen = () => {
   }, [tapButton]);
 
   return (
-    <>
+    <View style={{marginTop: isAndroid ? winHeight * 0.1 : 0}}>
       <View style={{marginVertical: 10}}>
         <TitleText title="アーカイブ済み" />
       </View>
@@ -108,7 +114,7 @@ export const SuppliArchiveScreen = () => {
         modalFunc={setTapButton}
         modalTitle={modalTitle}
       />
-    </>
+    </View>
   );
 };
 

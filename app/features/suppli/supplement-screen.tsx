@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {ComStyles} from '../../global/styles';
+import {ComStyles, winHeight} from '../../global/styles';
 import {ScrollView, TouchableOpacity} from 'react-native-gesture-handler';
 import {useRecoilState, useRecoilValue} from 'recoil';
 import {
@@ -18,6 +18,7 @@ import {CountSupplement} from './count-supplement';
 import {dateState, editableState} from '../date-manager/data-manager.recoil';
 import {TitleText} from '../../components/title-text';
 import {dateToStr, isToday} from '../../api/utils';
+import {isAndroid} from '@freakycoder/react-native-helpers';
 
 export const SupplementScreen = () => {
   const navigation = useNavigation();
@@ -110,7 +111,7 @@ const Styles = StyleSheet.create({
   screenContainer: {
     flex: 1,
     flexDirection: 'column',
-    marginTop: 20,
+    marginTop: isAndroid ? winHeight * 0.1 + 20 : 20,
   },
   addButtonContainer: {
     maxHeight: 60,

@@ -1,11 +1,17 @@
+import {isAndroid} from '@freakycoder/react-native-helpers';
 import {useNavigation} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {useRecoilState, useRecoilValue} from 'recoil';
 import {storage, storageRemove} from '../../api/storage.helper';
-import {comparisonDate, dateToStr} from '../../api/utils';
+import {comparisonDate, dateToStr, toDay} from '../../api/utils';
 import {FadeInView} from '../../components/fade-in-view';
-import {screenThemeColor, shadowStyles, winWidth} from '../../global/styles';
+import {
+  screenThemeColor,
+  shadowStyles,
+  winHeight,
+  winWidth,
+} from '../../global/styles';
 import {useDataManager} from '../init-app/data-manager.hook';
 import {userInfoState} from '../init-app/init-app.recoil';
 import {CustomCalendar} from './calender';
@@ -141,9 +147,11 @@ export const CalendarScreen = () => {
 const Styles = StyleSheet.create({
   container: {
     marginVertical: 30,
+    marginTop: isAndroid ? winHeight * 0.1 : 30,
   },
   btnContainer: {
     margin: 22,
+    marginTop: isAndroid ? 6 : 22,
     alignItems: 'center',
   },
   btnContent: {

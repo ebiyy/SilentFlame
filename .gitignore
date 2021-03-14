@@ -77,3 +77,9 @@ app/config/meal-lists/*
 utility/csvtojson/*.csv
 
 backup/realm/*
+android/app/google-services.json
+android/gradle.properties
+firebase-init.ts
+
+android/java_pid22559.hprof
+android/java_pid21066.hprof

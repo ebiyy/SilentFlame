@@ -36,7 +36,7 @@ export const formatShortStrDate = (date: Date) => {
     day: 'numeric',
   })
     .format(date)
-    .replaceAll('/', '-');
+    .replace(new RegExp('/', 'g'), '-');
   return replaceDate(temp);
 };
 
@@ -47,7 +47,7 @@ export const getOtherDay = (num: number) => {
     day: 'numeric',
   })
     .format(new Date().setDate(new Date().getDate() + num))
-    .replaceAll('/', '-');
+    .replace(new RegExp('/', 'g'), '-');
   return replaceDate(date);
 };
 
@@ -58,7 +58,7 @@ export const toDay = new Intl.DateTimeFormat('ja-JP', {
   day: 'numeric',
 })
   .format(new Date())
-  .replaceAll('/', '-');
+  .replace(new RegExp('/', 'g'), '-');
 
 // ex. 1/21
 export const formatJpMonthDay = (date: Date | string) =>

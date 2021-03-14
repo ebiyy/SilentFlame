@@ -1,3 +1,4 @@
+import {isAndroid} from '@freakycoder/react-native-helpers';
 import React from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import {winWidth} from '../global/styles';
@@ -17,7 +18,7 @@ const style = {
     top: '40%',
     left: winWidth * 0.03,
     rotate: '28deg',
-    fontSize: winWidth * 0.26,
+    fontSize: winWidth * 0.23,
   },
 };
 
@@ -43,6 +44,6 @@ const typeStyles = (type: 'top' | 'bottom') =>
     },
     text: {
       fontSize: style[type].fontSize,
-      color: 'white',
+      color: isAndroid ? '#c6c6c6' : 'white',
     },
   });

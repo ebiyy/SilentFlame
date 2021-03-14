@@ -1,11 +1,11 @@
 import React, {useState} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {Pressable, StyleSheet, Text, View} from 'react-native';
 import {
   ScrollView,
   TextInput,
   TouchableOpacity,
 } from 'react-native-gesture-handler';
-import {screenThemeColor, shadowStyles} from '../../global/styles';
+import {screenThemeColor, shadowStyles, winHeight} from '../../global/styles';
 import {
   carbohydrateNutrientKeys,
   fatNutrientKeys,
@@ -14,6 +14,7 @@ import {
   vitaminNutrientKeys,
 } from './constant';
 import Modal from 'react-native-modal';
+import {getStatusBarHeight, isAndroid} from '@freakycoder/react-native-helpers';
 
 // プロテインはペプチドブレンドの詳細とかにもっと色々ある。。
 const NUREIENT = {
@@ -70,7 +71,7 @@ export const NutrientNameModal = (props: Props) => {
   const [value, onChangeText] = useState('');
 
   return (
-    <View>
+    <View style={{position: 'absolute'}}>
       {modalVisible && (
         <View style={styles.container}>
           <Modal
@@ -89,18 +90,23 @@ export const NutrientNameModal = (props: Props) => {
                 <View>
                   <View style={styles.modalHeader}>
                     {TAB.map((obj, i) => (
-                      <TouchableOpacity key={i} onPress={() => setTab(obj.key)}>
+                      <Pressable
+                        key={i}
+                        onPress={() => {
+                          console.log('setTab(obj.key)', obj.key);
+                          setTab(obj.key);
+                        }}>
                         <View style={styles.tabs}>
                           <Text style={styles.tabText}>{obj.dispName}</Text>
                         </View>
-                      </TouchableOpacity>
+                      </Pressable>
                     ))}
                   </View>
                   <ScrollView>
                     <View style={styles.modalBody}>
                       {tab !== 'manual' ? (
                         NUREIENT[tab].map((nutrient, i) => (
-                          <TouchableOpacity
+                          <Pressable
                             key={i}
                             style={styles.openButton}
                             onPress={() => {
@@ -108,7 +114,7 @@ export const NutrientNameModal = (props: Props) => {
                               setModalVisible(false);
                             }}>
                             <Text style={styles.nutrientText}>{nutrient}</Text>
-                          </TouchableOpacity>
+                          </Pressable>
                         ))
                       ) : (
                         <View style={styles.modalFormContainer}>
@@ -126,7 +132,7 @@ export const NutrientNameModal = (props: Props) => {
                                 shadowStyles(screenThemeColor.suppli).boxShadow,
                                 styles.modalBtn,
                               ]}>
-                              <TouchableOpacity
+                              <Pressable
                                 onPress={
                                   value
                                     ? () => {
@@ -138,7 +144,7 @@ export const NutrientNameModal = (props: Props) => {
                                 <Text style={styles.modalBtnText}>
                                   栄養素を追加
                                 </Text>
-                              </TouchableOpacity>
+                              </Pressable>
                             </View>
                             <Text
                               style={{paddingTop: 40, paddingHorizontal: 20}}>
@@ -167,7 +173,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     borderRadius: 20,
     marginHorizontal: 15,
-    marginVertical: 130,
+    marginTop:
+      winHeight * 0.15 -
+      (isAndroid ? (getStatusBarHeight() ? getStatusBarHeight() : 0) : 0),
+    marginBottom: winHeight * 0.15,
+    // elevation: 10,
     // backgroundColor: 'rgba(221, 221, 221, 0.8)',
   },
   modalContainer: {
@@ -186,7 +196,7 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 3.84,
-    elevation: 5,
+    // elevation: 5,
   },
   modalHeader: {
     flexDirection: 'row',
@@ -203,7 +213,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 10,
     margin: 5,
-    elevation: 2,
+    // elevation: 2,
     height: 40,
     ...shadowStyles(screenThemeColor.suppli).boxShadow,
     borderWidth: 2,

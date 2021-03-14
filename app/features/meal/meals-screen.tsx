@@ -14,7 +14,7 @@ import {
   mealsState,
 } from './recoil.meal';
 // import {useMargeMealState} from './hook.meal';
-import {screenThemeColor} from '../../global/styles';
+import {screenThemeColor, winHeight} from '../../global/styles';
 import {useRecoilState, useRecoilValue} from 'recoil';
 import {suppliToMealState} from '../suppli/suppli.hook';
 import {Divider} from '../../components/divider';
@@ -28,6 +28,7 @@ import {dateState, editableState} from '../date-manager/data-manager.recoil';
 import {comparisonDate, dateToStr, isToday} from '../../api/utils';
 import {storage} from '../../api/storage.helper';
 import {userInfoState} from '../init-app/init-app.recoil';
+import {isAndroid} from '@freakycoder/react-native-helpers';
 
 const timePeriod: TimePeriod = {
   breakfast: '朝食',
@@ -65,7 +66,7 @@ export const MealsScreen = () => {
 
   return (
     <KeyboardAvoidingView
-      style={{flex: 1}}
+      style={[{flex: 1}, {marginTop: isAndroid ? winHeight * 0.1 : 0}]}
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <ScrollView>

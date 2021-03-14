@@ -4,13 +4,14 @@ import {VirtualizedList} from 'react-native';
 import {View, TextInput, StyleSheet, Text, Dimensions} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {useRecoilValue} from 'recoil';
-import {screenThemeColor} from '../../global/styles';
+import {screenThemeColor, winHeight} from '../../global/styles';
 import {NUTRIENTS} from '../../config/meal-lists/nutrients';
 import {MealLsit} from './meal-list';
 import {addDays, dateToStr} from '../../api/utils';
 import {storage} from '../../api/storage.helper';
 import {dateState} from '../date-manager/data-manager.recoil';
 import {TitleText} from '../../components/title-text';
+import { isAndroid } from '@freakycoder/react-native-helpers';
 
 const generateHitObj = (inputText: string) => {
   const fullSerach = (text: string) =>
@@ -139,7 +140,7 @@ export const MealsSearchScreen = ({route}) => {
   };
 
   return (
-    <View>
+    <View style={{marginTop: isAndroid ? winHeight * 0.1 : 0}}>
       <VirtualizedList
         data={[]}
         renderItem={renderItem}
@@ -186,6 +187,7 @@ export const MealsSearchScreen = ({route}) => {
           <View style={styles.inner}>
             <View style={{alignItems: 'center', marginBottom: 8}}>
               <TouchableOpacity
+                activeOpacity={isAndroid ? 0.7 : 0.2}
                 style={{
                   width: Dimensions.get('window').width / 2,
                 }}

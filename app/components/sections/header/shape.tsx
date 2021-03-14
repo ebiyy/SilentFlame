@@ -3,7 +3,7 @@
 import React from 'react';
 import {Platform, StyleSheet} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {hasNotch} from '@freakycoder/react-native-helpers';
+import {hasNotch, isIOS} from '@freakycoder/react-native-helpers';
 import {winHeight, winWidth} from '../../../global/styles';
 
 export const Shape = () => {
@@ -41,7 +41,7 @@ const setPosition = (position: PositionStyle | undefined) => {
 const Styles = StyleSheet.create({
   main: {
     width: winWidth,
-    height: winWidth,
+    height: isIOS ? winWidth : winHeight * 0.4 + winWidth * 0.1,
     alignSelf: 'center',
     position: 'absolute',
     alignContent: 'center',

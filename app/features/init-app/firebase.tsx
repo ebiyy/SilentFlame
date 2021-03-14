@@ -12,12 +12,15 @@ import {
 } from '../../api/storage.helper';
 import {firebaseAuth} from './functions';
 import {VALEU} from '../setting/setting-list-item';
+import {Platform} from 'react-native';
+import {IOS, ANDROID} from '../../../firebase-init';
 
 const initFirebase = async () => {
+  console.log('ANDROID.clientId,', Platform.OS, ANDROID.clientId);
   const credentials = {
-    clientId: clientId,
-    appId: appId,
-    apiKey: apiKey,
+    clientId: Platform.OS === 'ios' ? IOS.clientId : ANDROID.clientId,
+    appId: Platform.OS === 'ios' ? IOS.appId : ANDROID.appId,
+    apiKey: Platform.OS === 'ios' ? IOS.apiKey : ANDROID.apiKey,
     databaseURL: '',
     storageBucket: '',
     messagingSenderId: '',

@@ -9,7 +9,12 @@ import {
   View,
 } from 'react-native';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
-import {screenThemeColor, shadowStyles, winWidth} from '../../global/styles';
+import {
+  screenThemeColor,
+  shadowStyles,
+  winHeight,
+  winWidth,
+} from '../../global/styles';
 import {SetterOrUpdater, useRecoilValue} from 'recoil';
 import {imageResState, isScrollState} from './suppli.hook';
 import {FormType, Suppli, SuppliBaseInfo, SuppliNutrient} from './suppli';
@@ -19,6 +24,7 @@ import {Divider} from '../../components/divider';
 import {TitleText} from '../../components/title-text';
 import {NutrientFormController} from './nutrient-from-controller';
 import {SupplementForm} from './supplement-form';
+import {isAndroid} from '@freakycoder/react-native-helpers';
 
 type Params = {
   mode: 'add' | 'view' | 'edit';
@@ -170,6 +176,7 @@ export const SupplFormScreen = ({navigation, route}) => {
 const Styles = StyleSheet.create({
   container: {
     marginHorizontal: 20,
+    marginTop: isAndroid ? winHeight * 0.1 : 20,
     flex: 1,
   },
   btnSection: {

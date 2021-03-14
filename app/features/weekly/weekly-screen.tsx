@@ -23,6 +23,7 @@ import {SampleBaner} from '../../components/sample-baner';
 import {callInAppReview} from './sample-in-app-review';
 import {useRoute} from '@react-navigation/core';
 import {useNavigation} from '@react-navigation/native';
+import {isAndroid, isIOS} from '@freakycoder/react-native-helpers';
 
 export const WeeklyScreen = () => {
   const route = useRoute();
@@ -188,47 +189,57 @@ export const WeeklyScreen = () => {
   return (
     <FadeInView>
       <ScrollView scrollEnabled={winHeight < 800}>
-        <LossQuantityController />
-        <View style={calWeekData ? {position: 'relative'} : {}}>
-          <PfcPieChart
-            weekData={calWeekData ? calWeekData : mockWeekData}
-            boxShadow="black"
-          />
-          <View>
-            <View style={styles.progressBarContainer}>
-              <RateProgressBar
-                title="今週のカロリー平均"
-                rimit={
-                  userInfo && userInfo.calorie ? Number(userInfo.calorie) : 2200
-                }
-                unit="kcal"
-                color="#FF6E6B"
-                recoilSelector={mealsENERC_KCALState}
-                value={Number(
-                  calWeekData
-                    ? calWeekData.ENERC_KCAL
-                    : mockWeekData.ENERC_KCAL,
-                )}
-              />
+        <View style={{marginTop: isAndroid ? winHeight * 0.1 : 0}}>
+          {isIOS ? (
+            <LossQuantityController />
+          ) : (
+            <View style={{marginTop: winHeight * 0.04}}></View>
+          )}
+          <View style={calWeekData ? {position: 'relative'} : {}}>
+            <PfcPieChart
+              weekData={calWeekData ? calWeekData : mockWeekData}
+              boxShadow="black"
+            />
+            <View>
+              <View style={styles.progressBarContainer}>
+                <RateProgressBar
+                  title="今週のカロリー平均"
+                  rimit={
+                    userInfo && userInfo.calorie
+                      ? Number(userInfo.calorie)
+                      : 2200
+                  }
+                  unit="kcal"
+                  color="#FF6E6B"
+                  recoilSelector={mealsENERC_KCALState}
+                  value={Number(
+                    calWeekData
+                      ? calWeekData.ENERC_KCAL
+                      : mockWeekData.ENERC_KCAL,
+                  )}
+                />
+              </View>
+              <View style={styles.progressBarContainer}>
+                <RateProgressBar
+                  title="今週の水分平均"
+                  rimit={
+                    userInfo && userInfo.water ? Number(userInfo.water) : 2
+                  }
+                  unit="L"
+                  color={screenThemeColor.water}
+                  recoilSelector={mealsWATERState}
+                  value={Number(
+                    (
+                      Number(
+                        calWeekData ? calWeekData.WATER : mockWeekData.WATER,
+                      ) / 1000
+                    ).toFixed(1),
+                  )}
+                />
+              </View>
             </View>
-            <View style={styles.progressBarContainer}>
-              <RateProgressBar
-                title="今週の水分平均"
-                rimit={userInfo && userInfo.water ? Number(userInfo.water) : 2}
-                unit="L"
-                color={screenThemeColor.water}
-                recoilSelector={mealsWATERState}
-                value={Number(
-                  (
-                    Number(
-                      calWeekData ? calWeekData.WATER : mockWeekData.WATER,
-                    ) / 1000
-                  ).toFixed(1),
-                )}
-              />
-            </View>
+            {!calWeekData && <SampleBaner type="bottom" />}
           </View>
-          {!calWeekData && <SampleBaner type="bottom" />}
         </View>
       </ScrollView>
     </FadeInView>
@@ -237,6 +248,6 @@ export const WeeklyScreen = () => {
 
 const styles = StyleSheet.create({
   progressBarContainer: {
-    marginTop: winHeight * 0.03,
+    marginTop: winHeight * (isAndroid ? 0.065 : 0.03),
   },
 });

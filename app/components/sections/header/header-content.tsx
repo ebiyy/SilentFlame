@@ -3,7 +3,7 @@
 import React from 'react';
 import {View, SafeAreaView, StyleSheet} from 'react-native';
 import {isAndroid, getStatusBarHeight} from '@freakycoder/react-native-helpers';
-import {winWidth} from '../../../global/styles';
+import {winHeight, winWidth} from '../../../global/styles';
 
 export const HeaderContent = () => {
   return (
@@ -16,12 +16,8 @@ export const HeaderContent = () => {
 const Styles = StyleSheet.create({
   container: {
     width: winWidth,
-    height: 35,
+    height: winHeight * 0.02 + winWidth * 0.03,
     flexDirection: 'row',
-    marginTop: isAndroid
-      ? getStatusBarHeight() !== undefined
-        ? getStatusBarHeight() + 8
-        : 8
-      : 8,
+    marginTop: isAndroid ? winHeight * 0.02 + winWidth * 0.01 : 8,
   },
 });

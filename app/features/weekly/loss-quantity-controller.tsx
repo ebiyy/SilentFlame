@@ -1,13 +1,19 @@
 import React, {useEffect, useState} from 'react';
-import {View, StyleSheet, Text} from 'react-native';
+import {View, StyleSheet, Text, Platform} from 'react-native';
 import {screenThemeColor, shadowStyles} from '../../global/styles';
 import {getLossQuantityData} from './apple-heath-kit';
 import {HealthData} from './apple-health-kit';
-import {lossQuantityView} from './constants';
+import {
+  lossQuantityView,
+  mockBodyFatPercentage,
+  mockLeanBodyMass,
+  mockWeight,
+} from './constants';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import {LossQuantityChart} from './loss-quantity-chart';
 import {TitleText} from '../../components/title-text';
 import {SampleBaner} from '../../components/sample-baner';
+import {getGoogleFitData} from './google-fit';
 
 type SwitchBtnProps = {
   state: string;
@@ -52,13 +58,25 @@ export const LossQuantityController = () => {
 
   const isHealthDataMock = () => {
     const mock = weightData?.filter(
-      (v) => v.startDate === '2021-01-31T03:54:11.000+0900',
+      (v) =>
+        v.startDate === '2021-01-31T03:54:11.000+0900' ||
+        v.startDate === '2021-01-31T03:54:11Z',
     );
     return mock && mock.length > 0;
   };
 
+  const mapStartDate = (mockData) =>
+    mockData.map((obj) => {
+      return {
+        startDate: obj.startDate.replace('.000+0900', 'Z'),
+        value: obj.value,
+      };
+    });
+
   useEffect(() => {
-    getLossQuantityData(setWeightData, setBodyFatData, setLeanBodyMassData);
+    if (Platform.OS === 'ios') {
+      getLossQuantityData(setWeightData, setBodyFatData, setLeanBodyMassData);
+    }
   }, []);
 
   return (

@@ -57,9 +57,10 @@ export const InitApp = () => {
       nextAppState === 'active'
     ) {
       console.log('App has come to the foreground!');
+      // RNRestart.Restart();
     }
     if (
-      appCurrentState.current.match(/inactive/) &&
+      appCurrentState.current.match(/inactive|active/) &&
       nextAppState === 'background'
     ) {
       RNRestart.Restart();

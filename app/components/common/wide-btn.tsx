@@ -1,3 +1,4 @@
+import {isAndroid} from '@freakycoder/react-native-helpers';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {
@@ -30,6 +31,7 @@ export const WideBtn = (props: Props) => {
   } = props;
   return (
     <TouchableOpacity
+      activeOpacity={isAndroid ? 0.7 : 0.2}
       style={{width: Dimensions.get('window').width / wideRate}}
       onPress={() => navigation.navigate(toNavigate, navigatePrames)}>
       <View

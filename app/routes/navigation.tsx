@@ -16,6 +16,8 @@ import {CustomHeaderTitle} from './components/header-title';
 import {MyTheme} from './counstants';
 import {CalendarScreen} from '../features/date-manager/calender-controller';
 import {WaterArchiveScreen} from '../features/water/water-archive-screen';
+import {Platform} from 'react-native';
+import {isAndroid} from '@freakycoder/react-native-helpers';
 
 const Stack = createStackNavigator();
 
@@ -27,7 +29,10 @@ export const NavigationScreen = () => {
           headerTitle: () => <CustomHeaderTitle />,
           headerBackground: () => <CustomHeaderBackground />,
           headerRight: () => <HeaderRightDate />,
-          cardStyle: {marginTop: winHeight * 0.08},
+          cardStyle: {
+            marginTop: Platform.OS === 'ios' ? winHeight * 0.08 : 0,
+          },
+          headerTitleStyle: {alignContent: 'center'},
           headerBackTitle: 'Back',
         })}>
         {/* main screen */}

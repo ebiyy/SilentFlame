@@ -10,13 +10,19 @@ import {
 import {useRecoilState, useRecoilValue} from 'recoil';
 import {actionMealState, mealsState} from './recoil.meal';
 import {calNutrient, generateMeal, replaceFoodName} from './function.meal';
-import {screenThemeColor, shadowStyles, winWidth} from '../../global/styles';
+import {
+  screenThemeColor,
+  shadowStyles,
+  winHeight,
+  winWidth,
+} from '../../global/styles';
 import SwitchSelector from 'react-native-switch-selector';
 import {BASIC_NUTRIENTS_LABEL, NUTRIENTS_LABEL} from './constant.meal';
 import {Divider} from '../../components/divider';
 import {userIdState} from '../init-app/init-app.recoil';
 import {NutrientsList} from './nutrients-list';
 import {editableState} from '../date-manager/data-manager.recoil';
+import {isAndroid} from '@freakycoder/react-native-helpers';
 
 type Params = {
   selectMeal: Meal;
@@ -87,7 +93,7 @@ export const NutrientsScreen = ({navigation, route}) => {
 
   // console.log(getMarginBottom(15));
   return (
-    <>
+    <View style={{marginTop: isAndroid ? winHeight * 0.1 : 0}}>
       <View style={getMarginBottom(15, 'headerContainer')}>
         <View style={getMarginBottom(10, 'headerTitle')}>
           <Text
@@ -198,7 +204,7 @@ export const NutrientsScreen = ({navigation, route}) => {
         listRules={listRules}
         isSingle={parentScreen !== 'PfcPieChart'}
       />
-    </>
+    </View>
   );
 };
 

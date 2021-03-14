@@ -22,6 +22,7 @@ import {sumMeal} from './functions';
 import {MCi} from './common/icons';
 import {suppliToMealState} from '../features/suppli/suppli.hook';
 import {waterToMealState} from '../features/water/water.hook';
+import {isAndroid} from '@freakycoder/react-native-helpers';
 
 type Props = {
   meals?: Meal[];
@@ -36,7 +37,7 @@ export const PfcPieChart = (props: Props) => {
   const sumFat = useRecoilValue(mealsFatState);
   const sumCHOCDF = useRecoilValue(mealsCHOCDFState);
   const sumCHOAV = useRecoilValue(mealsCHOAVState);
-  const height = winHeight * 0.205;
+  const height = winHeight * (isAndroid ? 0.28 : 0.205);
   const [isWeight, setIsWeight] = useState(false);
   const suppliToMeal = useRecoilValue(suppliToMealState);
   const waterToMeal = useRecoilValue(waterToMealState);
@@ -115,14 +116,14 @@ export const PfcPieChart = (props: Props) => {
                   : weekData && Number(weekData.PROT),
                 color: '#5eee7d',
                 legendFontColor: 'black',
-                legendFontSize: 15,
+                legendFontSize: isAndroid ? 16 : 15,
               },
               {
                 name: isWeight ? '脂質(g)' : '脂質',
                 nutrinet: meals ? sumFat : weekData && Number(weekData.FAT),
                 color: '#86cbf3',
                 legendFontColor: 'black',
-                legendFontSize: 15,
+                legendFontSize: isAndroid ? 16 : 15,
               },
               {
                 name: isWeight ? '炭水化物(g)' : '炭水化物',
@@ -131,7 +132,7 @@ export const PfcPieChart = (props: Props) => {
                   : weekData && calWeekCHOCDF(weekData),
                 color: '#f18fc2',
                 legendFontColor: 'black',
-                legendFontSize: 15,
+                legendFontSize: isAndroid ? 16 : 15,
               },
               {
                 name: isWeight ? '糖質(g)' : '糖質',
@@ -140,11 +141,11 @@ export const PfcPieChart = (props: Props) => {
                   : weekData && Number(weekData.CHOAVLM),
                 color: '#ea4bbc',
                 legendFontColor: 'black',
-                legendFontSize: 15,
+                legendFontSize: isAndroid ? 16 : 15,
               },
             ]}
             width={winWidth * 0.9}
-            height={winHeight * 0.205}
+            height={height}
             chartConfig={pfcPieCharConfig}
             paddingLeft="0"
             accessor="nutrinet"

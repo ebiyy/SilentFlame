@@ -1,3 +1,4 @@
+import {isAndroid} from '@freakycoder/react-native-helpers';
 import {useNavigation} from '@react-navigation/native';
 import React from 'react';
 import {
@@ -71,6 +72,7 @@ export const ItemActions = (props: Props) => {
             navigatePrames={{mode: 'add'}}
           /> */}
           <TouchableOpacity
+            activeOpacity={isAndroid ? 0.7 : 0.2}
             style={{width: winWidth / 2}}
             onPress={() => {
               setImageRes({});

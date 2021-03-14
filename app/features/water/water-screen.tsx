@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {screenThemeColor, shadowStyles} from '../../global/styles';
+import {screenThemeColor, shadowStyles, winHeight} from '../../global/styles';
 import {mealsWATERState} from '../meal/recoil.meal';
 import {ScrollView} from 'react-native-gesture-handler';
 import {useRecoilState, useRecoilValue} from 'recoil';
@@ -40,6 +40,7 @@ import {dateState, editableState} from '../date-manager/data-manager.recoil';
 import {WaterWeight} from './water';
 import {userInfoState} from '../init-app/init-app.recoil';
 import {RecycleBtn} from '../suppli/components/recycle-btn';
+import {isAndroid} from '@freakycoder/react-native-helpers';
 
 const inputWaterPatten = [
   {name: 'cup', label: 120, iconElm: 'SimpleLineIcons'},
@@ -294,6 +295,7 @@ const Styles = StyleSheet.create({
   screenContainer: {
     flex: 1,
     flexDirection: 'column',
+    marginTop: isAndroid ? winHeight * 0.1 : 0,
     // marginTop: 20,
   },
   rateBarContainer: {
@@ -322,7 +324,7 @@ const Styles = StyleSheet.create({
     },
     shadowOpacity: 1,
     shadowRadius: 4,
-    elevation: 1,
+    // elevation: 1,
     // backgroundColor: 'white',
     borderWidth: 1,
     borderColor: 'lightblue',
