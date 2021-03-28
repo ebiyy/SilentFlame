@@ -7,7 +7,7 @@ export const CustomHeaderBackground = () => {
   return (
     <View>
       <GradientHeader />
-      {/* <TestAdmod /> */}
+      <TestAdmod />
     </View>
   );
 };
