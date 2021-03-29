@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>CFBundleDevelopmentRegion</key>
-	<string>en</string>
+	<string>ja_JP</string>
 	<key>CFBundleDisplayName</key>
 	<string>Silent Flame</string>
 	<key>CFBundleExecutable</key>
@@ -42,9 +42,9 @@
 		</dict>
 	</dict>
 	<key>NSCameraUsageDescription</key>
-	<string></string>
+	<string>登録するアイテムの画像に設定します。</string>
 	<key>NSHealthShareUsageDescription</key>
-	<string>Read and understand health data.</string>
+	<string>増減の推移を表示する目的で利用します。</string>
 	<key>NSHealthUpdateUsageDescription</key>
 	<string>Share workout data with other apps.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>

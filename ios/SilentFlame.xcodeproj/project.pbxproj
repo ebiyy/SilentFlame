@@ -8,9 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		0010AFFE25F2893200FAC142 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
+		003F220D26117682005A45FC /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 003F220C26117682005A45FC /* GoogleService-Info.plist */; };
 		00DFE2FC25C539B1001DD666 /* HealthKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00DFE2FB25C539B1001DD666 /* HealthKit.framework */; };
 		00E356F31AD99517003FC87E /* SilentFlameTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 00E356F21AD99517003FC87E /* SilentFlameTests.m */; };
-		00EAAA6225D56C6D00BE4B38 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 00EAAA6125D56C6D00BE4B38 /* GoogleService-Info.plist */; };
 		13B07FBC1A68108700A75B9A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		2D02E4BC1E0B4A80006451C7 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
@@ -42,13 +42,13 @@
 
 /* Begin PBXFileReference section */
 		00373B0367576A2C2E4C5CF3 /* Pods-SilentFlame-tvOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SilentFlame-tvOS.debug.xcconfig"; path = "Target Support Files/Pods-SilentFlame-tvOS/Pods-SilentFlame-tvOS.debug.xcconfig"; sourceTree = "<group>"; };
+		003F220C26117682005A45FC /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		00DFE2FA25C539B1001DD666 /* SilentFlame.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = SilentFlame.entitlements; path = SilentFlame/SilentFlame.entitlements; sourceTree = "<group>"; };
 		00DFE2FB25C539B1001DD666 /* HealthKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = HealthKit.framework; path = System/Library/Frameworks/HealthKit.framework; sourceTree = SDKROOT; };
 		00E356EE1AD99517003FC87E /* SilentFlameTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SilentFlameTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* SilentFlameTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SilentFlameTests.m; sourceTree = "<group>"; };
-		00EAAA6125D56C6D00BE4B38 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../../Downloads/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		13B07F961A680F5B00A75B9A /* SilentFlame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = SilentFlame.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = SilentFlame/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = SilentFlame/AppDelegate.m; sourceTree = "<group>"; };
@@ -205,7 +205,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
-				00EAAA6125D56C6D00BE4B38 /* GoogleService-Info.plist */,
+				003F220C26117682005A45FC /* GoogleService-Info.plist */,
 				13B07FAE1A68108700A75B9A /* SilentFlame */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				00E356EF1AD99517003FC87E /* SilentFlameTests */,
@@ -392,7 +392,7 @@
 			files = (
 				0010AFFE25F2893200FAC142 /* Images.xcassets in Resources */,
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
-				00EAAA6225D56C6D00BE4B38 /* GoogleService-Info.plist in Resources */,
+				003F220D26117682005A45FC /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -806,7 +806,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = SilentFlame/SilentFlame.entitlements;
-				CURRENT_PROJECT_VERSION = 1.0.3;
+				CURRENT_PROJECT_VERSION = 1.0.4;
 				DEVELOPMENT_TEAM = 5V6DUAYUG3;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = SilentFlame/Info.plist;
@@ -834,7 +834,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = SilentFlame/SilentFlame.entitlements;
-				CURRENT_PROJECT_VERSION = 1.0.3;
+				CURRENT_PROJECT_VERSION = 1.0.4;
 				DEVELOPMENT_TEAM = 5V6DUAYUG3;
 				INFOPLIST_FILE = SilentFlame/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 14.2;
