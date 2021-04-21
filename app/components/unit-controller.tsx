@@ -1,8 +1,8 @@
 import React, {useRef} from 'react';
 import {Controller, Control, DeepMap, FieldError} from 'react-hook-form';
-import {TextInput, Keyboard, StyleSheet} from 'react-native';
+import {TextInput, Keyboard, StyleSheet, Platform} from 'react-native';
 import {shadowStyles} from '../global/styles';
-import {SamplePickerModule} from '../sample/picker-module';
+// import {SamplePickerModule} from '../sample/picker-module';
 
 type Props = {
   control: Control<Record<string, any>>;
@@ -51,12 +51,15 @@ export const UnitController = (props: Props) => {
               }
             }}
           />
-          <SamplePickerModule
-            pickerRef={pickerRef}
-            dataset={items}
-            defaultValue={value}
-            onChange={onChange}
-          />
+          {/* {Platform.OS === 'ios' ||
+            (Platform.OS === 'android' && (
+              <SamplePickerModule
+                pickerRef={pickerRef}
+                dataset={items}
+                defaultValue={value}
+                onChange={onChange}
+              />
+            ))} */}
         </>
       )}
       name={controlName}

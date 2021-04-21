@@ -17,7 +17,6 @@ import {addDays, dateToStr} from '../../api/utils';
 import {dateState, editableState} from '../date-manager/data-manager.recoil';
 import {weeklyDataState} from './recoil.weekly';
 import {userInfoState} from '../init-app/init-app.recoil';
-import {SamplePickerModule} from '../../sample/picker-module';
 import {mockWeekData} from './constants';
 import {SampleBaner} from '../../components/sample-baner';
 import {callInAppReview} from './sample-in-app-review';

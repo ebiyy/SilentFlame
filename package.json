@@ -14,7 +14,9 @@
     "android-clean": "rm -rf node_modules && rm yarn.lock && rm -rf android/app/build && yarn && cd android && ./gradlew clean && cd ../ && yarn start -- --reset-cache",
     "pod-restart": "cd ios && pod repo remove master && pod setup && pod install && cd ../",
     "csvtojson": "node ./app/helpers/csvtojson/index.js",
-    "android-release": "cd android && ./gradlew clean && ./gradlew assembleRelease"
+    "android-release": "cd android && ./gradlew clean && ./gradlew assembleRelease",
+    "macos-restart": "rm -rf node_modules && rm yarn.lock && yarn && yarn macos-pod",
+    "macos-pod": "rm -rf macos/Pods && rm macos/Podfile.lock && npx react-native-macos-init && yarn start -- --reset-cache"
   },
   "dependencies": {
     "@freakycoder/react-native-helpers": "^1.0.1",
@@ -52,6 +54,7 @@
     "react-native-in-app-review": "^3.1.1",
     "react-native-keyboard-aware-scroll-view": "^0.9.3",
     "react-native-linear-gradient": "^2.5.6",
+    "react-native-macos": "^0.63.0-0",
     "react-native-modal": "^11.7.0",
     "react-native-modal-datetime-picker": "^9.2.0",
     "react-native-picker-module": "^2.0.4",
